@@ -6,7 +6,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import {
   Snowflake, Warehouse, FlaskConical, Sprout, Ship, Users, Package,
-  Globe, Anchor, Lock, ArrowRight, X, Route, Eye, EyeOff, Factory,
+  Globe, Anchor, Lock, ArrowRight, X, Route, Eye, EyeOff,
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
 import { api } from "../lib/api";
@@ -49,7 +49,6 @@ const EJE_Y = CENTRO_MEDIO.y;                  // todas las columnas se centran 
 
 const ICONO = {
   laboratorio: FlaskConical, campo: Sprout, ubicacion: Snowflake,
-  planta: Factory, frigorifico: Snowflake,
   orden: Ship, cliente: Users, puerto: Anchor, pais: Globe, galpon: Warehouse,
 };
 
@@ -106,29 +105,26 @@ function NodoMarca({ data }) {
 
 // --- el nodo -----------------------------------------------------------------
 function NodoOperacion({ data }) {
-  const esPlanta = data.tipo === "planta";
-  const Icono = esPlanta ? Factory
-    : (data.tipo_sitio === "galpon" ? Warehouse : (ICONO[data.tipo] || Package));
-  const t = esPlanta ? TONO.verde : (TONO[data.estado] || TONO.neutro);
-  const esCentro = data.capa === "centro" || esPlanta;
+  const Icono = data.tipo_sitio === "galpon" ? Warehouse : (ICONO[data.tipo] || Package);
+  const t = TONO[data.estado] || TONO.neutro;
+  const esCentro = data.capa === "centro";
   const apagado = data.atenuado;
 
   return (
     <div
       className="rounded-xl border-2 transition-opacity"
       style={{
-        borderColor: data.resaltado ? "#2b7a8c" : (esPlanta ? "#2f7d5b" : t.borde),
-        background: esPlanta ? "#f2f8f5" : t.fondo,
+        borderColor: data.resaltado ? "#2b7a8c" : t.borde,
+        background: t.fondo,
         width: esCentro ? W.centro : data.ancho,
         padding: esCentro ? "12px 14px" : "9px 11px",
         opacity: apagado ? 0.16 : 1,
         boxShadow: data.resaltado
           ? "0 0 0 3px rgba(43,122,140,.2)"
-          : esPlanta ? "0 6px 22px rgba(47,125,91,.22)"
           : esCentro ? "0 2px 12px rgba(33,32,29,.08)" : "0 1px 3px rgba(33,32,29,.05)",
       }}
     >
-      <Handles centro={esCentro || data.tipo === "frigorifico"} />
+      <Handles centro={esCentro} />
       <div className="flex items-start gap-2">
         <Icono size={esCentro ? 19 : 15} className="mt-0.5 shrink-0 text-tinta-suave" />
         <div className="min-w-0 flex-1">
@@ -152,22 +148,11 @@ function NodoOperacion({ data }) {
               {data.metricas.lotes} lotes
             </span>
           </div>
-          {data.tipo !== "planta" && (
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-linea">
             <div className="h-full rounded-full"
                  style={{ width: `${Math.min(100, data.metricas.ocupacion_pct || 0)}%`,
                           background: data.metricas.ocupacion_pct > 90 ? "#de7c1a" : "#2b7a8c" }} />
           </div>
-          )}
-          {esPlanta && (data.zonas || []).length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {data.zonas.map((z) => (
-                <span key={z.id} className="rounded bg-salvia/10 px-1.5 py-0.5 text-[0.66rem] font-medium text-salvia">
-                  {z.nombre}
-                </span>
-              ))}
-            </div>
-          )}
           <div className="mt-2 flex flex-wrap gap-1 text-[0.68rem]">
             {data.metricas.diferencias > 0 && (
               <span className="rounded bg-rojo/10 px-1.5 py-0.5 font-medium text-rojo">
@@ -232,13 +217,16 @@ export default function MapaOperacion({ onPreguntar }) {
     if (!d || !d.nodos) return { nodosBase: [], aristasBase: [] };
 
     const marca = d.nodos.find((n) => n.tipo === "marca");
-    const planta = d.nodos.find((n) => n.tipo === "planta");
-    const frios = d.nodos.filter((n) => n.tipo === "frigorifico");
     const ubis = d.nodos.filter((n) => n.capa === "centro" && n.tipo === "ubicacion");
     const origen = d.nodos.filter((n) => n.capa === "origen");
     const ordenes = d.nodos.filter((n) => n.tipo === "orden");
     const salida = d.nodos.filter(
       (n) => n.capa === "destino" && n.tipo !== "orden");
+
+    // El cuadro: los frigoríficos arriba y a la izquierda, el galpón al final.
+    // El orden importa — así los dos traslados sin confirmar quedan en
+    // corredores rectos y no en la diagonal.
+    const idx = new Map(ubis.map((u, i) => [u.id, i]));
 
     const nodos = [];
     const columna = (lista, x, ancho, alto) => {
@@ -249,60 +237,6 @@ export default function MapaOperacion({ onPreguntar }) {
         data: { ...n, ancho },
       }));
     };
-
-    // Flujo real: la PLANTA ocupa el medio del cuadro (donde iba el logo).
-    // Los frigoríficos quedan en las cuatro esquinas. Sin esto el mapa de la
-    // operación seguía mostrando solo los 4 depósitos del seed viejo.
-    if (d.modelo === "real" && planta) {
-      columna(origen, COL.origen, W.origen, 78);
-      frios.forEach((u, i) => nodos.push({
-        id: u.id, type: "operacion", draggable: false,
-        position: { x: i % 2 ? COL.gridR : COL.gridL, y: GRID_Y[i > 1 ? 1 : 0] },
-        data: { ...u, ancho: W.centro },
-      }));
-      nodos.push({
-        id: planta.id, type: "operacion", draggable: false,
-        position: { x: CENTRO_MEDIO.x - W.centro / 2, y: CENTRO_MEDIO.y - 70 },
-        data: { ...planta },
-        zIndex: 1200,
-      });
-      columna(salida, COL.cliente, W.cliente, 84);
-
-      const idxFrio = new Map(frios.map((u, i) => [u.id, i]));
-      const aristas = (d.aristas || []).map((a) => {
-        const dePlanta = a.origen === planta.id;
-        const aPlanta = a.destino === planta.id;
-        const iFrio = idxFrio.get(dePlanta ? a.destino : a.origen);
-        let sh = "s-r", th = "t-l";
-        if (dePlanta && iFrio != null) {
-          sh = iFrio % 2 ? "s-r" : "s-l";
-          th = iFrio % 2 ? "t-l" : "t-r";
-        } else if (aPlanta && iFrio != null) {
-          sh = iFrio % 2 ? "s-l" : "s-r";
-          th = iFrio % 2 ? "t-r" : "t-l";
-        }
-        const color = a.tipo === "ingreso_tolva" ? "#2b7a8c"
-          : a.tipo === "retiro_frio" || a.tipo === "entrega_cliente" ? "#2f7d5b"
-          : a.tipo === "campo_a_frio" ? "#de7c1a" : "#8fb6bf";
-        return {
-          id: a.id, source: a.origen, target: a.destino,
-          sourceHandle: sh, targetHandle: th,
-          type: "bezier",
-          style: { stroke: color, strokeWidth: a.tipo === "ingreso_tolva" ? 2.4 : 1.7,
-                   strokeDasharray: a.tipo === "campo_a_frio" ? "6 4" : undefined },
-          markerEnd: { type: MarkerType.ArrowClosed, width: 14, height: 14, color },
-          label: a.kg ? `${num(Math.round(a.kg / 1000))} t` : undefined,
-          labelStyle: { fontSize: 10, fill: "#6f6a61" },
-          labelBgStyle: { fill: "#fff", fillOpacity: 0.9 },
-          labelBgPadding: [3, 2],
-          data: { ...a, ids: [a.id] },
-        };
-      });
-      return { nodosBase: nodos, aristasBase: aristas };
-    }
-
-    // Layout heredado: cuatro depósitos, sin planta.
-    const idx = new Map(ubis.map((u, i) => [u.id, i]));
 
     columna(origen, COL.origen, W.origen, 84);
     ubis.forEach((u, i) => nodos.push({
@@ -460,28 +394,15 @@ export default function MapaOperacion({ onPreguntar }) {
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-bold">{t("mapa.titulo")}</h1>
-          <p className="mt-1 max-w-[42rem] text-[0.95rem] text-tinta-suave">
-            {d.regla || t("mapa.subtitulo")}
-          </p>
+          <p className="mt-1 text-[0.95rem] text-tinta-suave">{t("mapa.subtitulo")}</p>
         </div>
         <div className="flex flex-wrap gap-5 text-right">
-          {d.modelo === "real" ? (
-            <>
-              <Kpi valor={`${num(Math.round((r.kg_en_planta || 0) / 1000))} t`} etiqueta="En planta" />
-              <Kpi valor={`${num(Math.round((r.kg_en_frio || 0) / 1000))} t`} etiqueta="En frío" />
-              <Kpi valor={num(r.recepciones)} etiqueta="Recepciones" />
-              <Kpi valor={num(r.campos)} etiqueta="Campos" />
-            </>
-          ) : (
-            <>
-              <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
-              <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
-              <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
-                   tono={r.diferencias ? "alerta" : "ok"} />
-              <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
-                   tono={r.kg_en_transito ? "alerta" : "ok"} />
-            </>
-          )}
+          <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
+          <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
+          <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
+               tono={r.diferencias ? "alerta" : "ok"} />
+          <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
+               tono={r.kg_en_transito ? "alerta" : "ok"} />
         </div>
       </header>
 
@@ -536,7 +457,7 @@ export default function MapaOperacion({ onPreguntar }) {
 
       {/* el lienzo, a todo el ancho: el mapa entra entero sin zoom */}
       <div className="relative h-[31rem] overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema/40">
-        <div className={`pointer-events-none absolute inset-x-0 top-0 z-10 grid border-b border-linea bg-superficie/85 px-6 py-1.5 backdrop-blur ${(d.capas || []).length > 3 ? "grid-cols-4" : "grid-cols-3"}`}>
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 grid grid-cols-3 border-b border-linea bg-superficie/85 px-6 py-1.5 backdrop-blur">
           {(d.capas || []).map((c, i) => (
             <span key={c.id}
                   className={`text-[0.7rem] font-semibold uppercase tracking-wide text-tinta-suave ${i === 1 ? "text-center" : i === 2 ? "text-right" : ""}`}>

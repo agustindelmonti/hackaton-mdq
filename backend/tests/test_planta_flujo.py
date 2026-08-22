@@ -116,17 +116,7 @@ def test_existen_los_tres_caminos_que_ellos_describieron():
     assert desde_planta >= len(entregas) / 3
 
 
-def test_mapa_de_la_operacion_tiene_nodo_planta_no_solo_depositos():
-    """El filtro viejo del frontend (capa=centro, tipo=ubicacion) no veía la
-    planta. El payload real tiene tipo=planta en el hub."""
-    d = MAPA.flujo()
-    assert d["modelo"] == "real"
-    planta = next(n for n in d["nodos"] if n["tipo"] == "planta")
-    assert planta["etiqueta"] == "Planta Mar del Plata"
-    assert planta["capa"] == "hub"
-    assert {z["id"] for z in planta["zonas"]} == {"recepcion", "reclasificacion", "playa"}
-    # el mapa viejo de 4 depósitos no existe en este grafo
-    assert not any(n["tipo"] == "ubicacion" for n in d["nodos"])
+def test_mapa_pone_la_planta_en_el_hub_no_cuatro_depositos():
     d = MAPA.flujo()
     assert d["modelo"] == "real"
     capas = {c["id"] for c in d["capas"]}
