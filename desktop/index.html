@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Papasud — Consola de escritorio (prototipo)</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <div class="sidebar">
+    <div class="sidebar-brand">Papasud
+      <span class="sub">Consola de escritorio · prototipo</span>
+    </div>
+    <div class="sidebar-nav">
+      <button class="sidebar-btn active" data-nav="analitica" onclick="navTo('analitica')">
+        <span class="icon">📊</span> Analítica
+      </button>
+      <button class="sidebar-btn" data-nav="exportacion" onclick="navTo('exportacion')">
+        <span class="icon">📄</span> Comercio exterior
+      </button>
+      <button class="sidebar-btn" data-nav="operaciones" onclick="navTo('operaciones')">
+        <span class="icon">🏭</span> Operaciones de stock
+      </button>
+    </div>
+    <div class="sidebar-role">
+      <strong>Rol simulado</strong>
+      Analista/gerencia y administrativo de comercio exterior — los roles de escritorio de
+      <em>papasud-features-y-flows.md</em>. El operario de depósito y el ingeniero de campo usan el prototipo mobile.
+    </div>
+  </div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="topTitle">Analítica</h1>
+        <div class="subtitle" id="topSubtitle">Rendimiento, superficie y consulta con cita de fuente</div>
+      </div>
+      <div class="sync-pill"><span class="dot"></span> Datos mock — mismo dataset que el prototipo mobile</div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===================== VISTA: ANALÍTICA ===================== -->
+      <div class="view active" data-view="analitica">
+        <div class="section-label">Indicadores — última campaña (2025)</div>
+        <div class="grid grid-4" id="kpiGrid"></div>
+
+        <div class="section-label">Rendimiento y superficie</div>
+        <div class="grid grid-2">
+          <div class="card chart-card">
+            <h3>Rendimiento por variedad y campaña (t/ha)</h3>
+            <div class="card-sub">Serie 2018-2025. El quiebre de Innovator en 2022 es el outlier que detecta F1.9.</div>
+            <canvas id="chartRendimiento"></canvas>
+          </div>
+          <div class="card chart-card">
+            <h3>Superficie sembrada por año (ha)</h3>
+            <div class="card-sub">2025 marcada — caída declarada por Papasud, no verificada públicamente.</div>
+            <canvas id="chartSuperficie"></canvas>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card chart-card">
+            <h3>Papasud vs. promedio de zona (t/ha)</h3>
+            <div class="card-sub">Benchmark F1.8 — MAGyP Estimaciones Agrícolas, <strong>DEMO, no verificado contra la fuente</strong>.</div>
+            <canvas id="chartBenchmark"></canvas>
+          </div>
+          <div class="card" id="outlierCard"></div>
+        </div>
+
+        <div class="section-label">Consulta conversacional con cita de fuente (Flow H)</div>
+        <div class="card">
+          <div class="suggestion-row" id="querySuggestions"></div>
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-input-row">
+            <input type="text" class="input" id="chatInput" placeholder="Escribí una pregunta o tocá un ejemplo de arriba…" />
+            <button class="btn btn-primary" onclick="enviarPregunta()">Preguntar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== VISTA: COMERCIO EXTERIOR ===================== -->
+      <div class="view" data-view="exportacion">
+        <div class="section-label">Pipeline de documentación de exportación</div>
+        <div class="table-wrap">
+          <div class="table-toolbar" style="padding:10px 14px 0;">
+            <select class="input" id="expFiltroEstado" onchange="renderPipeline()">
+              <option value="todos">Todos los estados</option>
+              <option value="listo">Listo</option>
+              <option value="con_inconsistencias">Con inconsistencias</option>
+            </select>
+            <select class="input" id="expFiltroPais" onchange="renderPipeline()">
+              <option value="todos">Todos los países</option>
+            </select>
+            <span class="table-count" id="expCount"></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Lote</th><th>Variedad</th><th>País destino</th><th>Responsable</th>
+                <th>Actualizado</th><th>Estado</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="expTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Nota</div>
+        <div class="card" style="font-size:12.5px; color:var(--color-text-dim); line-height:1.5;">
+          Cada fila corre los mismos chequeos F3.13 que la pantalla de cierre del prototipo mobile (NCM, certificado de origen, peso vs. packing list, declaración de plaga, tope de rótulo, vencimiento INASE) — acá agregados para que el administrativo vea de un vistazo qué lote necesita atención antes de ir al detalle. Marca <strong>DEMO — SIN VALOR LEGAL / NO OFICIAL</strong> aplica igual que en el mobile.
+        </div>
+      </div>
+
+      <!-- ===================== VISTA: OPERACIONES DE STOCK ===================== -->
+      <div class="view" data-view="operaciones">
+        <div class="section-label">Stock por ubicación (vista derivada del libro append-only)</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Lote</th><th>Variedad</th><th>Subcategoría</th>
+                <th id="colUbic0"></th><th id="colUbic1"></th><th id="colUbic2"></th><th id="colUbic3"></th>
+                <th>Total</th></tr>
+            </thead>
+            <tbody id="stockTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Cola de discrepancias (conteos registrados)</div>
+        <div id="discrepanciaQueue"></div>
+
+        <div class="section-label">Libro de movimientos</div>
+        <div class="table-wrap">
+          <div class="table-toolbar" style="padding:10px 14px 0;">
+            <select class="input" id="movFiltroFuente" onchange="renderMovimientosTable()">
+              <option value="todos">Toda fuente</option>
+              <option value="voz">Voz</option>
+              <option value="texto">Texto</option>
+              <option value="conteo">Conteo</option>
+              <option value="importacion">Importación (seed)</option>
+            </select>
+            <select class="input" id="movFiltroConfianza" onchange="renderMovimientosTable()">
+              <option value="todos">Toda confianza</option>
+              <option value="alta">Alta</option>
+              <option value="dudosa">Dudosa</option>
+            </select>
+            <span class="table-count" id="movCount"></span>
+          </div>
+          <table>
+            <thead><tr><th>Fecha</th><th>Lote</th><th>Origen</th><th>Destino</th><th>Kg</th><th>Fuente</th><th>Confianza</th><th>Usuario</th></tr></thead>
+            <tbody id="movTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DRAWER: detalle de exportación ===================== -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="cerrarDrawer()"></div>
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="cerrarDrawer()">×</button>
+  <div id="drawerContent"></div>
+</div>
+
+<script src="../prototype/data.js"></script>
+<script src="../prototype/logic.js"></script>
+<script src="data-desktop.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
