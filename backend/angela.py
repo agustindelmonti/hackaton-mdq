@@ -274,6 +274,20 @@ pantalla ya muestra: si un gráfico quedó fijado, decí dónde quedó y UNA cos
 que se ve — no narres todos sus números. El dueño escanea; corto no es frío.
 - SIN EMOJIS. Ni en las respuestas ni en los títulos. Sos una socia seria, no un bot \
 con caritas.
+- FORMATO MARKDOWN: escribí en Markdown. Negritas para el dato que manda, listas \
+cuando hay dos o más puntos, un heading corto (###) sólo si la respuesta tiene \
+secciones. Nada de HTML. Los montos `_fmt` se copian tal cual, también adentro \
+del Markdown.
+- DESPUÉS de la respuesta, en un bloque APARTE (nunca mezclado con el texto que \
+lee el dueño), agregá exactamente 3 preguntas de seguimiento para INDAGAR MÁS A \
+FONDO — no para repetir lo ya dicho ni para confirmar un sí/no. Cortas, concretas, \
+en el mismo idioma, sin números que no vinieron de una herramienta. Formato exacto:
+
+:::siguientes
+pregunta 1
+pregunta 2
+pregunta 3
+:::
 
 CÓMO USÁS LOS DATOS:
 - SIEMPRE que te pregunten por un número del negocio, usá las herramientas para \
@@ -3159,6 +3173,328 @@ def _fallback(mensaje: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Suggested queries: el dueño sigue indagando (no confirma, no repite)
+# ---------------------------------------------------------------------------
+
+_RE_SIGUIENTES = re.compile(
+    r"(?:\n|\A)\s*:::siguientes\s*\n([\s\S]*?)\n\s*:::\s*\s*$",
+    re.IGNORECASE,
+)
+
+_CIERRES_SIN_SEGUIMIENTO = (
+    "eso está fuera de lo que manejo",
+    "that's outside what i handle",
+    "soy ángela — me ocupo solo",
+    "i'm ángela — i only handle",
+    "listo, lo cancelo",
+    "done, cancelled",
+    "esa consulta es del área",
+    "that question belongs to the",
+)
+
+_SUGERENCIAS_POR_TOOL = {
+    "stock_ubicaciones": {
+        "es": (
+            "¿Qué lotes de esa ubicación tienen merma fuera de curva?",
+            "¿Hay stock suficiente para el próximo despacho?",
+            "¿Cómo está el galpón de Chapadmalal contra las cámaras?",
+        ),
+        "en": (
+            "Which lots in that location are losing more weight than they should?",
+            "Is there enough stock for the next dispatch?",
+            "How does the Chapadmalal shed compare to the cold rooms?",
+        ),
+    },
+    "consultar_lote": {
+        "es": (
+            "¿De qué lote padre desciende este?",
+            "¿La categoría INASE cierra con el linaje?",
+            "¿Cuánta merma llevó este lote en cámara?",
+        ),
+        "en": (
+            "Which parent lot does this one come from?",
+            "Does the INASE category match the lineage?",
+            "How much weight has this lot lost in storage?",
+        ),
+    },
+    "verificar_disponibilidad": {
+        "es": (
+            "¿Qué movimientos componen ese saldo?",
+            "¿Hay otro lote de la misma variedad que sí alcance?",
+            "¿La merma esperada cambia el disponible?",
+        ),
+        "en": (
+            "Which movements make up that balance?",
+            "Is there another lot of the same variety that covers it?",
+            "Does expected shrinkage change what's available?",
+        ),
+    },
+    "explicar_diferencia": {
+        "es": (
+            "¿Qué movimientos pueden explicar el faltante?",
+            "¿La diferencia queda dentro de la merma esperada?",
+            "¿En qué ubicación conviene contar de nuevo?",
+        ),
+        "en": (
+            "Which movements could explain the gap?",
+            "Is the difference still inside expected shrinkage?",
+            "Which location should we recount?",
+        ),
+    },
+    "verificar_orden_carga": {
+        "es": (
+            "¿Qué lote alternativa cubre esa orden?",
+            "¿El bloqueo es de stock, de linaje o de merma?",
+            "¿Qué papeles faltan para poder despachar?",
+        ),
+        "en": (
+            "Which alternative lot would cover that order?",
+            "Is the hold about stock, lineage or shrinkage?",
+            "Which papers are still missing to dispatch?",
+        ),
+    },
+    "consultar_deposito": {
+        "es": (
+            "¿Qué vence o brota primero en esa cámara?",
+            "¿Hay discrepancias de conteo abiertas ahí?",
+            "¿Cuántos bolsones se pueden mover hoy?",
+        ),
+        "en": (
+            "What sprouts or expires first in that room?",
+            "Are there open count discrepancies there?",
+            "How many bags can we move today?",
+        ),
+    },
+    "resumen_negocio": {
+        "es": (
+            "¿Dónde está el mayor riesgo de stock hoy?",
+            "¿Qué ubicación tiene más plata parada?",
+            "¿Hay algún despacho frenado por una discrepancia?",
+        ),
+        "en": (
+            "Where is the biggest stock risk today?",
+            "Which location has the most money sitting idle?",
+            "Is any dispatch blocked by a discrepancy?",
+        ),
+    },
+    "consultar_cruces": {
+        "es": (
+            "¿Qué lote de ese cruce no cierra el linaje?",
+            "¿Hay un movimiento sin confirmar en esa cadena?",
+            "¿Eso frena algún despacho de esta semana?",
+        ),
+        "en": (
+            "Which lot in that cross-check breaks lineage?",
+            "Is there an unconfirmed movement in that chain?",
+            "Does that block a dispatch this week?",
+        ),
+    },
+}
+
+_SUGERENCIAS_POR_TEMA = (
+    (("merma", "conteo", "discrepan", "diferencia", "contado", "shrink", "count"), {
+        "es": (
+            "¿La diferencia queda dentro de la merma esperada?",
+            "¿Qué movimientos pueden explicar el faltante?",
+            "¿En qué cámara conviene volver a contar?",
+        ),
+        "en": (
+            "Is the gap still inside expected shrinkage?",
+            "Which movements could explain the missing kilos?",
+            "Which cold room should we recount?",
+        ),
+    }),
+    (("linaje", "categoría", "categoria", "inase", "padre", "generación", "generacion",
+      "lineage", "category"), {
+        "es": (
+            "¿El lote padre es de categoría igual o superior?",
+            "¿Qué generación comercial tiene este lote?",
+            "¿Eso frena un despacho o sólo hay que corregir el rótulo?",
+        ),
+        "en": (
+            "Is the parent lot the same category or higher?",
+            "What commercial generation is this lot?",
+            "Does that block a dispatch or is it just a label fix?",
+        ),
+    }),
+    (("despacho", "remito", "orden de carga", "embarque", "dtv", "dispatch",
+      "shipment"), {
+        "es": (
+            "¿Hay stock suficiente para cerrar ese remito?",
+            "¿El linaje de esos lotes cierra para exportar?",
+            "¿Qué papeles faltan en la carpeta de embarque?",
+        ),
+        "en": (
+            "Is there enough stock to close that dispatch note?",
+            "Does the lineage of those lots hold for export?",
+            "Which papers are still missing from the shipping folder?",
+        ),
+    }),
+    (("frigor", "cámara", "camara", "galpón", "galpon", "chapadmalal", "ubicación",
+      "ubicacion", "cold room", "shed"), {
+        "es": (
+            "¿Cómo se reparte el stock entre las 4 ubicaciones?",
+            "¿Qué lotes del galpón no deberían seguir ahí?",
+            "¿Hay alguna cámara con merma fuera de curva?",
+        ),
+        "en": (
+            "How is stock split across the 4 locations?",
+            "Which lots shouldn't still be in the shed?",
+            "Is any cold room losing more weight than it should?",
+        ),
+    }),
+)
+
+_SUGERENCIAS_GENERICAS = {
+    "es": (
+        "¿Me mostrás el detalle detrás de esos números?",
+        "¿Hay alguna alerta o bloqueo relacionado?",
+        "¿Qué convendría revisar ahora en el depósito?",
+    ),
+    "en": (
+        "Show me the detail behind those numbers",
+        "Is there an alert or hold related to this?",
+        "What should we check in the warehouse now?",
+    ),
+}
+
+
+def _idioma_sugerencias() -> str:
+    return "en" if _idioma_actual() == "en" else "es"
+
+
+def _como_sugerencias(items) -> list[dict]:
+    out = []
+    seen = set()
+    for raw in items or []:
+        if isinstance(raw, dict):
+            enviar = (raw.get("enviar") or raw.get("label") or "").strip()
+            label = (raw.get("label") or enviar).strip()
+        else:
+            enviar = str(raw or "").strip()
+            label = enviar
+        enviar = re.sub(r"^[-*•]\s+", "", enviar)
+        enviar = re.sub(r"^\d+[\.)]\s+", "", enviar).strip()
+        label = re.sub(r"^[-*•]\s+", "", label)
+        label = re.sub(r"^\d+[\.)]\s+", "", label).strip()
+        if not enviar or enviar.lower() in seen or len(enviar) > 140:
+            continue
+        seen.add(enviar.lower())
+        out.append({"label": label or enviar, "enviar": enviar})
+        if len(out) == 3:
+            break
+    return out
+
+
+def extraer_sugerencias(texto: str) -> tuple[str, list[dict]]:
+    """Saca el bloque :::siguientes del final. El texto visible queda limpio."""
+    crudo = (texto or "").strip()
+    if not crudo:
+        return "", []
+    m = _RE_SIGUIENTES.search(crudo)
+    if not m:
+        return crudo, []
+    limpio = (crudo[:m.start()] + crudo[m.end():]).strip()
+    lineas = [ln.strip() for ln in m.group(1).splitlines() if ln.strip()]
+    return limpio, _como_sugerencias(lineas)
+
+
+def omitir_sugerencias(texto: str) -> bool:
+    t = (texto or "").strip().lower()
+    if not t:
+        return True
+    return t.startswith(_CIERRES_SIN_SEGUIMIENTO)
+
+
+def sugerencias_heuristicas(
+    mensaje: str,
+    tools_usadas: list[str] | None = None,
+) -> list[dict]:
+    """3 preguntas de seguimiento cuando no hay modelo o no vino el bloque."""
+    lang = _idioma_sugerencias()
+    for name in reversed(tools_usadas or []):
+        pack = _SUGERENCIAS_POR_TOOL.get(name)
+        if pack:
+            return _como_sugerencias(pack.get(lang) or pack["es"])
+    blob = ds._strip(mensaje or "")
+    for keys, pack in _SUGERENCIAS_POR_TEMA:
+        if any(k in blob for k in keys):
+            return _como_sugerencias(pack.get(lang) or pack["es"])
+    return _como_sugerencias(_SUGERENCIAS_GENERICAS[lang])
+
+
+def _sugerencias_desde_llm(
+    client,
+    modelo: str,
+    mensaje: str,
+    respuesta: str,
+    historial: list[dict] | None,
+) -> list[dict]:
+    """Una pasada corta, sin tools: 3 preguntas para ir más a fondo."""
+    if client is None or omitir_sugerencias(respuesta):
+        return []
+    lang = _idioma_sugerencias()
+    if lang == "en":
+        consigna = (
+            "Propose exactly 3 follow-up questions that go DEEPER into this turn "
+            "(not repeats, not yes/no confirmations). Short, concrete, same language "
+            "as the answer. Do not invent numbers. Reply with JSON only: "
+            '{"sugerencias":["q1","q2","q3"]}'
+        )
+    else:
+        consigna = (
+            "Proponé exactamente 3 preguntas de seguimiento para INDAGAR MÁS A FONDO "
+            "este turno (no repitas, no confirmes un sí/no). Cortas, concretas, en el "
+            "mismo idioma que la respuesta. No inventes números. Respondé sólo JSON: "
+            '{"sugerencias":["p1","p2","p3"]}'
+        )
+    recorte = []
+    for turn in (historial or [])[-4:]:
+        if turn.get("role") in ("user", "assistant") and turn.get("content"):
+            recorte.append(f"{turn['role']}: {str(turn['content'])[:400]}")
+    recorte.append(f"user: {mensaje}")
+    recorte.append(f"assistant: {respuesta[:800]}")
+    try:
+        resp = client.messages.create(
+            model=modelo,
+            max_tokens=220,
+            system=consigna,
+            messages=[{"role": "user", "content": "\n".join(recorte)}],
+        )
+        raw = "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
+        m = re.search(r"\{[\s\S]*\}", raw)
+        if not m:
+            return []
+        data = json.loads(m.group(0))
+        return _como_sugerencias(data.get("sugerencias") or data.get("suggestions"))
+    except Exception:  # noqa: BLE001 — las sugerencias nunca tiran el chat
+        return []
+
+
+def resolver_sugerencias(
+    texto: str,
+    mensaje: str,
+    historial: list[dict] | None,
+    tools_usadas: list[str] | None,
+    *,
+    client=None,
+    modelo: str | None = None,
+) -> tuple[str, list[dict]]:
+    """Texto visible + 3 suggested queries. Primero el bloque del modelo."""
+    limpio, sugerencias = extraer_sugerencias(texto)
+    if omitir_sugerencias(limpio):
+        return limpio, []
+    if sugerencias:
+        return limpio, sugerencias
+    if client is not None and modelo:
+        sugerencias = _sugerencias_desde_llm(
+            client, modelo, mensaje, limpio, historial)
+    if not sugerencias:
+        sugerencias = sugerencias_heuristicas(mensaje, tools_usadas)
+    return limpio, sugerencias
+
+
+# ---------------------------------------------------------------------------
 # Conversación con Claude (tool use loop)
 # ---------------------------------------------------------------------------
 
@@ -3310,11 +3646,16 @@ def responder(
 
             # Respuesta final
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
+            texto, sugerencias = resolver_sugerencias(
+                texto, mensaje, historial, tools_usadas,
+                client=client, modelo=modelo,
+            )
             return {
                 "respuesta": texto,
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
+                "sugerencias": sugerencias,
             }
 
         return {
@@ -3348,9 +3689,14 @@ def stream_responder(
         fb = _fallback(mensaje)
         for te in fb.get("tool_events") or []:
             yield {"type": "tool", **te}
-        if fb.get("respuesta"):
-            yield {"type": "text", "text": fb["respuesta"]}
-        yield {"type": "done", "result": {**fb, "ok": True}}
+        texto, sugerencias = resolver_sugerencias(
+            fb.get("respuesta") or "", mensaje, historial, fb.get("tools_usadas") or [])
+        if texto:
+            yield {"type": "text", "text": texto}
+        if sugerencias:
+            yield {"type": "suggestions", "suggestions": sugerencias}
+        yield {"type": "done", "result": {**fb, "ok": True, "respuesta": texto,
+                                         "sugerencias": sugerencias}}
         return
 
     quien = ""
@@ -3463,7 +3809,14 @@ def stream_responder(
                 continue
 
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
-            yield {"type": "text", "text": texto}
+            texto, sugerencias = resolver_sugerencias(
+                texto, mensaje, historial, tools_usadas,
+                client=client, modelo=modelo,
+            )
+            if texto:
+                yield {"type": "text", "text": texto}
+            if sugerencias:
+                yield {"type": "suggestions", "suggestions": sugerencias}
             yield {
                 "type": "done",
                 "result": {
@@ -3472,6 +3825,7 @@ def stream_responder(
                     "modo": "claude",
                     "tools_usadas": tools_usadas,
                     "acciones": acciones,
+                    "sugerencias": sugerencias,
                 },
             }
             return
@@ -3486,6 +3840,7 @@ def stream_responder(
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
+                "sugerencias": [],
             },
         }
     except Exception as e:  # noqa: BLE001
@@ -3493,6 +3848,12 @@ def stream_responder(
         fb["error_tecnico"] = str(e)
         fb["ok"] = False
         fb["error_code"] = "provider"
-        if fb.get("respuesta"):
-            yield {"type": "text", "text": fb["respuesta"]}
+        texto, sugerencias = resolver_sugerencias(
+            fb.get("respuesta") or "", mensaje, historial, fb.get("tools_usadas") or [])
+        fb["respuesta"] = texto
+        fb["sugerencias"] = sugerencias
+        if texto:
+            yield {"type": "text", "text": texto}
+        if sugerencias:
+            yield {"type": "suggestions", "suggestions": sugerencias}
         yield {"type": "done", "result": fb}

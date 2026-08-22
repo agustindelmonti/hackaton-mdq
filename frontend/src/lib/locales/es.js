@@ -1805,6 +1805,7 @@ export const ES = {
   "angela.chip_financiar": "¿Cuánto puedo financiarle a un cliente?",
   "angela.chip_hoy": "¿Qué tengo que hacer hoy?",
   "angela.chip_recordatorio": "Anotá un recordatorio",
+  "angela.indagar": "Para indagar más",
   // --- card de oportunidad (componente compartido) ---
   "oportunidades.falta": "Falta: {que}",
   "oportunidades.card_label": "Oportunidad",

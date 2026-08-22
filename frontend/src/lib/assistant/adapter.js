@@ -53,6 +53,7 @@ function metaFromDone(result) {
     plan: plan ? { pasos: plan.pasos, resumen: plan.resumen } : undefined,
     documento: docAccion?.documento,
     sinModelo: result.modo === "simulado",
+    sugerencias: result.sugerencias || [],
   };
 }
 
@@ -133,6 +134,9 @@ export const angelaChatAdapter = {
           yield emit();
         } else if (event.type === "text") {
           text = visibleAssistantText(event.text);
+          yield emit();
+        } else if (event.type === "suggestions") {
+          meta = { ...meta, sugerencias: event.suggestions || [] };
           yield emit();
         } else if (event.type === "done") {
           const result = event.result ?? {};
