@@ -79,14 +79,12 @@ const nt = (n) => `${(Math.round((n || 0) / 100) / 10).toLocaleString("es-AR")} 
 // Los nodos del lienzo
 // ---------------------------------------------------------------------------
 function Puertos() {
-  return ["Top", "Right", "Bottom", "Left"].map((p) => (
-    <span key={p}>
-      <Handle type="source" id={`s-${p[0].toLowerCase()}`} position={Position[p]}
-              style={{ opacity: 0 }} />
-      <Handle type="target" id={`t-${p[0].toLowerCase()}`} position={Position[p]}
-              style={{ opacity: 0 }} />
-    </span>
-  ));
+  return (
+    <>
+      <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
+      <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
+    </>
+  );
 }
 
 function NodoMapa({ data }) {
@@ -168,6 +166,10 @@ export default function MapaOperacion({ onPreguntar }) {
       const y0 = EJE_Y - (lista.length * alto) / 2;
       lista.forEach((n, i) => nodos.push({
         id: n.id, type: "mapa", draggable: false,
+        // El tamaño va declarado: React Flow v12 esconde el nodo hasta que lo
+        // MIDE, y si el ResizeObserver no llega a correr queda un lienzo en
+        // blanco sin un solo error en consola. Declarándolo, no hay que medir.
+        width: ancho, height: alto - 26,
         position: { x, y: y0 + i * alto },
         data: {
           ...n, ancho,
@@ -191,9 +193,10 @@ export default function MapaOperacion({ onPreguntar }) {
       const grueso = Math.max(1.5, Math.min(9, a.kg / 120000));
       aristas.push({
         id: a.id, source: a.origen, target: a.destino,
-        sourceHandle: vuelta ? "s-b" : "s-r",
-        targetHandle: vuelta ? "t-b" : "t-l",
+        // La vuelta se dibuja escalonada y en verde, la ida curva y en azul:
+        // son dos viajes distintos y se tienen que ver como dos.
         type: vuelta ? "smoothstep" : "default",
+        pathOptions: vuelta ? { offset: 46, borderRadius: 18 } : undefined,
         style: {
           stroke: s.color,
           strokeWidth: grueso,
