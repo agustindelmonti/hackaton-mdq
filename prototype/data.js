@@ -189,6 +189,21 @@ const LOTE_VOZ_DEMO_ID = '6';
 
 const CONTEOS = [];
 
+// Un par de conteos históricos ya cargados para el lote 17, así el
+// Historial y el gráfico de evolución no arrancan vacíos en la demo.
+// Mismos números que el ejemplo de discrepancia (13.100kg a los 22
+// días) para que ambas pantallas cuenten la misma historia.
+(function seedConteosDemo() {
+  const ingresoLote17 = new Date();
+  ingresoLote17.setDate(ingresoLote17.getDate() - 22);
+  const fechaA = new Date(ingresoLote17); fechaA.setDate(fechaA.getDate() + 10);
+  const fechaB = new Date(ingresoLote17); fechaB.setDate(fechaB.getDate() + 22);
+  CONTEOS.push(
+    { id: 1, loteId: '17', ubicacionId: 'frig_gc', kgContado: 13700, kgEsperado: 13720, tolerancia: 140, delta: -20, clasificacion: 'dentro_de_merma', confianza: 'alta', fecha: fechaA.toISOString(), usuario: 'Operario Depósito' },
+    { id: 2, loteId: '17', ubicacionId: 'frig_gc', kgContado: 13100, kgEsperado: 13370, tolerancia: 140, delta: -270, clasificacion: 'excede_merma', confianza: 'alta', fecha: fechaB.toISOString(), usuario: 'Operario Depósito' }
+  );
+})();
+
 // ============================================================
 // Documentación de exportación — pantalla de cierre (N03).
 // Requisitos por país: mock a partir de docs/papasud-features-y-flows.md
