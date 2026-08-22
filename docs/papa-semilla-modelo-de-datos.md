@@ -113,12 +113,25 @@ create table variedad (
 
 create table ubicacion (
   id            text primary key,
-  nombre        text not null,             -- 'Frigorífico 1', 'Galpón'
-  tipo          text not null,             -- 'frigorifico' | 'galpon' | 'campo' | 'laboratorio'
-  localidad     text,                      -- 'General Pueyrredón', 'El Calafate'
-  provincia     text,                      -- 'Buenos Aires', 'Santa Cruz'
-  geom          jsonb                      -- polígono del lote, para la vertical satelital
+  nombre        text not null,             -- 'Planta Mar del Plata', 'Dospanca', 'Cayetano Chávez'
+  tipo          text not null,             -- 'planta' | 'frigorifico' | 'campo' | 'laboratorio' | 'cliente'
+  localidad     text,
+  provincia     text,
+  partido       text,
+  subcontratado boolean default false,     -- los frigoríficos NO son de Papasud
+  tiene_bascula boolean default false,     -- sólo la planta
+  geom          jsonb
 );
+
+-- Estaciones de proceso DENTRO de la planta. No son depósitos: el stock
+-- vive en planta_mdp. Charla 22/08: recepción/báscula → reclasificación → playa.
+create table zona_planta (
+  id          text primary key,            -- 'recepcion' | 'reclasificacion' | 'playa'
+  planta_id   text not null references ubicacion(id),
+  nombre      text not null,
+  rol         text not null                -- 'primer_ingreso' | 'calibre_empaque' | 'despacho'
+);
+
 
 -- LO IMPORTANTE: lote_padre_id. El linaje es el modelo.
 create table lote (
@@ -150,7 +163,42 @@ create table movimiento (
   transcripcion   text,                    -- el audio original, para auditoría
   confianza       text,                    -- 'alta' | 'dudosa'  (del extractor)
   confirmado_por  text,                    -- nadie escribe sin confirmar
-  nota            text
+  nota            text,
+  tipo            text,                    -- 'ingreso_tolva' | 'envio_frio' | 'retiro_frio' | ...
+  tipo_vehiculo   text,                    -- 'tolva' | 'camion_bolsas'
+  zona_planta     text,                    -- 'recepcion' | 'playa' (estación, no depósito)
+  orden_carga_id  text,
+  peso_bascula_kg numeric
+);
+
+-- Papel en el campo. A veces no hay señal. A veces sale sin remito.
+-- kg_estimado es ámbar (pendiente de pesaje), no un error. Ver cadena-planta-papasud.md.
+create table orden_carga (
+  id              text primary key,
+  lote_id         text not null references lote(id),
+  campo_id        text not null references ubicacion(id),
+  kg_estimado     numeric not null,
+  pendiente_pesaje boolean default true,
+  tipo_vehiculo   text not null,           -- 'tolva' | 'camion_bolsas'
+  camion          text,
+  chofer          text,
+  canal           text default 'papel',
+  sin_remito      boolean default false,
+  temperatura_cosecha_c numeric,
+  observaciones   text
+);
+
+-- Planilla de recepción: el camión entra a planta, la báscula pesa.
+create table recepcion_planta (
+  id               text primary key,
+  orden_carga_id   text references orden_carga(id),
+  movimiento_id    bigint references movimiento(id),
+  zona_id          text not null references zona_planta(id),  -- siempre 'recepcion'
+  peso_bascula_kg  numeric not null,
+  kg_estimado      numeric,
+  chofer           text,
+  camion           text,
+  tipo_vehiculo    text default 'tolva'
 );
 
 -- Conteo físico, separado de los movimientos: así se detecta la discrepancia.

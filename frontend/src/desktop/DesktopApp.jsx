@@ -20,7 +20,7 @@ import GestionEquipo from "../sections/GestionEquipo";
 import AdminContexto from "../sections/AdminContexto";
 import Administracion from "../sections/Administracion";
 import Exportacion from "../sections/Exportacion";
-import MapaOperacion from "../sections/MapaOperacion";
+import MapaFlujoPapasud from "../sections/MapaFlujoPapasud";
 import CerebroSemilla from "../sections/CerebroSemilla";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
@@ -391,7 +391,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                       onTarea={(x) => { const k = PREGUNTA_TAREA[x.tipo]; if (k) preguntar(t(k)); }}
                       onCerrada={onRecargar} onNavegar={navegar} /></div>
                   : <Inicio data={data} oportunidades={oportunidades} onNavegar={navegar} onPreguntar={preguntar} />)}
-                {section === "mapa" && <MapaOperacion onPreguntar={preguntar} />}
+                {section === "mapa" && <MapaFlujoPapasud onPreguntar={preguntar} />}
                 {section === "cerebro" && <CerebroSemilla onPreguntar={preguntar} />}
                 {section === "inventario" && <Inventario data={data} highlight={highlight} onPreguntar={preguntar} onNavegar={navegar} />}
                 {section === "saneamiento" && <Saneamiento user={user} highlight={highlight} onNavegar={navegar} onPreguntar={preguntar} onRecargar={onRecargar} onStagingCambio={setStagingCount} />}

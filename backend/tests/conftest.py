@@ -38,7 +38,9 @@ if "POLPILOT_DATA_DIR" not in os.environ:
                # Track B (feat/modelo-real): el modelo real de Papasud.
                "lotes_real.json", "movimientos_real.json", "stock_real.json",
                "bloqueo_alternativa_real.json", "plantadas_real.json",
-               "catalogos_real.json"):
+               "catalogos_real.json",
+               "ordenes_carga_real.json", "recepciones_planta_real.json",
+               "reclasificaciones_real.json"):
         _src = os.path.join(_origen, _f)
         if os.path.exists(_src):
             shutil.copy2(_src, os.path.join(_scratch, _f))

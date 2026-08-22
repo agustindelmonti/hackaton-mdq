@@ -1,33 +1,40 @@
 {
  "remito_duplicado": {
-  "remito": "R-4990",
+  "remito": "R-4837",
   "movimientos": [
-   "MOV-R-0190",
-   "MOV-R-0183"
+   "MOV-R-0037",
+   "MOV-R-0199"
   ]
  },
  "sin_dtv": {
-  "movimiento": "MOV-R-0123",
-  "lote": "L59"
+  "movimiento": "MOV-R-0124",
+  "lote": "L61"
  },
  "tarjeta_cruzada": {
-  "movimiento": "MOV-R-0002",
+  "movimiento": "MOV-R-0004",
   "lote_real": "L30",
   "tarjeta_usada": "TRJ-L31",
   "lote_de_la_tarjeta": "L31",
   "nota": "Del L30 tienen tarjetas del lote L31 pero corresponden al L30."
  },
  "fecha_incoherente": {
-  "movimiento": "MOV-R-0141",
-  "lote": "L63",
-  "fecha_entrega": "2026-04-20",
-  "fecha_ingreso": "2026-04-25"
+  "movimiento": "MOV-R-0184",
+  "lote": "L77",
+  "fecha_entrega": "2026-03-13",
+  "fecha_ingreso": "2026-03-18"
  },
  "kilos_no_cierran": {
-  "lote": "L41",
-  "frigorifico": "Pancani",
-  "kg_enviados": 25779.3,
-  "kg_retirados": 28929.3,
+  "lote": "L62",
+  "frigorifico": "Dospanca",
+  "kg_enviados": 17645.8,
+  "kg_retirados": 20795.8,
   "diferencia_kg": 3150.0
+ },
+ "orden_sin_remito": {
+  "orden_carga_id": "OC-0002",
+  "lote": "L30",
+  "campo": "Santa Ana",
+  "camion": "HK173QL",
+  "nota": "Salió del campo sin remito. La recepción en planta lo cargó después."
  }
 }
