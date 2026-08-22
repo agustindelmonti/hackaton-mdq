@@ -81,7 +81,7 @@ const CATALOGO = {
 // ARRIBA (Alertas/Oportunidades/Evolución), sin label de grupo.
 const BLOQUES_NAV = [
   // P28 — "El mapa de tu negocio" vive entre Home y Alertas (el pedido literal).
-  { lk: null, ids: ["disponibilidad", "panel", "mapa", "cerebro", "alertas",
+  { lk: null, ids: ["disponibilidad", "mapa", "cerebro", "alertas",
                     "oportunidades", "evolucion"] },
   { lk: "nav.grupo_stock",
     ids: ["deposito", "inventario", "movimientos", "conciliacion", "trazabilidad"] },
@@ -111,7 +111,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   // El sistema define el foco de la fase: el dueño aterriza donde importa hoy.
   const inicial = vistaHerramienta
     ? (secciones.includes("panel") ? "panel" : (secciones[0] || "perfil"))
-    : (fase?.foco && user.features.includes(fase.foco) ? fase.foco : (secciones[0] || "perfil"));
+    : (secciones.includes("disponibilidad") ? "disponibilidad" : (secciones[0] || "perfil"));
   const [section, setSection] = useState(inicial);
   const [highlight, setHighlight] = useState(null);
   // El panel de Ángela vive abierto por defecto cuando la pantalla lo banca

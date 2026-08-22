@@ -1140,9 +1140,11 @@ def trazabilidad_get(lote: str, _u: dict = Depends(require_feature("trazabilidad
 # --- El mapa de la operación, con el stock en el centro ---------------------
 @app.get("/api/mapa-operacion")
 def mapa_operacion(_u: dict = Depends(require_feature("mapa"))):
-    """Tres capas fijas: de dónde viene, dónde está, adónde va. El centro son
-    las cuatro ubicaciones — el ojo pasa obligatoriamente por el stock."""
-    return mapa_op.mapa()
+    """El mapa de la operación. El hub es la PLANTA (recepción / reclasificación
+    / playa); los frigoríficos son almacenamiento subcontratado alrededor.
+    Sirve el flujo real de Papasud — el de cuatro depósitos era el seed viejo."""
+    from core import mapa_real as _mapa
+    return _mapa.mapa()
 
 
 @app.get("/api/cerebro")
@@ -2516,9 +2518,11 @@ def papasud_lotes(_u: dict = Depends(usuario_actual)):
 @app.get("/api/papasud/mapa")
 def papasud_mapa(_u: dict = Depends(usuario_actual)):
     """El mapa del flujo real: campos → planta (hub) ⇄ frigoríficos → clientes.
-    `filas` se mantiene para Track C (una fila por lote×ubicación). El grafo
-    (`nodos`, `aristas`, `capas`) es lo que pinta la pantalla nueva."""
-    return _mapa_real.flujo()
+    Devuelve EL MISMO mapa que la pantalla (core.mapa_real). La versión del
+    flujo generado vive en core.mapa_planta y no se sirve: dos mapas con dos
+    totales distintos de la misma variedad es lo único que no puede pasar."""
+    from core import mapa_real as _mapa
+    return _mapa.mapa()
 
 
 @app.get("/api/papasud/planta")
