@@ -2490,6 +2490,7 @@ def admin_reset_demo(token: str):
 from core import (  # noqa: E402
     modelo_real as _modelo_real,
     stock_real as _stock_real,
+    mapa_real as _mapa_real,
     inconsistencias_papasud as _inconsistencias_papasud,
     liquidacion as _liquidacion,
     importer_papasud as _importer_papasud,
@@ -2508,10 +2509,37 @@ def papasud_lotes(_u: dict = Depends(usuario_actual)):
 
 @app.get("/api/papasud/mapa")
 def papasud_mapa(_u: dict = Depends(usuario_actual)):
-    """La foto de dónde está cada kilo: una fila por (lote, ubicación) con
-    stock vivo. Es la vista que el mapa de la operación (Track C) consume
-    directo, sin recalcular nada — el stock ya salió del núcleo."""
-    return {"filas": _stock_real.stock_por_ubicacion()}
+    """El mapa del flujo real: campos → planta (hub) ⇄ frigoríficos → clientes.
+    `filas` se mantiene para Track C (una fila por lote×ubicación). El grafo
+    (`nodos`, `aristas`, `capas`) es lo que pinta la pantalla nueva."""
+    return _mapa_real.flujo()
+
+
+@app.get("/api/papasud/planta")
+def papasud_planta(_u: dict = Depends(usuario_actual)):
+    """La planta como hub: zonas (báscula, reclasificación, playa), stock vivo
+    y las recepciones recientes. Números del libro, no del LLM."""
+    return _stock_real.detalle_planta()
+
+
+@app.get("/api/papasud/ordenes-carga")
+def papasud_ordenes_carga(_u: dict = Depends(usuario_actual)):
+    """Papel en el campo: a veces no hay señal. Cada tolva sale con una orden
+    de carga; el remito a menudo nace en la recepción de planta."""
+    return {"ordenes": _modelo_real.ordenes_carga()}
+
+
+@app.get("/api/papasud/recepciones")
+def papasud_recepciones(_u: dict = Depends(usuario_actual)):
+    """Planilla de recepción: el camión entra a planta, la báscula pesa, se
+    anota chofer, producto y lote."""
+    return {"recepciones": _modelo_real.recepciones()}
+
+
+@app.get("/api/papasud/sitios")
+def papasud_sitios(_u: dict = Depends(usuario_actual)):
+    """Kg vivos por planta / frigorífico / campo — el número grande del mapa."""
+    return _stock_real.resumen_sitios()
 
 
 @app.get("/api/papasud/disponibilidad")

@@ -199,6 +199,12 @@ export const api = {
     post(`/api/ordenes-carga/${numero}/emitir`, { aceptar_advertencias: aceptarAdvertencias }),
   // El mapa de la operación (stock en el centro) y la genealogía de un lote
   mapa: () => get("/api/mapa-operacion"),
+  // El flujo REAL: campo → planta ⇄ frío → cliente (charla 22/08)
+  mapaPapasud: () => get("/api/papasud/mapa"),
+  plantaPapasud: () => get("/api/papasud/planta"),
+  sitiosPapasud: () => get("/api/papasud/sitios"),
+  ordenesCargaPapasud: () => get("/api/papasud/ordenes-carga"),
+  recepcionesPapasud: () => get("/api/papasud/recepciones"),
   // EL CEREBRO: cada entidad y cómo se cruza (la capa de abajo del mapa)
   cerebro: () => get("/api/cerebro"),
   genealogia: (lote) => get(`/api/genealogia/${encodeURIComponent(lote)}`),

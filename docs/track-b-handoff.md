@@ -12,12 +12,16 @@ antes de hablar con Papasud.
 El modelo real vive **aparte**, en un namespace propio, para que ustedes puedan
 migrar a su ritmo sin que nada se caiga en el medio:
 
-- `data-papasud/dominio_real.py` — catálogos reales (variedades, campos,
-  lotes, frigoríficos, planta, clientes, transportistas, categorías, calibres)
+- `data-papasud/dominio_real.py` — catálogos reales (variedades, campos
+  incluyendo Cayetano Chávez, lotes, laboratorio in vitro, **planta con zonas**,
+  tipos de vehículo/tolva, frigoríficos, clientes, transportistas, roles,
+  Albor Agro como sistema a no reemplazar)
 - `data-papasud/generar_real.py` — generador determinista del dataset real
   (correr con `python data-papasud/generar_real.py`)
 - `backend/core/modelo_real.py` — loader + regla de linaje
 - `backend/core/stock_real.py` — stock derivado + motor de bloqueo-con-alternativa
+  + `detalle_planta` / `resumen_sitios`
+- `backend/core/mapa_real.py` — grafo del flujo real (campo → planta ⇄ frío → cliente)
 - `backend/core/inconsistencias_papasud.py` — detector de "arreglar el pasado"
 - `backend/core/liquidacion.py` — kg movidos y $ a pagar por transportista/frigorífico
 - `backend/core/importer_papasud.py` — importador tolerante de la planilla real
@@ -32,9 +36,13 @@ migrar a su ritmo sin que nada se caiga en el medio:
 variedad (regla dura, validada al cargar — `modelo_real.validar_regla_linaje`).
 
 **Flujo real:** `lote (campo) → planta → cliente`, con el circuito
-`planta → frigorífico → vuelve a planta → cliente` como el más común. Todo
-queda en un libro de movimientos **append-only** (`movimientos_real.json`):
-el stock es SIEMPRE la suma de ese libro, nunca una celda editable.
+`planta → frigorífico → vuelve a planta → cliente` como el más común. En el
+medio viven entidades de verdad: **orden de carga** (papel, a veces sin señal /
+sin remito), **tolva**, **planilla de recepción con báscula**, **reclasificación**
+(granel con tierra → bolsas). Atajos reales: campo→frío y campo→cliente.
+Ver `docs/cadena-planta-papasud.md`. Todo queda en un libro de movimientos
+**append-only** (`movimientos_real.json`): el stock es SIEMPRE la suma de ese
+libro, nunca una celda editable.
 
 Datos reales usados (nada inventado): variedades `agata, spunta, asterix,
 king_russet` · campos `santa_ana, marisol, trevelin, oriente` · lotes
@@ -47,9 +55,13 @@ king_russet` · campos `santa_ana, marisol, trevelin, oriente` · lotes
 
 | Endpoint | Para qué |
 |---|---|
-| `GET /api/papasud/catalogos` | variedades, campos, frigoríficos, clientes, transportistas, categorías, calibres |
-| `GET /api/papasud/lotes` | los 60 lotes reales con su campo/pivote/cuadrante/variedad |
-| `GET /api/papasud/mapa` | una fila por (lote, ubicación) con stock vivo — **esto es lo que el mapa de Track C consume directo** |
+| `GET /api/papasud/catalogos` | variedades, campos (5, incl. Cayetano Chávez), laboratorio, planta+zonas, tolva, frigoríficos, clientes, transportistas, roles, Albor Agro |
+| `GET /api/papasud/lotes` | los 60 lotes reales con su campo/pivote/cuadrante/variedad. Lote 300 = Cayetano Chávez |
+| `GET /api/papasud/mapa` | grafo del flujo real (`nodos`/`aristas`/`capas`) **más** `filas` de stock vivo. La planta es el hub |
+| `GET /api/papasud/planta` | zonas (báscula, reclasificación, playa), stock, recepciones recientes |
+| `GET /api/papasud/sitios` | kg vivos agrupados: planta / cada frío / cada campo |
+| `GET /api/papasud/ordenes-carga` | el papel del campo (kg estimado, pendiente de pesaje) |
+| `GET /api/papasud/recepciones` | planilla de recepción: peso de báscula, chofer, lote |
 | `GET /api/papasud/disponibilidad?variedad_id=spunta` | "¿tengo X de Spunta?" — la consulta que abre la demo (Track A) |
 | `POST /api/papasud/pedido/verificar` | el motor de bloqueo-con-alternativa. Body: `{variedad_id, kg_pedido, lote_id?, ubicacion_id?, calibre_requerido?}`. Devuelve `bloqueado`, `mensaje` ya armado, y `alternativas` (lote, ubicación, kg, si requiere traslado desde frigorífico) |
 | `GET /api/papasud/pedido/verificar-demo` | el caso plantado en el dataset, listo para la demo, sin tener que armar el body a mano |
