@@ -4,6 +4,10 @@ openpyxl>=3.1
 anthropic>=0.40
 pydantic>=2.6
 python-dotenv>=1.0
+# El importer de Excel (P·Excel) sube el archivo por multipart/form-data
+# (UploadFile/File) — sin esto FastAPI explota al levantar la ruta, no al
+# invocarla (rompe el import de main.py entero, no solo el endpoint).
+python-multipart>=0.0.9
 # PDF real (P17): WeasyPrint necesita libs de sistema (Pango>=1.44) —
 # Windows dev: GTK3-Runtime (tschoonj); Linux/deploy:
 #   apt-get install libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 \
