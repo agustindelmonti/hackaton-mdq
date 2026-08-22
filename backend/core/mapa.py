@@ -412,6 +412,82 @@ def hallazgos() -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# PLANTA Y GALPONES NUEVOS — se SUMAN al mapa viejo, no lo reemplazan
+# ---------------------------------------------------------------------------
+def _es_galpon(item: dict) -> bool:
+    nombre = (item.get("nombre") or "").lower()
+    ident = (item.get("id") or "").lower()
+    return (item.get("tipo") == "galpon"
+            or "galpón" in nombre or "galpon" in nombre or "galpon" in ident)
+
+
+def _planta_y_galpones() -> tuple[list[dict], list[dict]]:
+    """La planta y los galpones que Papasud nombró el 22/08, encima de las
+    cuatro ubicaciones / órdenes / clientes que ya tenía el mapa.
+
+    Si el dataset real no está, el mapa viejo sigue igual: no se cae."""
+    try:
+        from . import modelo_real as M
+        from . import stock_real as S
+        cat = M.catalogos()
+        planta = cat.get("planta")
+        if not planta:
+            return [], []
+        sitios = S.resumen_sitios()
+        detalle = S.detalle_planta()
+    except (OSError, KeyError, ValueError):
+        return [], []
+
+    nodos, aristas = [], []
+    planta_stock = sitios.get("planta") or {"kg": 0.0, "lotes": 0, "bolsas": 0,
+                                            "por_variedad": []}
+    nodos.append(_nodo(
+        planta["id"], "planta", "centro", planta["nombre"],
+        subtitulo="Recepción · reclasificación · playa",
+        metricas={
+            "kg": planta_stock.get("kg") or 0.0,
+            "toneladas": round((planta_stock.get("kg") or 0) / 1000, 1),
+            "lotes": planta_stock.get("lotes") or 0,
+            "bolsas": planta_stock.get("bolsas") or 0,
+        },
+        tipo_sitio="planta",
+        zonas=detalle.get("zonas") or planta.get("zonas") or [],
+        grupos=[{"id": f"grp:planta:{g['variedad_id']}",
+                 "variedad": g["variedad"], "lotes": g["lotes"], "kg": g["kg"]}
+                for g in (planta_stock.get("por_variedad") or [])],
+        detalle="El hub. La mercadería se hace en el campo, se recibe acá, y de acá sale.",
+        logo=paths.LOGO,
+    ))
+
+    # Las 4 cámaras del seed siguen siendo el cuadro. Un galpón NUEVO (el de
+    # Mar del Plata) se agrega; Chapadmalal ya está y no se duplica.
+    ya = {u["nombre"].casefold() for u in semilla.ubicaciones()}
+    frigo_stock = {s["ubicacion_id"]: s for s in (sitios.get("frigorificos") or [])}
+    galpones = [f for f in (cat.get("frigorificos") or []) if _es_galpon(f)
+                and (f.get("nombre") or "").casefold() not in ya]
+    for g in galpones:
+        st = frigo_stock.get(f"frigorifico:{g['id']}") or {}
+        kg = float(st.get("kg") or 0)
+        nodos.append(_nodo(
+            f"galpon:{g['id']}", "galpon", "centro", g["nombre"],
+            subtitulo="Galpón · playa de despacho",
+            metricas={
+                "kg": kg,
+                "toneladas": round(kg / 1000, 1),
+                "lotes": st.get("lotes") or 0,
+                "bolsas": st.get("bolsas") or 0,
+            },
+            tipo_sitio="galpon",
+            grupos=[{"id": f"grp:galpon:{g['id']}:{x['variedad_id']}",
+                     "variedad": x["variedad"], "lotes": x["lotes"], "kg": x["kg"]}
+                    for x in (st.get("por_variedad") or [])],
+        ))
+        aristas.append(_arista(planta["id"], f"galpon:{g['id']}", "desde_planta"))
+
+    return nodos, aristas
+
+
+# ---------------------------------------------------------------------------
 # El mapa completo
 # ---------------------------------------------------------------------------
 def mapa() -> dict:
@@ -419,18 +495,19 @@ def mapa() -> dict:
     n_c, a_c = _centro(arts)
     n_o, a_o = _origen(arts)
     n_d, a_d = _destino(arts)
+    n_p, a_p = _planta_y_galpones()
     res = conciliacion.resumen()
     return {
         "capas": [
             {"id": "origen", "titulo": "De dónde viene",
              "detalle": "La escalera de multiplicación: laboratorio, campo, campaña."},
             {"id": "centro", "titulo": "Dónde está",
-             "detalle": "Las cuatro ubicaciones. El centro de la operación."},
+             "detalle": "Las cuatro ubicaciones, la planta y los galpones."},
             {"id": "destino", "titulo": "Adónde va",
              "detalle": "Órdenes, clientes, puerto y la documentación de cada embarque."},
         ],
-        "nodos": n_o + n_c + n_d,
-        "aristas": a_o + a_c + a_d,
+        "nodos": n_o + n_c + n_p + n_d,
+        "aristas": a_o + a_c + a_p + a_d,
         "hallazgos": hallazgos(),
         "resumen": {
             "toneladas": res["toneladas_total"],

@@ -107,8 +107,9 @@ function NodoMarca({ data }) {
 // --- el nodo -----------------------------------------------------------------
 function NodoOperacion({ data }) {
   const esPlanta = data.tipo === "planta";
+  const esGalpon = data.tipo === "galpon" || data.tipo_sitio === "galpon";
   const Icono = esPlanta ? Factory
-    : (data.tipo_sitio === "galpon" ? Warehouse : (ICONO[data.tipo] || Package));
+    : (esGalpon ? Warehouse : (ICONO[data.tipo] || Package));
   const t = esPlanta ? TONO.verde : (TONO[data.estado] || TONO.neutro);
   const esCentro = data.capa === "centro" || esPlanta;
   const apagado = data.atenuado;
@@ -152,7 +153,7 @@ function NodoOperacion({ data }) {
               {data.metricas.lotes} lotes
             </span>
           </div>
-          {data.tipo !== "planta" && (
+          {data.tipo !== "planta" && data.tipo !== "galpon" && data.metricas.ocupacion_pct != null && (
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-linea">
             <div className="h-full rounded-full"
                  style={{ width: `${Math.min(100, data.metricas.ocupacion_pct || 0)}%`,
@@ -233,7 +234,7 @@ export default function MapaOperacion({ onPreguntar }) {
 
     const marca = d.nodos.find((n) => n.tipo === "marca");
     const planta = d.nodos.find((n) => n.tipo === "planta");
-    const frios = d.nodos.filter((n) => n.tipo === "frigorifico");
+    const galpones = d.nodos.filter((n) => n.tipo === "galpon");
     const ubis = d.nodos.filter((n) => n.capa === "centro" && n.tipo === "ubicacion");
     const origen = d.nodos.filter((n) => n.capa === "origen");
     const ordenes = d.nodos.filter((n) => n.tipo === "orden");
@@ -250,58 +251,6 @@ export default function MapaOperacion({ onPreguntar }) {
       }));
     };
 
-    // Flujo real: la PLANTA ocupa el medio del cuadro (donde iba el logo).
-    // Los frigoríficos quedan en las cuatro esquinas. Sin esto el mapa de la
-    // operación seguía mostrando solo los 4 depósitos del seed viejo.
-    if (d.modelo === "real" && planta) {
-      columna(origen, COL.origen, W.origen, 78);
-      frios.forEach((u, i) => nodos.push({
-        id: u.id, type: "operacion", draggable: false,
-        position: { x: i % 2 ? COL.gridR : COL.gridL, y: GRID_Y[i > 1 ? 1 : 0] },
-        data: { ...u, ancho: W.centro },
-      }));
-      nodos.push({
-        id: planta.id, type: "operacion", draggable: false,
-        position: { x: CENTRO_MEDIO.x - W.centro / 2, y: CENTRO_MEDIO.y - 70 },
-        data: { ...planta },
-        zIndex: 1200,
-      });
-      columna(salida, COL.cliente, W.cliente, 84);
-
-      const idxFrio = new Map(frios.map((u, i) => [u.id, i]));
-      const aristas = (d.aristas || []).map((a) => {
-        const dePlanta = a.origen === planta.id;
-        const aPlanta = a.destino === planta.id;
-        const iFrio = idxFrio.get(dePlanta ? a.destino : a.origen);
-        let sh = "s-r", th = "t-l";
-        if (dePlanta && iFrio != null) {
-          sh = iFrio % 2 ? "s-r" : "s-l";
-          th = iFrio % 2 ? "t-l" : "t-r";
-        } else if (aPlanta && iFrio != null) {
-          sh = iFrio % 2 ? "s-l" : "s-r";
-          th = iFrio % 2 ? "t-r" : "t-l";
-        }
-        const color = a.tipo === "ingreso_tolva" ? "#2b7a8c"
-          : a.tipo === "retiro_frio" || a.tipo === "entrega_cliente" ? "#2f7d5b"
-          : a.tipo === "campo_a_frio" ? "#de7c1a" : "#8fb6bf";
-        return {
-          id: a.id, source: a.origen, target: a.destino,
-          sourceHandle: sh, targetHandle: th,
-          type: "bezier",
-          style: { stroke: color, strokeWidth: a.tipo === "ingreso_tolva" ? 2.4 : 1.7,
-                   strokeDasharray: a.tipo === "campo_a_frio" ? "6 4" : undefined },
-          markerEnd: { type: MarkerType.ArrowClosed, width: 14, height: 14, color },
-          label: a.kg ? `${num(Math.round(a.kg / 1000))} t` : undefined,
-          labelStyle: { fontSize: 10, fill: "#6f6a61" },
-          labelBgStyle: { fill: "#fff", fillOpacity: 0.9 },
-          labelBgPadding: [3, 2],
-          data: { ...a, ids: [a.id] },
-        };
-      });
-      return { nodosBase: nodos, aristasBase: aristas };
-    }
-
-    // Layout heredado: cuatro depósitos, sin planta.
     const idx = new Map(ubis.map((u, i) => [u.id, i]));
 
     columna(origen, COL.origen, W.origen, 84);
@@ -310,14 +259,25 @@ export default function MapaOperacion({ onPreguntar }) {
       position: { x: i % 2 ? COL.gridR : COL.gridL, y: GRID_Y[i > 1 ? 1 : 0] },
       data: { ...u },
     }));
+    // El hueco del cuadro es del logo, como en el mapa de siempre.
+    // Planta y galpones nuevos van ABAJO, no ocupan ese centro.
     if (marca) {
       nodos.push({
         id: marca.id, type: "marca", draggable: false, selectable: false,
-        // el logo va literalmente en el medio del cuadro
         position: { x: CENTRO_MEDIO.x - 95, y: CENTRO_MEDIO.y - 52 },
         data: { ...marca },
         zIndex: 1200,
       });
+    }
+    const extra = [planta, ...galpones].filter(Boolean);
+    if (extra.length) {
+      const yExtra = GRID_Y[1] + 250;
+      const x0 = CENTRO_MEDIO.x - (extra.length * (W.centro + 20)) / 2;
+      extra.forEach((n, i) => nodos.push({
+        id: n.id, type: "operacion", draggable: false,
+        position: { x: x0 + i * (W.centro + 20), y: yExtra },
+        data: { ...n },
+      }));
     }
     columna(ordenes, COL.orden, W.orden, 90);
     columna(salida, COL.cliente, W.cliente, 84);
@@ -379,21 +339,30 @@ export default function MapaOperacion({ onPreguntar }) {
       });
     }
 
+    const idsGalpon = new Set(galpones.map((g) => g.id));
     for (const a of otras) {
       const esIngreso = a.tipo === "ingreso";
       if (esIngreso && !todosLosIngresos && !a.principal) continue;
+      // Las flechas planta→cámaras ensucian el cuadro de siempre. Sólo se
+      // dibuja planta→galpón nuevo, al lado, debajo del logo.
+      if (a.tipo === "desde_planta" && !idsGalpon.has(a.destino)) continue;
+      let sh = "s-r", th = "t-l";
+      if (a.tipo === "desde_planta" && idsGalpon.has(a.destino)) {
+        sh = "s-r";
+        th = "t-l";
+      }
       aristas.push({
         id: a.id, source: a.origen, target: a.destino,
-        sourceHandle: "s-r",
-        targetHandle: (idx.get(a.destino) != null) ? "t-l" : "t-l",
+        sourceHandle: sh,
+        targetHandle: th,
         type: "bezier",
         style: {
-          stroke: a.alerta ? "#d2372b" : "#d0ccc4",
-          strokeWidth: a.alerta ? 2 : 1.3,
+          stroke: a.tipo === "desde_planta" ? "#2f7d5b" : (a.alerta ? "#d2372b" : "#d0ccc4"),
+          strokeWidth: a.tipo === "desde_planta" ? 1.7 : (a.alerta ? 2 : 1.3),
           strokeDasharray: a.alerta ? "5 4" : undefined,
         },
         markerEnd: { type: MarkerType.ArrowClosed, width: 12, height: 12,
-                     color: a.alerta ? "#d2372b" : "#c4c0b8" },
+                     color: a.tipo === "desde_planta" ? "#2f7d5b" : (a.alerta ? "#d2372b" : "#c4c0b8") },
         data: { ...a, ids: [a.id] },
       });
     }
@@ -465,23 +434,12 @@ export default function MapaOperacion({ onPreguntar }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-5 text-right">
-          {d.modelo === "real" ? (
-            <>
-              <Kpi valor={`${num(Math.round((r.kg_en_planta || 0) / 1000))} t`} etiqueta="En planta" />
-              <Kpi valor={`${num(Math.round((r.kg_en_frio || 0) / 1000))} t`} etiqueta="En frío" />
-              <Kpi valor={num(r.recepciones)} etiqueta="Recepciones" />
-              <Kpi valor={num(r.campos)} etiqueta="Campos" />
-            </>
-          ) : (
-            <>
-              <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
-              <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
-              <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
-                   tono={r.diferencias ? "alerta" : "ok"} />
-              <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
-                   tono={r.kg_en_transito ? "alerta" : "ok"} />
-            </>
-          )}
+          <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
+          <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
+          <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
+               tono={r.diferencias ? "alerta" : "ok"} />
+          <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
+               tono={r.kg_en_transito ? "alerta" : "ok"} />
         </div>
       </header>
 
@@ -535,7 +493,7 @@ export default function MapaOperacion({ onPreguntar }) {
       </div>
 
       {/* el lienzo, a todo el ancho: el mapa entra entero sin zoom */}
-      <div className="relative h-[31rem] overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema/40">
+      <div className="relative h-[38rem] overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema/40">
         <div className={`pointer-events-none absolute inset-x-0 top-0 z-10 grid border-b border-linea bg-superficie/85 px-6 py-1.5 backdrop-blur ${(d.capas || []).length > 3 ? "grid-cols-4" : "grid-cols-3"}`}>
           {(d.capas || []).map((c, i) => (
             <span key={c.id}

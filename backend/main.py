@@ -1140,11 +1140,10 @@ def trazabilidad_get(lote: str, _u: dict = Depends(require_feature("trazabilidad
 # --- El mapa de la operación, con el stock en el centro ---------------------
 @app.get("/api/mapa-operacion")
 def mapa_operacion(_u: dict = Depends(require_feature("mapa"))):
-    """El mapa de la operación. El hub es la PLANTA (recepción / reclasificación
-    / playa); los frigoríficos son almacenamiento subcontratado alrededor.
-    Sirve el flujo real de Papasud — el de cuatro depósitos era el seed viejo."""
-    from core import mapa_real as _mapa_real
-    return _mapa_real.flujo()
+    """El mapa de la operación: las cuatro ubicaciones, órdenes de carga y
+    clientes del seed, más la planta y los galpones nuevos. El flujo
+    campo→planta→frío vive en `/api/papasud/mapa`."""
+    return mapa_op.mapa()
 
 
 @app.get("/api/cerebro")
