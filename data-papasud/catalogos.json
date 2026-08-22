@@ -54,6 +54,41 @@
    "temp_objetivo": null,
    "temp_tolerancia": null,
    "direccion": "Camino Viejo a Chapadmalal km 8"
+  },
+  {
+   "id": "planta_mdp",
+   "nombre": "Planta Mar del Plata",
+   "tipo": "planta",
+   "camaras": [
+    "Recepción / báscula",
+    "Reclasificación",
+    "Playa de carga"
+   ],
+   "capacidad_kg": 800000,
+   "temp_objetivo": null,
+   "temp_tolerancia": null,
+   "direccion": "Parque Industrial — Mar del Plata",
+   "tiene_bascula": true,
+   "zonas": [
+    {
+     "id": "recepcion",
+     "nombre": "Recepción / báscula",
+     "rol": "primer_ingreso",
+     "detalle": "El camión entra, se pesa, nace la planilla de recepción."
+    },
+    {
+     "id": "reclasificacion",
+     "nombre": "Reclasificación y empaque",
+     "rol": "calibre_empaque",
+     "detalle": "De granel con tierra a bolsas calibradas."
+    },
+    {
+     "id": "playa",
+     "nombre": "Playa de carga",
+     "rol": "despacho",
+     "detalle": "De acá sale a frío, a cliente o a exportación."
+    }
+   ]
   }
  ],
  "variedades": [

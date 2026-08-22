@@ -97,7 +97,11 @@ class TestN01Movimientos:
 class TestN02Conciliacion:
     def test_las_cuatro_ubicaciones_estan_y_suman_el_total(self):
         ubis = conciliacion.por_ubicacion()
-        assert len(ubis) == 4
+        camaras = [u for u in ubis if u["tipo"] != "planta"]
+        plantas = [u for u in ubis if u["tipo"] == "planta"]
+        assert len(camaras) == 4
+        assert len(plantas) == 1
+        assert plantas[0]["kg"] > 0
         r = conciliacion.resumen()
         assert sum(u["toneladas"] for u in ubis) == pytest.approx(
             r["toneladas_total"], rel=1e-6)
@@ -388,7 +392,9 @@ class TestMapaYCerebro:
     def test_las_cuatro_ubicaciones_son_las_anclas_del_cerebro(self):
         d = cerebro.completo()
         ubis = [n for n in d["nodos"] if n["tipo"] == "ubicacion"]
-        assert len(ubis) == 4
+        camaras = [n for n in ubis if n["id"] != "ubi:planta_mdp"]
+        assert len(camaras) == 4
+        assert any(n["id"] == "ubi:planta_mdp" for n in ubis)
         assert all(n["kg"] > 0 for n in ubis), \
             "sin kilos las cámaras quedan del tamaño de un lote suelto"
 

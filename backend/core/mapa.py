@@ -82,7 +82,11 @@ def _arista(origen, destino, tipo, **extra) -> dict:
 # ---------------------------------------------------------------------------
 def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
     nodos, aristas = [], []
-    ubis = conciliacion.por_ubicacion()
+    todos = conciliacion.por_ubicacion()
+    # La planta no es la quinta cámara: el cuadro sigue siendo 2×2 y el hub
+    # lo dibuja `_planta_y_galpones` en su propia columna.
+    ubis = [u for u in todos if u.get("tipo") != "planta"]
+    ids_planta = {u["id"] for u in todos if u.get("tipo") == "planta"}
 
     for u in ubis:
         lotes = [a for a in arts if a.get("ubicacion_id") == u["id"]]
@@ -131,8 +135,8 @@ def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
         # tenant. Que la pantalla lo resolviera por su cuenta era una carrera —
         # el mapa se dibujaba antes de que el logo llegara y quedaba el texto.
         logo=paths.LOGO,
-        metricas={"toneladas": round(sum(u["toneladas"] for u in ubis), 1),
-                  "lotes": sum(u["lotes"] for u in ubis),
+        metricas={"toneladas": round(sum(u["toneladas"] for u in todos), 1),
+                  "lotes": sum(u["lotes"] for u in todos),
                   "ubicaciones": len(ubis)},
     ))
 
@@ -146,6 +150,9 @@ def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
         o = nombre_a_id.get(m.get("origen"))
         d = nombre_a_id.get(m.get("destino"))
         if not o or not d or o == d:
+            continue
+        # campo→planta y planta→cámara no son un corredor del cuadro
+        if o in ids_planta or d in ids_planta:
             continue
         k = (o, d)
         f = flujos.setdefault(k, {"kg": 0.0, "n": 0, "en_transito": 0,
@@ -173,7 +180,7 @@ def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
 # ---------------------------------------------------------------------------
 # ORIGEN — de dónde sale cada kilo
 # ---------------------------------------------------------------------------
-def _origen(arts: list[dict]) -> tuple[list[dict], list[dict]]:
+def _origen(arts: list[dict], via_planta: bool = False) -> tuple[list[dict], list[dict]]:
     """La escalera de multiplicación, que es lo que hace a esta empresa rara:
     laboratorio in vitro → minitubérculo en El Calafate → campo → cámara."""
     nodos, aristas = [], []
@@ -217,16 +224,13 @@ def _origen(arts: list[dict]) -> tuple[list[dict], list[dict]]:
                      "vectores. Por eso el material de categoría alta se multiplica acá."
                      if patagonia else None),
         ))
-        # El campo alimenta a las ubicaciones donde hoy están sus lotes. Cinco
-        # campos por cuatro cámaras son casi el bipartito completo: veinte
-        # líneas que no dicen nada. Se marca cuál es la PRINCIPAL de cada campo
-        # (donde está la mayoría de sus kilos) y la pantalla dibuja esa; el
-        # resto queda detrás de un "ver todos los ingresos" — nada se esconde,
-        # pero la lectura por defecto es la verdadera.
-        principal = max(g["ubis"].items(), key=lambda kv: kv[1])[0] if g["ubis"] else None
-        for uid, kg in sorted(g["ubis"].items(), key=lambda kv: -kv[1]):
-            aristas.append(_arista(nid, f"ubi:{uid}", "ingreso",
-                                   kg=round(kg, 1), principal=(uid == principal)))
+        # Si la planta está en el mapa, el campo NO salta a la cámara: el kilo
+        # pasa por planta. Esas aristas las arma `_planta_y_galpones`.
+        if not via_planta:
+            principal = max(g["ubis"].items(), key=lambda kv: kv[1])[0] if g["ubis"] else None
+            for uid, kg in sorted(g["ubis"].items(), key=lambda kv: -kv[1]):
+                aristas.append(_arista(nid, f"ubi:{uid}", "ingreso",
+                                       kg=round(kg, 1), principal=(uid == principal)))
         if patagonia:
             aristas.append(_arista("lab:invitro", nid, "multiplicacion"))
 
@@ -398,6 +402,7 @@ def hallazgos() -> list[dict]:
             g["min"] = min(g["min"], dd)
     for uid, g in riesgo.items():
         u = semilla.ubicacion(uid) or {}
+        nid = uid if u.get("tipo") == "planta" else f"ubi:{uid}"
         out.append({
             "id": f"brotacion:{uid}",
             "clase": "brotacion",
@@ -405,7 +410,7 @@ def hallazgos() -> list[dict]:
             "detalle": (f"El primero en {g['min']} días. Son "
                         f"${g['valor']:,.0f} que dejan de ser semilla de su "
                         f"categoría.").replace(",", "."),
-            "camino": {"nodos": [_sid(f"ubi:{uid}")], "aristas": []},
+            "camino": {"nodos": [_sid(nid)], "aristas": []},
             "seccion": "deposito",
         })
     return out
@@ -421,50 +426,62 @@ def _es_galpon(item: dict) -> bool:
             or "galpón" in nombre or "galpon" in nombre or "galpon" in ident)
 
 
-def _planta_y_galpones() -> tuple[list[dict], list[dict]]:
-    """La planta y los galpones que Papasud nombró el 22/08, encima de las
-    cuatro ubicaciones / órdenes / clientes que ya tenía el mapa.
+def _nodo_planta_seed(planta: dict, arts: list[dict], conc: dict | None) -> dict:
+    """Nodo de planta con los kilos del seed viejo (mismo universo que Sierra)."""
+    lotes = [a for a in arts if a.get("ubicacion_id") == planta["id"]]
+    kg = float((conc or {}).get("kg") or 0)
+    if not kg:
+        kg = sum(float(a.get("stock") or 0) for a in lotes)
+    por_var: dict[str, dict] = {}
+    for a in lotes:
+        v = a.get("variedad") or "—"
+        g = por_var.setdefault(v, {"lotes": 0, "kg": 0.0, "id": a.get("variedad_id")})
+        g["lotes"] += 1
+        g["kg"] += float(a.get("stock") or 0)
+    return _nodo(
+        planta["id"], "planta", "centro", planta["nombre"],
+        subtitulo="Recepción · reclasificación · playa",
+        estado=(conc or {}).get("estado") or "verde",
+        metricas={
+            "kg": round(kg, 1),
+            "toneladas": round(kg / 1000, 1),
+            "lotes": (conc or {}).get("lotes") or len(lotes),
+            "ocupacion_pct": (conc or {}).get("ocupacion_pct"),
+            "valor": (conc or {}).get("valor"),
+            "diferencias": (conc or {}).get("diferencias_abiertas") or 0,
+            "por_brotar": len((conc or {}).get("por_brotar_45d") or []),
+            "ya_brotados": (conc or {}).get("ya_brotados") or 0,
+        },
+        tipo_sitio="planta",
+        zonas=planta.get("zonas") or [],
+        camaras=planta.get("camaras") or [],
+        grupos=[{"id": f"grp:planta:{g.get('id') or v}",
+                 "variedad": v, "lotes": g["lotes"], "kg": round(g["kg"], 1)}
+                for v, g in sorted(por_var.items(), key=lambda kv: -kv[1]["kg"])],
+        detalle="El hub. La mercadería se hace en el campo, se recibe acá, y de acá sale.",
+    )
 
-    Si el dataset real no está, el mapa viejo sigue igual: no se cae."""
+
+def _galpones_nuevos() -> tuple[list[dict], list[dict]]:
+    """Galpón MdP del modelo real, si no está ya en el seed de las 4 cámaras."""
     try:
         from . import modelo_real as M
         from . import stock_real as S
         cat = M.catalogos()
-        planta = cat.get("planta")
-        if not planta:
-            return [], []
         sitios = S.resumen_sitios()
-        detalle = S.detalle_planta()
     except (OSError, KeyError, ValueError):
         return [], []
-
     nodos, aristas = [], []
-    planta_stock = sitios.get("planta") or {"kg": 0.0, "lotes": 0, "bolsas": 0,
-                                            "por_variedad": []}
-    nodos.append(_nodo(
-        planta["id"], "planta", "centro", planta["nombre"],
-        subtitulo="Recepción · reclasificación · playa",
-        metricas={
-            "kg": planta_stock.get("kg") or 0.0,
-            "toneladas": round((planta_stock.get("kg") or 0) / 1000, 1),
-            "lotes": planta_stock.get("lotes") or 0,
-            "bolsas": planta_stock.get("bolsas") or 0,
-        },
-        tipo_sitio="planta",
-        zonas=detalle.get("zonas") or planta.get("zonas") or [],
-        grupos=[{"id": f"grp:planta:{g['variedad_id']}",
-                 "variedad": g["variedad"], "lotes": g["lotes"], "kg": g["kg"]}
-                for g in (planta_stock.get("por_variedad") or [])],
-        detalle="El hub. La mercadería se hace en el campo, se recibe acá, y de acá sale.",
-        logo=paths.LOGO,
-    ))
-
-    # Las 4 cámaras del seed siguen siendo el cuadro. Un galpón NUEVO (el de
-    # Mar del Plata) se agrega; Chapadmalal ya está y no se duplica.
     ya = {u["nombre"].casefold() for u in semilla.ubicaciones()}
     frigo_stock = {s["ubicacion_id"]: s for s in (sitios.get("frigorificos") or [])}
     galpones = [f for f in (cat.get("frigorificos") or []) if _es_galpon(f)
                 and (f.get("nombre") or "").casefold() not in ya]
+    planta_id = None
+    seed_planta = next((u for u in semilla.ubicaciones() if u.get("tipo") == "planta"), None)
+    if seed_planta:
+        planta_id = seed_planta["id"]
+    else:
+        planta_id = (cat.get("planta") or {}).get("id")
     for g in galpones:
         st = frigo_stock.get(f"frigorifico:{g['id']}") or {}
         kg = float(st.get("kg") or 0)
@@ -482,8 +499,100 @@ def _planta_y_galpones() -> tuple[list[dict], list[dict]]:
                      "variedad": x["variedad"], "lotes": x["lotes"], "kg": x["kg"]}
                     for x in (st.get("por_variedad") or [])],
         ))
-        aristas.append(_arista(planta["id"], f"galpon:{g['id']}", "desde_planta"))
+        if planta_id:
+            aristas.append(_arista(planta_id, f"galpon:{g['id']}", "desde_planta"))
+    return nodos, aristas
 
+
+def _aristas_campo_planta_camara(planta: dict, arts: list[dict]) -> list[dict]:
+    """Campo → planta → las 4 cámaras. Prefiere movimientos reales del seed."""
+    aristas = []
+    catalogo = {c["nombre"]: c for c in semilla.campos()}
+    nombre_a_id = {u["nombre"]: u["id"] for u in semilla.ubicaciones()}
+    por_campo: dict[str, float] = {}
+    por_ubi: dict[str, float] = {}
+    for m in movimientos.listar():
+        if m.get("tipo") == "ingreso" and m.get("destino") == planta["nombre"]:
+            por_campo[m.get("origen") or "—"] = (
+                por_campo.get(m.get("origen") or "—", 0.0) + float(m.get("kg") or 0))
+        if m.get("origen") == planta["nombre"]:
+            did = nombre_a_id.get(m.get("destino") or "")
+            if did and did != planta["id"]:
+                por_ubi[did] = por_ubi.get(did, 0.0) + float(m.get("kg") or 0)
+    if not por_campo:
+        for a in arts:
+            c = a.get("campo_origen") or "—"
+            por_campo[c] = por_campo.get(c, 0.0) + float(a.get("stock") or 0)
+    if not por_ubi:
+        for a in arts:
+            uid = a.get("ubicacion_id")
+            if uid and uid != planta["id"]:
+                por_ubi[uid] = por_ubi.get(uid, 0.0) + float(a.get("stock") or 0)
+    principal_campo = max(por_campo.items(), key=lambda kv: kv[1])[0] if por_campo else None
+    for nombre, kg in por_campo.items():
+        meta = catalogo.get(nombre, {})
+        nid = f"campo:{meta.get('id') or nombre}"
+        aristas.append(_arista(nid, planta["id"], "ingreso",
+                               kg=round(kg, 1), principal=(nombre == principal_campo)))
+    for u in semilla.ubicaciones():
+        if u.get("tipo") == "planta":
+            continue
+        kg = round(por_ubi.get(u["id"], 0.0), 1)
+        if kg <= 0:
+            continue
+        aristas.append(_arista(planta["id"], f"ubi:{u['id']}", "desde_planta",
+                               kg=kg, principal=True))
+    return aristas
+
+
+def _planta_y_galpones(arts: list[dict]) -> tuple[list[dict], list[dict]]:
+    """La planta y los galpones nuevos, encima de las 4 cámaras / órdenes /
+    clientes. Si hay planta en el seed, los kilos salen de esa misma base
+    (no del modelo real, que es otro universo). Si no, se recae al overlay."""
+    nodos, aristas = [], []
+    conc_planta = next((u for u in conciliacion.por_ubicacion()
+                        if u.get("tipo") == "planta"), None)
+    planta = next((u for u in semilla.ubicaciones() if u.get("tipo") == "planta"), None)
+
+    if planta:
+        nodos.append(_nodo_planta_seed(planta, arts, conc_planta))
+        aristas.extend(_aristas_campo_planta_camara(planta, arts))
+    else:
+        try:
+            from . import modelo_real as M
+            from . import stock_real as S
+            cat = M.catalogos()
+            planta_real = cat.get("planta")
+            if not planta_real:
+                return [], []
+            sitios = S.resumen_sitios()
+            detalle = S.detalle_planta()
+        except (OSError, KeyError, ValueError):
+            return [], []
+        planta_stock = sitios.get("planta") or {"kg": 0.0, "lotes": 0, "bolsas": 0,
+                                                "por_variedad": []}
+        nodos.append(_nodo(
+            planta_real["id"], "planta", "centro", planta_real["nombre"],
+            subtitulo="Recepción · reclasificación · playa",
+            metricas={
+                "kg": planta_stock.get("kg") or 0.0,
+                "toneladas": round((planta_stock.get("kg") or 0) / 1000, 1),
+                "lotes": planta_stock.get("lotes") or 0,
+                "bolsas": planta_stock.get("bolsas") or 0,
+            },
+            tipo_sitio="planta",
+            zonas=detalle.get("zonas") or planta_real.get("zonas") or [],
+            grupos=[{"id": f"grp:planta:{g['variedad_id']}",
+                     "variedad": g["variedad"], "lotes": g["lotes"], "kg": g["kg"]}
+                    for g in (planta_stock.get("por_variedad") or [])],
+            detalle="El hub. La mercadería se hace en el campo, se recibe acá, y de acá sale.",
+        ))
+        planta = planta_real
+        aristas.extend(_aristas_campo_planta_camara(planta, arts))
+
+    n_g, a_g = _galpones_nuevos()
+    nodos.extend(n_g)
+    aristas.extend(a_g)
     return nodos, aristas
 
 
@@ -493,9 +602,9 @@ def _planta_y_galpones() -> tuple[list[dict], list[dict]]:
 def mapa() -> dict:
     arts = [a for a in store.raw_actual() if float(a.get("stock") or 0) != 0]
     n_c, a_c = _centro(arts)
-    n_o, a_o = _origen(arts)
+    n_p, a_p = _planta_y_galpones(arts)
+    n_o, a_o = _origen(arts, via_planta=bool(n_p))
     n_d, a_d = _destino(arts)
-    n_p, a_p = _planta_y_galpones()
     res = conciliacion.resumen()
     return {
         "capas": [
