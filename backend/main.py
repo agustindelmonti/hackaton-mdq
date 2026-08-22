@@ -40,7 +40,7 @@ from core import (store, saneamiento, fase, memoria, importer, staging, anomalia
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
                   evolucion, ventas, paths, conocimiento, piso, onboarding, tareas,
-                  cerebro as cerebro_mod)
+                  cerebro as cerebro_mod, planilla)
 
 
 def _lang(u: dict | None = None) -> str:
@@ -988,9 +988,15 @@ def snapshot_offline(u: dict = Depends(require_feature("movimientos"))):
         lotes.append({
             "codigo": a["codigo"],
             "lote": a.get("lote"),
+            "lote_id": a.get("lote_id") or a.get("lote"),
+            "nro_lote": a.get("nro_lote"),
+            "chacra_id": a.get("chacra_id"),
+            "color_bolsa": a.get("color_bolsa"),
+            "color_hilo": a.get("color_hilo"),
             "descripcion": a.get("descripcion"),
             "variedad": a.get("variedad"),
             "categoria_semilla": a.get("categoria_semilla"),
+            "calibre_comercial": a.get("calibre_comercial"),
             "ubicacion_id": a.get("ubicacion_id"),
             "ubicacion": a.get("ubicacion"),
             "camara": a.get("camara"),
@@ -1030,6 +1036,39 @@ def movimientos_get(limite: int = 60, lote: str | None = None,
                                           ubicacion=ubicacion, tipo=tipo),
         "sin_confirmar": movimientos.sin_confirmar(),
     }
+
+
+@app.get("/api/remitos")
+def remitos_get(_u: dict = Depends(require_feature("movimientos"))):
+    """El viaje, no la fila: un remito con sus líneas, DTV y transporte."""
+    filas = planilla.remitos()
+    return {"total": len(filas), "remitos": filas, "activo": planilla.activo()}
+
+
+@app.get("/api/remitos/{rid}")
+def remito_get(rid: str, _u: dict = Depends(require_feature("movimientos"))):
+    r = planilla.remito(rid)
+    if not r:
+        raise HTTPException(404, f"remito {rid} no encontrado")
+    return r
+
+
+@app.get("/api/planilla/lotes")
+def planilla_lotes_get(nro: str | None = None, clave: str | None = None,
+                       _u: dict = Depends(require_feature("deposito"))):
+    """Busca por nro corto (puede devolver VARIOS) o por clave namespaced."""
+    if clave:
+        lote = planilla.lote_por_clave(clave)
+        return {"lotes": [lote] if lote else [], "unico": bool(lote)}
+    if nro:
+        hits = planilla.buscar_por_nro(nro)
+        return {"lotes": hits, "unico": len(hits) == 1, "nro": nro}
+    return {"lotes": planilla.lotes(), "unico": False}
+
+
+@app.get("/api/planilla/modelo")
+def planilla_modelo_get(_u: dict = Depends(require_feature("deposito"))):
+    return planilla.modelo()
 
 
 @app.get("/api/movimientos/disponibilidad")

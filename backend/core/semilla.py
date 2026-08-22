@@ -122,3 +122,19 @@ def documento_exportacion(did: str) -> dict | None:
 # --- Meta ------------------------------------------------------------------
 def meta() -> dict:
     return dict(_cargar().get("meta") or {})
+
+
+def calibres_comerciales() -> list[dict]:
+    return list(_cargar().get("calibres_comerciales") or [])
+
+
+def envases() -> list[dict]:
+    return list(_cargar().get("envases") or [])
+
+
+def chacras() -> list[dict]:
+    return list(_cargar().get("chacras") or _cargar().get("campos") or [])
+
+
+def transportes() -> list[dict]:
+    return list(_cargar().get("transportes") or [])

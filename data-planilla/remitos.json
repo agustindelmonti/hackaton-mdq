@@ -1,0 +1,206 @@
+{
+ "remitos": [
+  {
+   "id": "R-2026-1009",
+   "numero": "1009",
+   "fecha": "2026-03-29",
+   "transporte_id": "camillo_gaston",
+   "dtv_e": "13534780-9",
+   "origen_id": "campo_santa_ana",
+   "destino_id": null,
+   "sin_numero": false,
+   "lineas": [
+    {
+     "lote_id": "santa_ana:spunta:300",
+     "kg": 10200,
+     "bolsas": 204,
+     "destino_id": "galpon_mdp",
+     "calibre_comercial": "sin_tamanar",
+     "envase": "bolsa"
+    },
+    {
+     "lote_id": "santa_ana:asterix:811",
+     "kg": 25000,
+     "bolsas": 500,
+     "destino_id": "galpon_mdp",
+     "calibre_comercial": "sin_tamanar",
+     "envase": "bolsa"
+    }
+   ],
+   "kg_total": 35200,
+   "bolsas_total": 704
+  },
+  {
+   "id": "R-2026-36",
+   "numero": "36",
+   "fecha": "2026-04-01",
+   "transporte_id": "el_salvador",
+   "dtv_e": null,
+   "origen_id": "campo_trevelin",
+   "destino_id": "planta_santa_ana",
+   "sin_numero": false,
+   "lineas": [
+    {
+     "lote_id": "trevelin:spunta:3",
+     "kg": 12397,
+     "bolsas": 230,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "blanca",
+     "color_hilo": "rojo"
+    },
+    {
+     "lote_id": "trevelin:agata:2",
+     "kg": 5983,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "naranja",
+     "color_hilo": "amarillo"
+    },
+    {
+     "lote_id": "trevelin:king_russet:10",
+     "kg": 3880,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "amarilla",
+     "color_hilo": "marron"
+    },
+    {
+     "lote_id": "trevelin:ludmilla:6",
+     "kg": 1132,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "amarilla",
+     "color_hilo": "rojo"
+    },
+    {
+     "lote_id": "trevelin:alverstone:42",
+     "kg": 2425,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "naranja",
+     "color_hilo": "marron"
+    },
+    {
+     "lote_id": "trevelin:markies:4",
+     "kg": 1725,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "amarilla",
+     "color_hilo": "blanco"
+    },
+    {
+     "lote_id": "trevelin:daifla:5",
+     "kg": 3072,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "negra",
+     "color_hilo": "verde"
+    },
+    {
+     "lote_id": "trevelin:seven_four_7:7",
+     "kg": 754,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "amarilla",
+     "color_hilo": "negro"
+    },
+    {
+     "lote_id": "trevelin:ikarus:51",
+     "kg": 2857,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "negra",
+     "color_hilo": "celeste"
+    },
+    {
+     "lote_id": "trevelin:edison:9",
+     "kg": 1994,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "blanca",
+     "color_hilo": "amarillo"
+    },
+    {
+     "lote_id": "trevelin:atlantic:1",
+     "kg": 53.9,
+     "bolsas": 1,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "color_bolsa": "roja",
+     "color_hilo": "azul"
+    }
+   ],
+   "kg_total": 36272.9,
+   "bolsas_total": 240
+  },
+  {
+   "id": "R-2026-910",
+   "numero": "910",
+   "fecha": "2026-06-30",
+   "transporte_id": "delcasagro",
+   "dtv_e": null,
+   "origen_id": "planta_santa_ana",
+   "destino_id": null,
+   "sin_numero": false,
+   "lineas": [
+    {
+     "lote_id": "santa_ana:spunta:301",
+     "kg": 32760,
+     "bolsas": 660,
+     "destino_id": null,
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "kg_promedio": 49.63,
+     "cliente_id": "delcaso",
+     "cliente_final_id": "romero_m"
+    }
+   ],
+   "kg_total": 32760,
+   "bolsas_total": 660
+  },
+  {
+   "id": "R-2026-1139",
+   "numero": "1139",
+   "fecha": "2026-07-03",
+   "transporte_id": "camillo_jaimez",
+   "dtv_e": null,
+   "origen_id": "pancani",
+   "destino_id": "planta_santa_ana",
+   "sin_numero": false,
+   "lineas": [
+    {
+     "lote_id": "santa_ana:spunta:302",
+     "kg": 15200,
+     "bolsas": 317,
+     "destino_id": "planta_santa_ana",
+     "calibre_comercial": "recibo",
+     "envase": "bolsa",
+     "nota": "a planta para trabajar"
+    }
+   ],
+   "kg_total": 15200,
+   "bolsas_total": 317
+  }
+ ]
+}
