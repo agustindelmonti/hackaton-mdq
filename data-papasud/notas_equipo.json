@@ -1,0 +1,84 @@
+{
+ "notas": [
+  {
+   "id": "NOTA-001",
+   "fecha": "2026-08-16",
+   "autor": "ruben",
+   "rol": "encargado",
+   "texto": "La Cámara 3 de Sierra viene marcando 1,5 °C por encima del objetivo desde el jueves. Ya avisé a mantenimiento. Los bolsones del fondo son los que más lo sufren.",
+   "texto_en": "The Cámara 3 unit at Sierra has been running 1.5 °C above target since Thursday. I already told maintenance. The bags at the back are the ones taking the hit.",
+   "canal": "voz",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-002",
+   "fecha": "2026-08-12",
+   "autor": "marcos",
+   "rol": "operario",
+   "texto": "El martes cargué 18 bolsones de Spunta para el galpón. Salieron de Ruta 226 con el camión de las 14. No sé si alguien los descargó, yo no estuve.",
+   "texto_en": "On Tuesday I loaded 18 bags of Spunta for the shed. They left Ruta 226 on the 2 p.m. truck. I don't know if anyone unloaded them, I wasn't there.",
+   "canal": "voz",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-003",
+   "fecha": "2026-08-18",
+   "autor": "dalia",
+   "rol": "agrónoma",
+   "texto": "El lote de Spunta de la Cámara 3 está brotando antes de tiempo. Con la temperatura que viene marcando esa cámara no me sorprende. Habría que adelantarle la salida.",
+   "texto_en": "The Spunta lot in Cámara 3 is sprouting ahead of schedule. With the temperature that chamber has been running, I'm not surprised. We should move up its dispatch.",
+   "canal": "texto",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-004",
+   "fecha": "2026-08-15",
+   "autor": "nestor",
+   "rol": "operario",
+   "texto": "Che, ¿los bolsones del Sector Norte del galpón de quién son? No tienen remito arriba y están hace días. Nadie me supo decir.",
+   "texto_en": "Hey — whose are the bags in the shed's North Sector? They have no delivery note on them and they've been sitting for days. Nobody could tell me.",
+   "canal": "voz",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-005",
+   "fecha": "2026-08-20",
+   "autor": "cecilia",
+   "rol": "administración",
+   "texto": "Los de Vietnam confirmaron el contenedor para la semana que viene. Necesito el certificado del INASE antes del jueves o se cae el embarque.",
+   "texto_en": "Vietnam confirmed the container for next week. I need the INASE certificate before Thursday or the shipment falls through.",
+   "canal": "texto",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-006",
+   "fecha": "2026-08-07",
+   "autor": "ruben",
+   "rol": "encargado",
+   "texto": "Ojo con el conteo de Batán: la Cámara 2 la contamos con dos personas distintas el mismo día y dio parecido pero no igual. Un bolsón nunca pesa mil justo.",
+   "texto_en": "Careful with the Batán count: two different people counted Cámara 2 the same day and it came out close but not equal. A big bag never weighs exactly a thousand.",
+   "canal": "texto",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-007",
+   "fecha": "2026-08-13",
+   "autor": "dalia",
+   "rol": "agrónoma",
+   "texto": "El análisis del lote de Asterix vino observado — el PVY dio por encima de la tolerancia de su categoría. Ese no puede salir como Prefundación.",
+   "texto_en": "The Asterix lot's analysis came back flagged — PVY tested above its category tolerance. That one can't ship as Prefundación.",
+   "canal": "texto",
+   "tipo": "observacion"
+  },
+  {
+   "id": "NOTA-008",
+   "fecha": "2026-08-01",
+   "autor": "cecilia",
+   "rol": "administración",
+   "texto": "Recordá que Brasil pide el certificado fitosanitario del MERCOSUR, no el genérico. La última vez lo mandamos mal y perdimos cuatro días.",
+   "texto_en": "Remember Brazil asks for the MERCOSUR phytosanitary certificate, not the generic one. Last time we sent the wrong one and lost four days.",
+   "canal": "voz",
+   "tipo": "observacion"
+  }
+ ]
+}
