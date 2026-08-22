@@ -17,7 +17,7 @@
    "rol": "operario",
    "texto": "El martes cargué 18 bolsones de Spunta para el galpón. Salieron de Ruta 226 con el camión de las 14. No sé si alguien los descargó, yo no estuve.",
    "texto_en": "On Tuesday I loaded 18 bags of Spunta for the shed. They left Ruta 226 on the 2 p.m. truck. I don't know if anyone unloaded them, I wasn't there.",
-   "canal": "voz",
+   "canal": "texto",
    "tipo": "observacion"
   },
   {
@@ -25,8 +25,8 @@
    "fecha": "2026-08-18",
    "autor": "dalia",
    "rol": "agrónoma",
-   "texto": "El lote de Spunta de la Cámara 3 está brotando antes de tiempo. Con la temperatura que viene marcando esa cámara no me sorprende. Habría que adelantarle la salida.",
-   "texto_en": "The Spunta lot in Cámara 3 is sprouting ahead of schedule. With the temperature that chamber has been running, I'm not surprised. We should move up its dispatch.",
+   "texto": "El lote de Innovator de la Cámara 3 está brotando antes de tiempo. Con la temperatura que viene marcando esa cámara no me sorprende. Habría que adelantarle la salida.",
+   "texto_en": "The Innovator lot in Cámara 3 is sprouting ahead of schedule. With the temperature that chamber has been running, I'm not surprised. We should move up its dispatch.",
    "canal": "texto",
    "tipo": "observacion"
   },
@@ -47,7 +47,7 @@
    "rol": "administración",
    "texto": "Los de Vietnam confirmaron el contenedor para la semana que viene. Necesito el certificado del INASE antes del jueves o se cae el embarque.",
    "texto_en": "Vietnam confirmed the container for next week. I need the INASE certificate before Thursday or the shipment falls through.",
-   "canal": "texto",
+   "canal": "voz",
    "tipo": "observacion"
   },
   {
@@ -67,7 +67,7 @@
    "rol": "agrónoma",
    "texto": "El análisis del lote de Asterix vino observado — el PVY dio por encima de la tolerancia de su categoría. Ese no puede salir como Prefundación.",
    "texto_en": "The Asterix lot's analysis came back flagged — PVY tested above its category tolerance. That one can't ship as Prefundación.",
-   "canal": "texto",
+   "canal": "voz",
    "tipo": "observacion"
   },
   {
@@ -77,7 +77,7 @@
    "rol": "administración",
    "texto": "Recordá que Brasil pide el certificado fitosanitario del MERCOSUR, no el genérico. La última vez lo mandamos mal y perdimos cuatro días.",
    "texto_en": "Remember Brazil asks for the MERCOSUR phytosanitary certificate, not the generic one. Last time we sent the wrong one and lost four days.",
-   "canal": "voz",
+   "canal": "texto",
    "tipo": "observacion"
   }
  ]

@@ -89,22 +89,42 @@ VAR_POR_ID = {v["id"]: v for v in VARIEDADES}
 # arriba en el pedigrí (y más caro el kilo). `clase` es la fiscalización.
 CATEGORIAS = [
     {"id": "preinicial_2", "nombre": "Preinicial II", "clase": "Básica", "orden": 1,
-     "costo_kg": 2_140.0, "peso_relativo": 0.03, "virus_max_pct": 0.0},
-    {"id": "inicial_1", "nombre": "Inicial I", "clase": "Básica", "orden": 2,
-     "costo_kg": 1_186.0, "peso_relativo": 0.08, "virus_max_pct": 0.2},
-    {"id": "inicial_2", "nombre": "Inicial II", "clase": "Básica", "orden": 3,
-     "costo_kg": 894.0, "peso_relativo": 0.18, "virus_max_pct": 0.5},
-    {"id": "inicial_3", "nombre": "Inicial III", "clase": "Básica", "orden": 4,
-     "costo_kg": 713.0, "peso_relativo": 0.22, "virus_max_pct": 1.0},
-    {"id": "prefundacion", "nombre": "Prefundación", "clase": "Básica", "orden": 5,
-     "costo_kg": 608.0, "peso_relativo": 0.17, "virus_max_pct": 2.0},
-    {"id": "fundacion", "nombre": "Fundación", "clase": "Básica", "orden": 6,
-     "costo_kg": 521.0, "peso_relativo": 0.14, "virus_max_pct": 4.0},
-    {"id": "registrada", "nombre": "Registrada", "clase": "Certificada", "orden": 7,
-     "costo_kg": 428.0, "peso_relativo": 0.12, "virus_max_pct": 6.0},
-    {"id": "certificada", "nombre": "Certificada", "clase": "Certificada", "orden": 8,
-     "costo_kg": 356.0, "peso_relativo": 0.06, "virus_max_pct": 10.0},
+     "ambiente": "condiciones controladas", "costo_kg": 2_140.0,
+     "peso_relativo": 0.02, "virus_max_pct": 0.0},
+    {"id": "preinicial_3", "nombre": "Preinicial III", "clase": "Básica", "orden": 2,
+     "ambiente": "condiciones controladas", "costo_kg": 1_685.0,
+     "peso_relativo": 0.03, "virus_max_pct": 0.0},
+    {"id": "inicial_1", "nombre": "Inicial I", "clase": "Básica", "orden": 3,
+     "ambiente": "campo", "costo_kg": 1_186.0,
+     "peso_relativo": 0.08, "virus_max_pct": 0.2},
+    {"id": "inicial_2", "nombre": "Inicial II", "clase": "Básica", "orden": 4,
+     "ambiente": "campo", "costo_kg": 894.0,
+     "peso_relativo": 0.17, "virus_max_pct": 0.6},
+    {"id": "inicial_3", "nombre": "Inicial III", "clase": "Básica", "orden": 5,
+     "ambiente": "campo", "costo_kg": 713.0,
+     "peso_relativo": 0.21, "virus_max_pct": 1.0},
+    {"id": "prefundacion", "nombre": "Prefundación", "clase": "Básica", "orden": 6,
+     "ambiente": "campo", "costo_kg": 608.0,
+     "peso_relativo": 0.16, "virus_max_pct": 1.6},
+    {"id": "fundacion", "nombre": "Fundación", "clase": "Básica", "orden": 7,
+     "ambiente": "campo", "costo_kg": 521.0,
+     "peso_relativo": 0.14, "virus_max_pct": 2.0},
+    {"id": "registrada", "nombre": "Registrada", "clase": "Certificada", "orden": 8,
+     "ambiente": "campo", "costo_kg": 428.0,
+     "peso_relativo": 0.13, "virus_max_pct": 6.0},
+    {"id": "certificada", "nombre": "Certificada", "clase": "Certificada", "orden": 9,
+     "ambiente": "campo", "costo_kg": 356.0,
+     "peso_relativo": 0.06, "virus_max_pct": 15.0},
 ]
+
+# Los virus que se fiscalizan y cómo se analizan. La tolerancia declarada arriba
+# es sobre PVY, que es el que manda; los otros tres se informan igual en el
+# análisis. En las categorías de laboratorio (in vitro) la tolerancia es 0%,
+# igual que la de mezcla varietal.
+VIRUS_FISCALIZADOS = ["PVY", "PVX", "PLRV", "PVS"]
+METODO_ANALISIS = "DAS-ELISA"
+LABORATORIO = "INTA Balcarce · ProPapa (habilitado por INASE)"
+
 CAT_POR_ID = {c["id"]: c for c in CATEGORIAS}
 
 # --- Calibres (Res. INASE 171/2000, Art. 25) -------------------------------
@@ -119,13 +139,35 @@ CALIBRES = {
 }
 CALIBRE_TOLERANCIA_PCT = 5.0   # Art. 25: 5% en peso del grado contiguo
 
+# --- Grados por PESO (Res. INASE 217/2002, art. 22) ------------------------
+# Ojo, no es lo mismo que lo de arriba: los calibres en milímetros aplican al
+# TUBÉRCULO SEMILLA producido a campo; estos grados por peso en gramos aplican
+# al MINITUBÉRculo de las categorías Preiniciales, que sale de invernáculo y se
+# cuenta por unidad, no por kilo. Confundirlos es el tipo de error que un
+# productor detecta al toque.
+GRADOS_PESO = {
+    0: {"min_g": None, "max_g": 5.0, "label": "Grado 0 (menos de 5 g)"},
+    1: {"min_g": 5.0, "max_g": 15.0, "label": "Grado 1 (5 a 15 g)"},
+    2: {"min_g": 15.0, "max_g": 25.0, "label": "Grado 2 (15 a 25 g)"},
+    3: {"min_g": 25.0, "max_g": 40.0, "label": "Grado 3 (25 a 40 g)"},
+    4: {"min_g": 40.0, "max_g": 60.0, "label": "Grado 4 (40 a 60 g)"},
+    5: {"min_g": 60.0, "max_g": None, "label": "Grado 5 (más de 60 g)"},
+}
+GRADO_PESO_TOLERANCIA_PCT = 5.0        # mismo 5% de desvío fuera de grado
+MAX_UNIDADES_POR_ENVASE = 2_000        # micro/minitubérculos por envase
+MAX_MICROPLANTAS_POR_CONJUNTO = 1_000
+
 # --- Envases y conservación ------------------------------------------------
 KG_POR_BOLSON = 1_000          # big bag: la unidad con la que se mueve la cámara
 KG_MAX_ENVASE_CAMPO = 50       # Art. 23
 KG_MAX_ENVASE_PREINICIAL = 20  # Art. 23
 
-TEMP_MIN_CONSERVACION = 3.0    # °C — bibliografía de poscosecha (>3 meses)
+TEMP_MIN_CONSERVACION = 3.0    # °C — conservación por más de 3 meses (CIP/INTA)
 TEMP_MAX_CONSERVACION = 5.0
+HUMEDAD_MIN_PCT = 85           # humedad relativa: por debajo, el tubérculo se deshidrata
+HUMEDAD_MAX_PCT = 90           # por encima, condensación y pudrición
+# Oscuridad total: la luz genera solanina y verdeo. Y antes de despachar, el
+# lote vuelve a temperatura ambiente de forma CONTROLADA: si no, condensa.
 TEMP_ROMPE_DORMANCIA = 4.0     # por encima de esto arranca la brotación
 
 # El frío es lo que compra tiempo: a 3–5 °C el reloj fisiológico del tubérculo
@@ -164,5 +206,18 @@ DOCS_EXPORTACION = [
      "requiere": ["factura", "pais_destino", "posicion_arancelaria"]},
 ]
 
-# Posición arancelaria de la papa para siembra en el Mercosur.
+# Posición arancelaria de la papa para siembra (NCM/HS).
 POSICION_ARANCELARIA = "0701.10.00"
+
+# --- Lo que el semillero está obligado a tener -----------------------------
+# La comercialización de papa semilla es obligatoriamente de clase FISCALIZADA
+# (Res. SAGyP 146/89). El semillero lleva Registro de Cultivos, obtiene el
+# Documento de Autorización de Venta (DAV) o de Multiplicación (DAM), y tiene
+# un Director Técnico registrado que responde por la fiscalización.
+CLASE_COMERCIAL = "Fiscalizada"
+DOCUMENTOS_HABILITANTES = ["DAV", "DAM"]
+
+# Identidad registral de la empresa en el dataset (sintética, con el formato
+# real: es lo que va impreso en cada rótulo y en cada documento de exportación).
+INSCRIPCION_RNCFS = "RNCyFS N° 14.328"
+CUIT = "30-54187629-3"

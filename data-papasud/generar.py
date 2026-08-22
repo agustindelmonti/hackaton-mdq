@@ -78,15 +78,20 @@ def iso(d: datetime.date) -> str:
 # alta se producen en la Patagonia austral, donde el aislamiento sanitario y la
 # ausencia de áfidos vectores permiten mantener el pedigrí limpio.
 CAMPOS = [
-    {"id": "calafate", "nombre": "Campo El Calafate — Santa Cruz", "ha": 38.4,
-     "rinde": 28.6, "zona": "Patagonia austral", "categorias_altas": True},
-    {"id": "sierra_chica", "nombre": "Campo Sierra Chica — Balcarce", "ha": 61.7,
+    # El minitubérculo de las categorías Preiniciales sale de El Calafate: el
+    # aislamiento sanitario del lugar —heladas y viento extremo, sin áfidos
+    # vectores— es lo que permite arrancar la escalera con carga viral cero.
+    {"id": "calafate", "nombre": "Campo El Calafate — Santa Cruz", "ha": 22.6,
+     "rinde": 26.4, "zona": "Patagonia austral", "categorias_altas": True},
+    # La multiplicación a campo se hace en el sudeste bonaerense, donde está el
+    # grueso de la papa semilla del país.
+    {"id": "tres_arroyos", "nombre": "Campo Tres Arroyos", "ha": 68.4,
      "rinde": 37.2, "zona": "Sudeste bonaerense", "categorias_altas": False},
-    {"id": "la_brava", "nombre": "Campo La Brava — Balcarce", "ha": 48.9,
+    {"id": "san_cayetano", "nombre": "Campo San Cayetano", "ha": 54.7,
      "rinde": 36.1, "zona": "Sudeste bonaerense", "categorias_altas": False},
-    {"id": "otamendi", "nombre": "Campo Otamendi — Gral. Alvarado", "ha": 39.2,
+    {"id": "gonzalez_chaves", "nombre": "Campo González Chaves", "ha": 43.9,
      "rinde": 34.8, "zona": "Sudeste bonaerense", "categorias_altas": False},
-    {"id": "napaleofu", "nombre": "Campo Napaleofú — Balcarce", "ha": 26.1,
+    {"id": "napaleofu", "nombre": "Campo Napaleofú — Balcarce", "ha": 24.7,
      "rinde": 33.4, "zona": "Sudeste bonaerense", "categorias_altas": False},
 ]
 
@@ -158,15 +163,17 @@ def generar_lotes() -> list[dict]:
                              weights=[w for _, w in campanias])[0]
 
         # El material de categoría alta sale de la Patagonia (aislamiento sanitario).
-        if cat["orden"] <= 2:
+        if cat["ambiente"] == "condiciones controladas":
             campo = CAMPOS[0]
         else:
             campo = R.choices(CAMPOS[1:], weights=[c["ha"] for c in CAMPOS[1:]])[0]
 
         # Kilos del lote: las categorías altas son lotes chicos (son caros y
         # escasos); las bajas, lotes grandes de multiplicación.
-        base_kg = {1: 4_800, 2: 11_500, 3: 26_000, 4: 38_000,
-                   5: 44_000, 6: 47_000, 7: 51_000, 8: 54_000}[cat["orden"]]
+        # Las Preiniciales son lotes chicos (minitubérculo caro y escaso); las
+        # categorías de campo crecen a medida que baja el pedigrí.
+        base_kg = {1: 3_400, 2: 6_100, 3: 12_800, 4: 27_000, 5: 38_000,
+                   6: 44_000, 7: 47_000, 8: 51_000, 9: 54_000}[cat["orden"]]
         kg = round(base_kg * R.uniform(0.72, 1.28), -2)
 
         # Calibre declarado. Grado 2 es el calibre de semilla por excelencia.
@@ -197,7 +204,7 @@ def generar_lotes() -> list[dict]:
         costo_kg = round(cat["costo_kg"] * R.uniform(0.94, 1.07), 2)
         # Exportación paga mejor: es material de categoría alta y sale con
         # certificación completa.
-        destino = "exportacion" if (cat["orden"] <= 5 and R.random() < 0.42) else "interno"
+        destino = "exportacion" if (cat["orden"] <= 6 and R.random() < 0.50) else "interno"
         markup = R.uniform(1.72, 1.94) if destino == "exportacion" else R.uniform(1.48, 1.66)
         precio_kg = round(costo_kg * markup, 2)
 
@@ -240,8 +247,12 @@ def generar_lotes() -> list[dict]:
             "fecha_ingreso": iso(ingreso),
             "analisis_estado": "aprobado",
             "analisis_fecha": iso(analisis_fecha),
-            "virus_pct": virus,
+            "analisis_metodo": D.METODO_ANALISIS,
+            "analisis_laboratorio": D.LABORATORIO,
+            "virus_pct": virus,                 # PVY, que es el que fija la tolerancia
             "virus_max_pct": cat["virus_max_pct"],
+            "ambiente": cat["ambiente"],
+            "clase_comercial": D.CLASE_COMERCIAL,
             "dormancia_dias": dormancia,
             "destino": destino,
         })

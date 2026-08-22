@@ -36,7 +36,7 @@ import i18n
 from authz import require_admin, require_feature, usuario_actual
 from core import (store, saneamiento, fase, memoria, importer, staging, anomalias,
                   semilla, movimientos, movimientos_nl, conciliacion, ordenes_carga,
-                  trazabilidad,
+                  trazabilidad, exportacion,
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
                   evolucion, ventas, paths, conocimiento, piso, onboarding)
@@ -1073,6 +1073,36 @@ def trazabilidad_get(lote: str, _u: dict = Depends(require_feature("trazabilidad
     r = trazabilidad.pedigri(lote)
     if not r.get("encontrado") and not r.get("candidatos"):
         raise HTTPException(404, lote)
+    return r
+
+
+# --- N03 · el copiloto de la carpeta de exportación -------------------------
+@app.get("/api/exportacion")
+def exportacion_embarques(_u: dict = Depends(require_feature("exportacion"))):
+    """Los embarques abiertos que necesitan carpeta."""
+    return {"embarques": exportacion.embarques(),
+            "documentos": [{"id": d[0], "nombre": d[1], "organismo": d[2], "emite": d[3]}
+                           for d in exportacion.DOCUMENTOS]}
+
+
+@app.get("/api/exportacion/{numero}")
+def exportacion_carpeta(numero: str, _u: dict = Depends(require_feature("exportacion"))):
+    """LA CARPETA del embarque: los seis documentos, cuánto le falta a cada uno
+    y el control cruzado de kilos, bultos y descripción entre ellos."""
+    r = exportacion.carpeta(numero)
+    if not r:
+        raise HTTPException(404, numero)
+    return r
+
+
+@app.get("/api/exportacion/{numero}/{doc_id}")
+def exportacion_documento(numero: str, doc_id: str,
+                          _u: dict = Depends(require_feature("exportacion"))):
+    """UN documento pre-completado desde la trazabilidad del lote. Cada campo
+    viaja con su FUENTE: de qué lote, de qué análisis, de qué cliente salió."""
+    r = exportacion.documento(numero, doc_id)
+    if not r:
+        raise HTTPException(404, f"{numero}/{doc_id}")
     return r
 
 

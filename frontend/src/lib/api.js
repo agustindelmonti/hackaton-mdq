@@ -178,6 +178,10 @@ export const api = {
   ordenVerificar: (numero) => get(`/api/ordenes-carga/${numero}/verificar`),
   ordenEmitir: (numero, aceptarAdvertencias = false) =>
     post(`/api/ordenes-carga/${numero}/emitir`, { aceptar_advertencias: aceptarAdvertencias }),
+  // N03 · la carpeta de exportación, pre-completada desde la trazabilidad
+  exportacion: () => get("/api/exportacion"),
+  exportacionCarpeta: (numero) => get(`/api/exportacion/${numero}`),
+  exportacionDocumento: (numero, docId) => get(`/api/exportacion/${numero}/${docId}`),
   // El pedigrí de un lote, punta a punta
   trazabilidad: (lote) => get(`/api/trazabilidad/${encodeURIComponent(lote)}`),
   syncDelta: (formato = "generico") => get(`/api/sync/delta?formato=${formato}`),

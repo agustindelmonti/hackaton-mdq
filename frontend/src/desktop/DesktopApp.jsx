@@ -22,6 +22,7 @@ import MiPerfil from "../sections/MiPerfil";
 import GestionEquipo from "../sections/GestionEquipo";
 import AdminContexto from "../sections/AdminContexto";
 import Administracion from "../sections/Administracion";
+import Exportacion from "../sections/Exportacion";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
 import Conciliacion from "../sections/Conciliacion";
@@ -412,6 +413,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                 {section === "deposito" && <Ubicaciones onPreguntar={preguntar} />}
                 {section === "movimientos" && <Movimientos onPreguntar={preguntar} />}
                 {section === "conciliacion" && <Conciliacion onPreguntar={preguntar} />}
+                {section === "exportacion" && <Exportacion onPreguntar={preguntar} />}
                 {section === "logistica" && (
                   <Despachos onPreguntar={preguntar} highlight={highlight} />
                 )}

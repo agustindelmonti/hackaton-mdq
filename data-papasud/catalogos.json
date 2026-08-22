@@ -106,7 +106,18 @@
    "nombre": "Preinicial II",
    "clase": "Básica",
    "orden": 1,
+   "ambiente": "condiciones controladas",
    "costo_kg": 2140.0,
+   "peso_relativo": 0.02,
+   "virus_max_pct": 0.0
+  },
+  {
+   "id": "preinicial_3",
+   "nombre": "Preinicial III",
+   "clase": "Básica",
+   "orden": 2,
+   "ambiente": "condiciones controladas",
+   "costo_kg": 1685.0,
    "peso_relativo": 0.03,
    "virus_max_pct": 0.0
   },
@@ -114,7 +125,8 @@
    "id": "inicial_1",
    "nombre": "Inicial I",
    "clase": "Básica",
-   "orden": 2,
+   "orden": 3,
+   "ambiente": "campo",
    "costo_kg": 1186.0,
    "peso_relativo": 0.08,
    "virus_max_pct": 0.2
@@ -123,55 +135,61 @@
    "id": "inicial_2",
    "nombre": "Inicial II",
    "clase": "Básica",
-   "orden": 3,
+   "orden": 4,
+   "ambiente": "campo",
    "costo_kg": 894.0,
-   "peso_relativo": 0.18,
-   "virus_max_pct": 0.5
+   "peso_relativo": 0.17,
+   "virus_max_pct": 0.6
   },
   {
    "id": "inicial_3",
    "nombre": "Inicial III",
    "clase": "Básica",
-   "orden": 4,
+   "orden": 5,
+   "ambiente": "campo",
    "costo_kg": 713.0,
-   "peso_relativo": 0.22,
+   "peso_relativo": 0.21,
    "virus_max_pct": 1.0
   },
   {
    "id": "prefundacion",
    "nombre": "Prefundación",
    "clase": "Básica",
-   "orden": 5,
+   "orden": 6,
+   "ambiente": "campo",
    "costo_kg": 608.0,
-   "peso_relativo": 0.17,
-   "virus_max_pct": 2.0
+   "peso_relativo": 0.16,
+   "virus_max_pct": 1.6
   },
   {
    "id": "fundacion",
    "nombre": "Fundación",
    "clase": "Básica",
-   "orden": 6,
+   "orden": 7,
+   "ambiente": "campo",
    "costo_kg": 521.0,
    "peso_relativo": 0.14,
-   "virus_max_pct": 4.0
+   "virus_max_pct": 2.0
   },
   {
    "id": "registrada",
    "nombre": "Registrada",
    "clase": "Certificada",
-   "orden": 7,
+   "orden": 8,
+   "ambiente": "campo",
    "costo_kg": 428.0,
-   "peso_relativo": 0.12,
+   "peso_relativo": 0.13,
    "virus_max_pct": 6.0
   },
   {
    "id": "certificada",
    "nombre": "Certificada",
    "clase": "Certificada",
-   "orden": 8,
+   "orden": 9,
+   "ambiente": "campo",
    "costo_kg": 356.0,
    "peso_relativo": 0.06,
-   "virus_max_pct": 10.0
+   "virus_max_pct": 15.0
   }
  ],
  "calibres": {
@@ -200,31 +218,31 @@
   {
    "id": "calafate",
    "nombre": "Campo El Calafate — Santa Cruz",
-   "ha": 38.4,
-   "rinde": 28.6,
+   "ha": 22.6,
+   "rinde": 26.4,
    "zona": "Patagonia austral",
    "categorias_altas": true
   },
   {
-   "id": "sierra_chica",
-   "nombre": "Campo Sierra Chica — Balcarce",
-   "ha": 61.7,
+   "id": "tres_arroyos",
+   "nombre": "Campo Tres Arroyos",
+   "ha": 68.4,
    "rinde": 37.2,
    "zona": "Sudeste bonaerense",
    "categorias_altas": false
   },
   {
-   "id": "la_brava",
-   "nombre": "Campo La Brava — Balcarce",
-   "ha": 48.9,
+   "id": "san_cayetano",
+   "nombre": "Campo San Cayetano",
+   "ha": 54.7,
    "rinde": 36.1,
    "zona": "Sudeste bonaerense",
    "categorias_altas": false
   },
   {
-   "id": "otamendi",
-   "nombre": "Campo Otamendi — Gral. Alvarado",
-   "ha": 39.2,
+   "id": "gonzalez_chaves",
+   "nombre": "Campo González Chaves",
+   "ha": 43.9,
    "rinde": 34.8,
    "zona": "Sudeste bonaerense",
    "categorias_altas": false
@@ -232,7 +250,7 @@
   {
    "id": "napaleofu",
    "nombre": "Campo Napaleofú — Balcarce",
-   "ha": 26.1,
+   "ha": 24.7,
    "rinde": 33.4,
    "zona": "Sudeste bonaerense",
    "categorias_altas": false
@@ -407,7 +425,7 @@
   "empresa": "Papasud S.A.",
   "hoy": "2026-08-22",
   "hectareas": 214.3,
-  "produccion_ciclo_kg": 7394670.0,
+  "produccion_ciclo_kg": 7468490.0,
   "campania": "2025/26",
   "posicion_arancelaria": "0701.10.00",
   "sintetico": true
