@@ -2628,15 +2628,19 @@ async def papasud_importar_planilla(
     return resultado
 
 
+from core import spa_estatica as _spa_estatica  # noqa: E402
+
 _STATIC_DIR = os.environ.get("POLPILOT_STATIC_DIR", "")
 if _STATIC_DIR and os.path.isdir(_STATIC_DIR):
     @app.get("/{spa_path:path}", include_in_schema=False)
     def spa(spa_path: str):
-        """El frontend compilado (Vite) servido por FastAPI: un servicio, un
-        puerto. Cualquier ruta que no sea un archivo real cae al index (SPA)."""
-        candidato = os.path.normpath(os.path.join(_STATIC_DIR, spa_path))
-        if not candidato.startswith(os.path.normpath(_STATIC_DIR)):
-            raise HTTPException(status_code=404, detail="Not Found")  # path traversal
-        if spa_path and os.path.isfile(candidato):
-            return FileResponse(candidato)
-        return FileResponse(os.path.join(_STATIC_DIR, "index.html"))
+        """El frontend compilado (Vite) servido por FastAPI.
+
+        Las rutas de la app caen al index. Un asset que no está (/assets/*.js,
+        sw.js, fuentes) es 404: devolver HTML ahí es la pantalla en blanco
+        `Expected a JavaScript module but got MIME text/html`.
+        """
+        kind, path, cc = _spa_estatica.resolver(_STATIC_DIR, spa_path)
+        if kind == "404" or not path:
+            raise HTTPException(status_code=404, detail="Not Found")
+        return FileResponse(path, headers={"Cache-Control": cc})

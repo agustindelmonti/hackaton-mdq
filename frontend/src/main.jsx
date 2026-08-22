@@ -20,10 +20,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // una vez; que no vuelva a pasar el día de una demo.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
-      // Sin service worker la app sigue funcionando con red; sólo se pierde el
-      // arranque offline. No es motivo para romper nada.
-    });
+    navigator.serviceWorker
+      .register("/sw.js", { updateViaCache: "none" })
+      .then((reg) => { reg.update().catch(() => {}); })
+      .catch(() => {
+        // Sin service worker la app sigue funcionando con red; sólo se pierde
+        // el arranque offline. No es motivo para romper nada.
+      });
   });
 } else if ("serviceWorker" in navigator) {
   // Si quedó uno registrado de una corrida anterior, se va con sus caches.

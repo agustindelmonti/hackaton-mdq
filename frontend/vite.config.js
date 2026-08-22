@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -6,8 +8,28 @@ import tailwindcss from "@tailwindcss/vite";
 // El front del demo se levanta con: POLPILOT_API_PORT=8001 npm run dev -- --port 5174
 const apiPort = process.env.POLPILOT_API_PORT || "8000";
 
+function stampServiceWorker() {
+  // Cada build pisa __BUILD_ID__ en dist/sw.js para que el SW viejo se
+  // reemplace y tire el cache del index.html (si no, el hash del bundle
+  // queda pegado y el módulo llega como text/html).
+  let swPath = "";
+  return {
+    name: "stamp-sw-version",
+    apply: "build",
+    configResolved(config) {
+      swPath = path.resolve(config.root, config.build.outDir, "sw.js");
+    },
+    closeBundle() {
+      if (!swPath || !fs.existsSync(swPath)) return;
+      const src = fs.readFileSync(swPath, "utf8");
+      if (!src.includes("__BUILD_ID__")) return;
+      fs.writeFileSync(swPath, src.replaceAll("__BUILD_ID__", Date.now().toString(36)));
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), stampServiceWorker()],
   resolve: {
     dedupe: ["zustand"],
   },
