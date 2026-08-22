@@ -87,7 +87,7 @@ const BLOQUES_NAV = [
   { lk: "nav.grupo_sistema", ids: ["cargar", "documentos", "auditoria", "admin_contexto", "perfil"] },
 ];
 
-export default function DesktopApp({ data, oportunidades, fase, user, onRecargar }) {
+export default function DesktopApp({ data, oportunidades, fase, user, onRecargar, angelaOpen: angelaOpenProp, setAngelaOpen: setAngelaOpenProp }) {
   const t = useT();
   const session = useSession();
   // P39·2 — un empleado no aterriza en el foco de la fase (eso es del dueño):
@@ -112,7 +112,9 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   const [highlight, setHighlight] = useState(null);
   // El panel de Ángela vive abierto por defecto cuando la pantalla lo banca
   // (la referencia de diseño: Ángela siempre presente a la derecha).
-  const [angelaOpen, setAngelaOpen] = useState(() => window.innerWidth >= 1280);
+  const [angelaOpenLocal, setAngelaOpenLocal] = useState(() => window.innerWidth >= 1280);
+  const angelaOpen = angelaOpenProp ?? angelaOpenLocal;
+  const setAngelaOpen = setAngelaOpenProp ?? setAngelaOpenLocal;
   const [consultaAngela, setConsultaAngela] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [faseVisible, setFaseVisible] = useState(true);

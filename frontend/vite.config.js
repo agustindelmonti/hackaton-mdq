@@ -8,6 +8,9 @@ const apiPort = process.env.POLPILOT_API_PORT || "8000";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    dedupe: ["zustand"],
+  },
   server: {
     port: 5173,
     // Proxy a la API de FastAPI durante desarrollo.

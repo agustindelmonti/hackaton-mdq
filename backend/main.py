@@ -24,7 +24,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
 import angela
@@ -1775,6 +1775,68 @@ def chat(req: ChatRequest, request: Request):
     if _es_demo():
         raise HTTPException(status_code=401, detail=i18n.t("api.sesion_requerida"))
     return angela.responder(req.mensaje, historial, rol="invitado", nombre=None, features=[])
+
+
+def _angela_stream_events(req: ChatRequest, request: Request):
+    """Auth/cap compartido entre /api/angela y /api/angela/stream."""
+    historial = [t.model_dump() for t in (req.historial or [])]
+    if _ip_excedido(_client_ip(request), _cap_ip()):
+        yield {"type": "done", "result": {**_mensaje_cap(request, req.token), "ok": True}}
+        return
+    if req.token:
+        u = auth.usuario_por_token(req.token)
+        if not u:
+            raise HTTPException(status_code=401, detail=i18n.t("api.sesion_invalida"))
+        cap = _cap_mensajes()
+        if cap > 0:
+            usados = _CHAT_POR_SESION.get(req.token, 0)
+            if usados >= cap:
+                yield {
+                    "type": "done",
+                    "result": {
+                        **{"respuesta": i18n.t("angela.cap_alcanzado", _lang(u)),
+                           "modo": "cap", "tools_usadas": [], "acciones": [], "opciones": []},
+                        "ok": True,
+                    },
+                }
+                return
+            _CHAT_POR_SESION[req.token] = usados + 1
+        import time as _time
+        _t0 = _time.monotonic()
+        for event in angela.stream_responder(
+            req.mensaje, historial, rol=u.get("rol"),
+            nombre=u.get("username"), features=u.get("features"),
+        ):
+            yield event
+        _ms = round((_time.monotonic() - _t0) * 1000)
+        print(f"[angela/stream] {_ms}ms user={u['username']}", flush=True)
+        try:
+            store.audit.record(actor=u["username"], accion="consulta_angela",
+                               despues={"stream": True, "ms": _ms})
+        except Exception:  # noqa: BLE001
+            pass
+        return
+    if _es_demo():
+        raise HTTPException(status_code=401, detail=i18n.t("api.sesion_requerida"))
+    for event in angela.stream_responder(
+        req.mensaje, historial, rol="invitado", nombre=None, features=[],
+    ):
+        yield event
+
+
+@app.post("/api/angela/stream")
+def chat_stream(req: ChatRequest, request: Request):
+    import json
+
+    def sse():
+        for event in _angela_stream_events(req, request):
+            yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(
+        sse(),
+        media_type="text/event-stream; charset=utf-8",
+        headers={"Cache-Control": "no-cache, no-transform", "Connection": "keep-alive"},
+    )
 
 
 @app.get("/api/oportunidades")

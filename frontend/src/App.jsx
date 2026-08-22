@@ -3,6 +3,7 @@ import AngelaMark from "./components/AngelaMark";
 import Login from "./components/Login";
 import MobileApp from "./mobile/MobileApp";
 import DesktopApp from "./desktop/DesktopApp";
+import { AngelaRuntimeProvider } from "./lib/assistant/runtime-provider";
 import { useIsDesktop } from "./lib/useViewport";
 import { authStore, useSession } from "./lib/auth";
 import { api } from "./lib/api";
@@ -142,13 +143,29 @@ export default function App() {
   }
 
   const user = session.usuario;
+  const [angelaDockOpen, setAngelaDockOpen] = useState(
+    () => typeof window !== "undefined" && window.innerWidth >= 1280,
+  );
   // key por usuario: al cambiar de identidad ("View as" del demo, P9·E) el
   // árbol entero se rearma — features, secciones, chat de Ángela — CERO
   // arrastre del usuario anterior.
-  return isDesktop ? (
-    <DesktopApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
-  ) : (
-    <MobileApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
+  return (
+    <AngelaRuntimeProvider dockOpen={angelaDockOpen} setDockOpen={setAngelaDockOpen}>
+      {isDesktop ? (
+        <DesktopApp
+          key={user.username}
+          data={data}
+          oportunidades={oportunidades}
+          fase={fase}
+          user={user}
+          onRecargar={recargar}
+          angelaOpen={angelaDockOpen}
+          setAngelaOpen={setAngelaDockOpen}
+        />
+      ) : (
+        <MobileApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
+      )}
+    </AngelaRuntimeProvider>
   );
 }
 

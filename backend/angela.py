@@ -3256,3 +3256,170 @@ def responder(
         fb = _fallback(mensaje)
         fb["error_tecnico"] = str(e)
         return fb
+
+
+def stream_responder(
+    mensaje: str,
+    historial: list[dict] | None = None,
+    rol: str | None = None,
+    nombre: str | None = None,
+    features: list[str] | None = None,
+    idioma: str | None = None,
+):
+    """Generador SSE para assistant-ui: tool → text → done."""
+    if idioma not in paths.IDIOMAS:
+        from core import perfiles
+        idioma = perfiles.idioma_de(nombre) if nombre else paths.DEFAULT_LANG
+    _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
+
+    client, modelo = config.cliente_llm("chat")
+    if client is None:
+        fb = _fallback(mensaje)
+        if fb.get("respuesta"):
+            yield {"type": "text", "text": fb["respuesta"]}
+        yield {"type": "done", "result": {**fb, "ok": True}}
+        return
+
+    quien = ""
+    if nombre or rol:
+        quien = (
+            f"\n\nESTÁS HABLANDO CON: {nombre or 'un usuario'} ({rol or 'rol no especificado'}). "
+            f"Adaptá lo que mostrás a lo que esta persona necesita en su rol; no le ofrezcas "
+            f"cosas que no le corresponden."
+        )
+    try:
+        import auth as _auth
+        _ant = _auth.antiguedad(nombre) if nombre else None
+        if _ant and _ant["nuevo"]:
+            quien += (
+                f"\n\nESTA PERSONA ES NUEVA: entró hace {_ant['dias']} días. Todavía no "
+                f"sabe dónde está cada cosa ni cómo se hace cada trámite acá. Explicá "
+                f"con paciencia y sin jerga, un paso por vez, y cuando la pregunta sea "
+                f"de cómo se trabaja en este negocio usá 'consultar_manual' antes de "
+                f"contestar. No le pidas que sepa nombres de proveedores, códigos ni "
+                f"secciones: guiala."
+            )
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        _m = memoria.get(nombre) if nombre else {}
+        _prefs = {k: v for k, v in (_m.get("vista") or {}).items() if k != "widgets"}
+        _notas = _m.get("preferencias") or {}
+        if _prefs or _notas:
+            quien += "\n\nLO QUE RECORDÁS DE ESTA PERSONA (aplicalo sin que te lo repita):"
+            if _prefs.get("sin_torta"):
+                quien += "\n- No quiere gráficos de torta/donut NUNCA. Elegí siempre otra forma."
+            if _prefs.get("margen_pin_umbral") is not None:
+                quien += (f"\n- Quiere los productos con margen teórico menor a "
+                          f"{_prefs['margen_pin_umbral']:g}% fijados arriba donde se listan márgenes "
+                          "(la interfaz ya lo hace sola).")
+            if _prefs.get("orden_home"):
+                quien += f"\n- Ordenó los bloques de su Inicio así: {', '.join(_prefs['orden_home'])}."
+            for k, v in list(_notas.items())[:6]:
+                quien += f"\n- Nota: {k} = {v}"
+    except Exception:  # noqa: BLE001
+        pass
+
+    contexto = _resumen_para_prompt() if _tiene_feature("inventario") else (
+        "El resumen general del inventario no corresponde al rol de esta persona. "
+        "No cites cifras globales del negocio (plata inmovilizada, catálogo) ni datos "
+        "de módulos que no maneja; contestá sólo lo de su área."
+    )
+    if idioma == "en":
+        directiva_idioma = (
+            "\n\nLANGUAGE: Reply ALWAYS in English — plain-spoken business English, "
+            "warm and direct, same personality as ever (never stiff corporate). "
+            "Product, customer and supplier names stay in Spanish exactly as they "
+            "appear in the data (quote them naturally). Format money with en-US "
+            "grouping: $1,234,567 (they are Argentine pesos, ARS)."
+        )
+    else:
+        directiva_idioma = (
+            "\n\nIDIOMA: Respondé SIEMPRE en castellano rioplatense, como siempre. "
+            "La plata en formato argentino: $1.234.567."
+        )
+    system_texto = (SYSTEM_PROMPT.format(contexto=contexto) + _contexto_externo()
+                    + quien + directiva_idioma)
+    system = (
+        [{"type": "text", "text": system_texto, "cache_control": {"type": "ephemeral"}}]
+        if config.PROMPT_CACHE else system_texto
+    )
+    tools_disponibles = tools_para(_features_actuales())
+
+    messages: list[dict] = []
+    for turn in (historial or [])[-6:]:
+        if turn.get("role") in ("user", "assistant") and turn.get("content"):
+            messages.append({"role": turn["role"], "content": turn["content"]})
+    messages.append({"role": "user", "content": mensaje})
+
+    tools_usadas: list[str] = []
+    acciones: list[dict] = []
+    try:
+        for _ in range(MAX_TOOL_TURNS):
+            resp = client.messages.create(
+                model=modelo,
+                max_tokens=MAX_TOKENS,
+                system=system,
+                tools=tools_disponibles,
+                messages=messages,
+            )
+
+            if resp.stop_reason == "tool_use":
+                messages.append({"role": "assistant", "content": resp.content})
+                tool_results = []
+                for block in resp.content:
+                    if block.type != "tool_use":
+                        continue
+                    tools_usadas.append(block.name)
+                    result, accion = _run_tool(block.name, block.input or {})
+                    if accion:
+                        acciones.append(accion)
+                    yield {
+                        "type": "tool",
+                        "id": block.id,
+                        "name": block.name,
+                        "input": block.input or {},
+                        "result": result,
+                    }
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": json.dumps(_con_pesos(result), ensure_ascii=False),
+                    })
+                messages.append({"role": "user", "content": tool_results})
+                continue
+
+            texto = "".join(b.text for b in resp.content if b.type == "text").strip()
+            yield {"type": "text", "text": texto}
+            yield {
+                "type": "done",
+                "result": {
+                    "ok": True,
+                    "respuesta": texto,
+                    "modo": "claude",
+                    "tools_usadas": tools_usadas,
+                    "acciones": acciones,
+                },
+            }
+            return
+
+        msg = "Estoy dando muchas vueltas con esa consulta. ¿Me la reformulás más simple?"
+        yield {"type": "text", "text": msg}
+        yield {
+            "type": "done",
+            "result": {
+                "ok": True,
+                "respuesta": msg,
+                "modo": "claude",
+                "tools_usadas": tools_usadas,
+                "acciones": acciones,
+            },
+        }
+    except Exception as e:  # noqa: BLE001
+        fb = _fallback(mensaje)
+        fb["error_tecnico"] = str(e)
+        fb["ok"] = False
+        fb["error_code"] = "provider"
+        if fb.get("respuesta"):
+            yield {"type": "text", "text": fb["respuesta"]}
+        yield {"type": "done", "result": fb}
