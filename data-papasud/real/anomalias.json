@@ -2618,6 +2618,39 @@
   }
  },
  {
+  "id": "nombre_escrito_distinto",
+  "detalle": "«sotelol» y «sotelo» parecen la misma persona escrita de dos maneras (chofer)",
+  "valor": "sotelol",
+  "movimiento": "MOV-2026-000246",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 3
+  }
+ },
+ {
+  "id": "nombre_escrito_distinto",
+  "detalle": "«sotelol» y «sotelo» parecen la misma persona escrita de dos maneras (chofer)",
+  "valor": "sotelol",
+  "movimiento": "MOV-2026-000247",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "nombre_escrito_distinto",
+  "detalle": "«sotelol» y «sotelo» parecen la misma persona escrita de dos maneras (chofer)",
+  "valor": "sotelol",
+  "movimiento": "MOV-2026-000251",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 8
+  }
+ },
+ {
   "id": "dtv_repetido",
   "detalle": "el DTV 13750306-9 ampara 2 remitos distintos",
   "valor": "13750306-9",

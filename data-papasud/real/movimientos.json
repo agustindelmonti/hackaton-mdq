@@ -7981,7 +7981,7 @@
    "id": "dospanca"
   },
   "transporte": "cerone",
-  "chofer": "(raphael",
+  "chofer": "raphael",
   "dtv": "13784910-0",
   "observaciones": "B.AMARILLA USADA C/TARJ. 13784910-0",
   "bolsa_color": "amarilla",
@@ -8912,7 +8912,8 @@
   },
   "anomalias": [
    "destino_no_declarado",
-   "kg_como_texto"
+   "kg_como_texto",
+   "nombre_escrito_distinto"
   ]
  },
  {
@@ -8946,7 +8947,8 @@
    "fila_excel": 4
   },
   "anomalias": [
-   "destino_no_declarado"
+   "destino_no_declarado",
+   "nombre_escrito_distinto"
   ]
  },
  {
@@ -9082,7 +9084,8 @@
    "fila_excel": 8
   },
   "anomalias": [
-   "destino_no_declarado"
+   "destino_no_declarado",
+   "nombre_escrito_distinto"
   ]
  },
  {

@@ -2255,6 +2255,13 @@ def admin_reset_demo(token: str):
     return {"ok": True, "mensaje": "demo restaurado al estado canónico"}
 
 
+# El cerebro de la información: «¿tengo o no tengo?», el bloqueo con
+# alternativa y las consultas comerciales. Vive en su propio router para que el
+# track del modelo y este no se pisen en el mismo archivo.
+import api_cerebro  # noqa: E402
+app.include_router(api_cerebro.router)
+
+
 _STATIC_DIR = os.environ.get("POLPILOT_STATIC_DIR", "")
 if _STATIC_DIR and os.path.isdir(_STATIC_DIR):
     @app.get("/{spa_path:path}", include_in_schema=False)

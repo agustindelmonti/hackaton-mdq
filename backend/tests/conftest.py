@@ -23,6 +23,15 @@ if "POLPILOT_DATA_DIR" not in os.environ:
     os.makedirs(_scratch)
     shutil.copy2(os.path.join(_raiz, "data-papasud", "inventory.json"),
                  os.path.join(_scratch, "inventory.json"))
+    # La planilla real importada, si está: los tests del cerebro corren contra
+    # los datos de verdad de Papasud. Se COPIA (no se linkea) para que la suite
+    # no pueda tocar el seed versionado, igual que todo lo demás.
+    _real = os.path.join(_raiz, "data-papasud", "real")
+    if os.path.isdir(_real):
+        shutil.copytree(_real, os.path.join(_scratch, "real"))
+    _seed = os.path.join(_raiz, "data-papasud", "pedidos_abiertos.seed.json")
+    if os.path.isfile(_seed):
+        shutil.copy2(_seed, os.path.join(_scratch, "pedidos_abiertos.seed.json"))
     os.environ["POLPILOT_DATA_DIR"] = _scratch
 
 

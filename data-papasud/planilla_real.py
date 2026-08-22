@@ -240,10 +240,11 @@ def _transporte(v) -> tuple[str | None, str | None]:
     if not t:
         return None, None
     t = _sn(t)
+    t = t.replace("((", "(")                      # 'cerone((raphael)' — se les fue
     m = re.match(r"^([^(/]+)[(/]\s*([^)/]+)\)?\s*$", t)
     if m:
-        return m.group(1).strip(" -"), m.group(2).strip(" -")
-    return t, None
+        return m.group(1).strip(" -()"), m.group(2).strip(" -()")
+    return t.strip(" -()"), None
 
 
 def _colores(obs: str | None) -> tuple[str | None, str | None]:
@@ -591,7 +592,28 @@ class Importacion:
                                  f"el lote {lote} declara {len(vs)} variedades ({detalle}); "
                                  f"por kilos manda {manda}", valor=v)
 
-        # 2 · El mismo DTV en dos remitos distintos. Un DTV ampara UN tránsito.
+        # 2 · El mismo nombre escrito de dos maneras. «cerone(sotelo)» y
+        #     «cerone(sotelol)» son el mismo chofer, y a la hora de liquidarle
+        #     el flete son dos personas distintas en la planilla.
+        import difflib
+        for campo in ("transporte", "chofer"):
+            nombres = sorted({m[campo] for m in self.movimientos if m.get(campo)})
+            ya: set[str] = set()
+            for i, a in enumerate(nombres):
+                for b in nombres[i + 1:]:
+                    if b in ya or abs(len(a) - len(b)) > 2:
+                        continue
+                    if difflib.SequenceMatcher(None, a, b).ratio() < 0.88:
+                        continue
+                    ya.add(b)
+                    for m in self.movimientos:
+                        if m.get(campo) == b:
+                            self._marcar(m, "nombre_escrito_distinto",
+                                         f"«{b}» y «{a}» parecen la misma persona "
+                                         f"escrita de dos maneras ({campo})",
+                                         valor=b)
+
+        # 3 · El mismo DTV en dos remitos distintos. Un DTV ampara UN tránsito.
         por_dtv: dict[str, set] = defaultdict(set)
         for m in self.movimientos:
             if m["dtv"]:

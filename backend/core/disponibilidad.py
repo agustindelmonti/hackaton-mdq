@@ -356,7 +356,8 @@ def _guardar_pedidos(ps: list[dict]) -> None:
         json.dump(ps, fh, ensure_ascii=False, indent=1)
 
 
-def pedidos_abiertos(*, variedad=None, ubicacion=None, calibre=None) -> list[dict]:
+def pedidos_abiertos(*, variedad=None, ubicacion=None, calibre=None,
+                     lote=None) -> list[dict]:
     out = []
     for p in _pedidos_todos():
         if p.get("estado") != "abierto":
@@ -366,6 +367,11 @@ def pedidos_abiertos(*, variedad=None, ubicacion=None, calibre=None) -> list[dic
         if ubicacion and p.get("ubicacion") != ubicacion:
             continue
         if calibre and p.get("calibre") != calibre:
+            continue
+        # Un pedido sólo compromete a un lote si tiene ESE lote asignado. Los
+        # que todavía no eligieron lote no se le cuelgan a ninguno: se avisan
+        # aparte, que es distinto de darlos por reservados en el lote de al lado.
+        if lote and lote not in (p.get("lotes") or []):
             continue
         out.append(p)
     return sorted(out, key=lambda p: p.get("entrega") or "")
@@ -378,9 +384,17 @@ def _kg_pedido(p: dict) -> float:
     return float(p.get("bolsas") or 0) * kb
 
 
-def comprometido(*, variedad=None, ubicacion=None, calibre=None) -> dict:
-    ps = pedidos_abiertos(variedad=variedad, ubicacion=ubicacion, calibre=calibre)
-    return {"kg": round(sum(_kg_pedido(p) for p in ps)), "pedidos": ps}
+def comprometido(*, variedad=None, ubicacion=None, calibre=None, lote=None) -> dict:
+    ps = pedidos_abiertos(variedad=variedad, ubicacion=ubicacion,
+                          calibre=calibre, lote=lote)
+    d = {"kg": round(sum(_kg_pedido(p) for p in ps)), "pedidos": ps}
+    if lote:
+        sueltos = [p for p in pedidos_abiertos(variedad=variedad, ubicacion=ubicacion,
+                                               calibre=calibre)
+                   if not p.get("lotes")]
+        d["sin_lote_asignado"] = {"kg": round(sum(_kg_pedido(p) for p in sueltos)),
+                                  "pedidos": sueltos}
+    return d
 
 
 # ===========================================================================
@@ -395,9 +409,12 @@ def consultar(*, variedad=None, calibre=None, ubicacion=None, lote=None,
       2. dónde está                     5. los remitos que lo respaldan
       3. cuánto comprometido, cuánto libre
     """
+    if lote and not variedad:
+        variedad = (real.lote_por_id().get(lote) or {}).get("variedad")
     ps = partidas(variedad=variedad, calibre=calibre, ubicacion=ubicacion, lote=lote)
     r = resumen(ps)
-    comp = comprometido(variedad=variedad, ubicacion=ubicacion, calibre=calibre)
+    comp = comprometido(variedad=variedad, ubicacion=ubicacion, calibre=calibre,
+                        lote=lote)
     libre_kg = max(0, r["kg"] - comp["kg"])
 
     pedido_kg = conversion = None
@@ -422,32 +439,37 @@ def consultar(*, variedad=None, calibre=None, ubicacion=None, lote=None,
         "resumen": r,
         "pedidos_abiertos": comp["pedidos"],
         "titular": _titular(r, comp, libre_kg, pedido_kg, alcanza, variedad, calibre,
-                            ubicacion, unidad, cantidad),
+                            ubicacion, unidad, cantidad, lote),
         "advertencias": _advertencias(r, ps),
     }
 
 
 def _titular(r, comp, libre, pedido_kg, alcanza, variedad, calibre, ubicacion,
-             unidad, cantidad) -> str:
+             unidad, cantidad, lote=None) -> str:
     """Una línea. El dueño está manejando: no lee una tabla."""
-    que = variedad.title() if variedad else "stock"
+    if lote:
+        que = f"el lote {lote}" + (f" ({variedad})" if variedad else "")
+    else:
+        que = variedad.title() if variedad else "stock"
     if calibre:
         que += f" {calibre}"
     donde = f" en {real.nombre_ubicacion(ubicacion)}" if ubicacion else ""
     if pedido_kg is None:
         if not r["kg"]:
             return f"No hay {que}{donde}."
-        s = f"Hay {_num(r['kg'])} kg de {que}{donde}"
+        s = (f"{que[0].upper()}{que[1:]}{donde} tiene {_num(r['kg'])} kg" if lote
+             else f"Hay {_num(r['kg'])} kg de {que}{donde}")
         if r["bolsas"]:
             s += f" ({_num(r['bolsas'])} bolsas)"
         if comp["kg"]:
             s += f". Comprometidos {_num(comp['kg'])} kg — libres {_num(libre)}"
         return s + "."
-    cant = f"{_num(cantidad)} {unidad}"
+    cant = f"{_num(cantidad)} {unidad}" if unidad == "bolsas" else None
+    sufijo = f" ({cant})" if cant else ""
     if alcanza:
         return (f"Sí. Tenés {_num(libre)} kg libres de {que}{donde} "
-                f"y el pedido son {_num(pedido_kg)} kg ({cant}).")
-    return (f"No alcanza. Piden {_num(pedido_kg)} kg ({cant}) de {que}{donde} "
+                f"y el pedido son {_num(pedido_kg)} kg{sufijo}.")
+    return (f"No alcanza. Piden {_num(pedido_kg)} kg{sufijo} de {que}{donde} "
             f"y hay {_num(libre)} kg libres: faltan {_num(pedido_kg - libre)} kg.")
 
 
