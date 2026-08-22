@@ -149,6 +149,7 @@ const TITLES = {
   conteo: ['Conteo físico', 'Discrepancia neta de merma'],
   lotes: ['Catálogo de lotes', 'Linaje y registro'],
   exportacion: ['Exportación', 'Documentación — cierre, DEMO sin valor legal'],
+  historial: ['Historial de conteos', 'Auditoría — lote, fecha, usuario, contado'],
 };
 
 function navTo(view, params) {
@@ -178,6 +179,7 @@ function renderView(view) {
   if (view === 'conteo') { setTitle('Conteo físico', 'Discrepancia neta de merma'); initConteoView(); }
   if (view === 'lotes') { setTitle('Catálogo de lotes', 'Linaje y registro'); initLotesView(); }
   if (view === 'exportacion') { setTitle('Exportación', 'Documentación — cierre, DEMO sin valor legal'); initExportacionView(ctx.loteId); }
+  if (view === 'historial') { setTitle('Historial de conteos', 'Auditoría — lote, fecha, usuario, contado'); initHistorialView(); }
 }
 function setTitle(title, subtitle) {
   document.getElementById('topTitle').textContent = title;
@@ -661,29 +663,41 @@ function redactarHipotesisMerma(candidatos) {
   return frase;
 }
 
-function renderDiscrepancia() {
-  const loteId = document.getElementById('conteoLoteSelect').value;
-  const kgContado = parseFloat(document.getElementById('conteoKgInput').value);
-  const lote = LOTE_BY_ID[loteId];
+// Cálculo compartido entre el render en vivo y el registro persistido
+// (registrarConteo) — un solo lugar decide qué es "esperado" y qué
+// "excede", para que la auditoría y la pantalla nunca puedan divergir.
+function calcularDiscrepancia(loteId, kgContado) {
   const ubic = ubicacionActualDeLote(loteId);
-  const resultEl = document.getElementById('discrepanciaResult');
-
-  if (!ubic) { resultEl.innerHTML = '<div class="empty-state">Este lote no tiene stock activo.</div>'; return; }
-
+  if (!ubic) return null;
   const declarado = stockPorLoteUbic(loteId, ubic.id);
   const ingreso = ultimoIngresoA(loteId, ubic.id);
   const dias = ingreso ? diasDesde(ingreso.fecha) : 0;
   const pct = mermaEsperadaPct(dias);
   const esperado = declarado * (1 - pct / 100);
+  const tolerancia = declarado * 0.01;
+  const result = { ubic, declarado, ingreso, dias, pct, esperado, tolerancia };
+  if (!isNaN(kgContado)) {
+    result.delta = kgContado - esperado;
+    result.excede = Math.abs(result.delta) > tolerancia;
+  }
+  return result;
+}
 
-  let bodyExtra = '';
+function renderDiscrepancia() {
+  const loteId = document.getElementById('conteoLoteSelect').value;
+  const kgContado = parseFloat(document.getElementById('conteoKgInput').value);
+  const resultEl = document.getElementById('discrepanciaResult');
+  document.getElementById('registrarConteoResult').innerHTML = '';
+
+  const calc = calcularDiscrepancia(loteId, kgContado);
+  if (!calc) { resultEl.innerHTML = '<div class="empty-state">Este lote no tiene stock activo.</div>'; return; }
+  const { ubic, declarado, dias, pct, esperado, tolerancia } = calc;
+
   let box = '';
   if (isNaN(kgContado)) {
     box = `<div class="alert-box dudoso"><div class="alert-title">🟡 Ingresá el conteo</div><div class="alert-body">Escribí los kg contados físicamente para comparar contra lo esperado.</div></div>`;
   } else {
-    const delta = kgContado - esperado;
-    const tolerancia = declarado * 0.01;
-    const excede = Math.abs(delta) > tolerancia;
+    const { delta, excede } = calc;
 
     if (!excede) {
       box = `
@@ -723,6 +737,173 @@ function renderDiscrepancia() {
       <div class="field-row"><span class="field-label">Kg esperado</span><span class="field-value tabular">${fmtKg(esperado)}</span></div>
     </div>
     ${box}`;
+}
+
+// El "create" real de la auditoría: hasta acá, Conteo sólo calculaba en
+// vivo y no dejaba rastro. Esto persiste el conteo en CONTEOS (lote +
+// fecha + usuario + kg contado + kg esperado + clasificación +
+// confianza), reusando el mismo cálculo que ya vio el operario en
+// pantalla — nunca un número recalculado aparte para guardar.
+function registrarConteo() {
+  const loteId = document.getElementById('conteoLoteSelect').value;
+  const kgContado = parseFloat(document.getElementById('conteoKgInput').value);
+  const estimado = document.getElementById('conteoEstimadoCheckbox').checked;
+  const resultEl = document.getElementById('registrarConteoResult');
+
+  if (isNaN(kgContado)) {
+    resultEl.innerHTML = `<div class="alert-box dudoso"><div class="alert-title">🟡 Falta el conteo</div><div class="alert-body">Cargá los kg contados antes de registrar.</div></div>`;
+    return;
+  }
+  const calc = calcularDiscrepancia(loteId, kgContado);
+  if (!calc) return;
+
+  const registro = {
+    id: CONTEOS.length + 1,
+    loteId,
+    ubicacionId: calc.ubic.id,
+    kgContado,
+    kgEsperado: calc.esperado,
+    tolerancia: calc.tolerancia,
+    delta: calc.delta,
+    clasificacion: calc.excede ? 'excede_merma' : 'dentro_de_merma',
+    // F3.5: un peso estimado (pendiente de pesaje) es un estado legítimo
+    // en ámbar por normativa, no un error — no lo mismo que "confianza
+    // dudosa" de un movimiento mal dictado, pero se muestra con el mismo
+    // color epistémico porque semánticamente es lo mismo: "la máquina
+    // (o el operario) todavía no cerró el dato con certeza".
+    confianza: estimado ? 'dudosa' : 'alta',
+    fecha: new Date().toISOString(),
+    usuario: 'Operario Depósito',
+  };
+  CONTEOS.push(registro);
+
+  const lote = LOTE_BY_ID[loteId];
+  resultEl.innerHTML = `<div class="alert-box confirmado"><div class="alert-title">🟢 Conteo registrado</div><div class="alert-body">Lote ${lote.nroLote} · ${fmtKg(kgContado)} · ${registro.clasificacion === 'excede_merma' ? 'excede la merma esperada' : 'dentro de la merma esperada'}${estimado ? ' · peso estimado, pendiente de pesaje' : ''}. Queda en el historial para auditoría.</div></div>`;
+}
+
+// ============================================================
+// -------------------- HISTORIAL DE CONTEOS ----------------------
+// ============================================================
+function initHistorialView() {
+  const sel = document.getElementById('historialLoteSelect');
+  const lotesConHistorial = [...new Set(CONTEOS.map(c => c.loteId))];
+  const defaultLote = lotesConHistorial.length ? lotesConHistorial[lotesConHistorial.length - 1] : LOTES[0].id;
+  sel.innerHTML = '<option value="todos">Todos los lotes</option>' +
+    LOTES.map(l => `<option value="${l.id}" ${l.id === defaultLote ? 'selected' : ''}>Lote ${l.nroLote}</option>`).join('');
+  renderHistorial();
+}
+
+function renderHistorial() {
+  const loteId = document.getElementById('historialLoteSelect').value;
+
+  // ---- Lista de registros (auditoría: lote + fecha + usuario + contado) ----
+  const registros = (loteId === 'todos' ? CONTEOS : CONTEOS.filter(c => c.loteId === loteId))
+    .slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  const listEl = document.getElementById('historialList');
+  listEl.innerHTML = registros.length ? registros.map(r => {
+    const lote = LOTE_BY_ID[r.loteId];
+    const ubic = UBICACIONES.find(u => u.id === r.ubicacionId);
+    const okClase = r.clasificacion === 'dentro_de_merma';
+    return `
+      <div class="historial-item">
+        <div class="historial-item-top">
+          <span class="historial-item-lote">Lote ${lote.nroLote} · ${ubic.nombre}</span>
+          <span class="chip ${okClase ? 'confirmado' : 'error'}">${okClase ? 'dentro de merma' : 'excede merma'}</span>
+        </div>
+        <div class="historial-item-meta">${fechaCorta(r.fecha)} · ${escapeHtml(r.usuario)} · contado <span class="tabular">${fmtKg(r.kgContado)}</span> · esperado <span class="tabular">${fmtKg(r.kgEsperado)}</span></div>
+        <div><span class="chip ${r.confianza === 'alta' ? 'confirmado' : 'dudoso'}" style="font-size:11px; padding:3px 9px;">${r.confianza === 'alta' ? 'pesaje confirmado' : 'estimado, pendiente de pesaje'}</span></div>
+      </div>`;
+  }).join('') : '<div class="empty-state">Sin conteos registrados todavía. Registrá uno desde la pantalla de Conteo.</div>';
+
+  // ---- Gráfico: sólo tiene sentido para un lote puntual, no "todos" ----
+  const chartWrap = document.getElementById('historialChartWrap');
+  if (loteId === 'todos') {
+    chartWrap.innerHTML = '<div class="empty-state">Elegí un lote para ver su evolución de stock.</div>';
+  } else {
+    chartWrap.innerHTML = renderStockChartSvg(loteId);
+  }
+}
+
+// Gráfico de stock neto vs. tiempo (SVG inline, sin librerías — mismo
+// principio "self-contained" del resto del prototipo). Traza:
+//   · línea punteada azul: kg declarado en el libro (constante desde
+//     el último ingreso a esta ubicación — el libro no decae solo)
+//   · banda verde: rango esperado = declarado × merma_curva(días) ± 1%
+//     de tolerancia — el mismo cálculo de calcularDiscrepancia()
+//   · puntos: cada conteo registrado, verde si cayó dentro de la
+//     banda, rojo si la excedió; relleno si fue pesaje confirmado,
+//     hueco si fue estimado (pendiente de pesaje)
+function renderStockChartSvg(loteId) {
+  const ubic = ubicacionActualDeLote(loteId);
+  if (!ubic) return '<div class="empty-state">Este lote no tiene stock activo para graficar.</div>';
+  const ingreso = ultimoIngresoA(loteId, ubic.id);
+  if (!ingreso) return '<div class="empty-state">Sin movimiento de ingreso registrado.</div>';
+
+  const declarado = stockPorLoteUbic(loteId, ubic.id);
+  const fechaIngreso = new Date(ingreso.fecha).getTime();
+  const diasTranscurridos = diasDesde(ingreso.fecha);
+  const diasPlot = Math.max(diasTranscurridos + 15, 30);
+
+  const W = 320, H = 170, padL = 52, padR = 10, padT = 10, padB = 22;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const x = (dias) => padL + (dias / diasPlot) * plotW;
+
+  // La merma esperada es sólo un 4-8% del declarado — si el eje Y
+  // arrancara en 0 la banda y los puntos quedarían pegados a una línea
+  // recta, invisibles. Recortamos el eje al rango donde realmente pasa
+  // algo: desde un poco debajo del peor caso de merma en el período
+  // graficado (o el conteo más bajo, lo que sea menor) hasta un poco
+  // arriba del declarado.
+  const conteosLote = CONTEOS.filter(c => c.loteId === loteId);
+  const peorMermaPct = mermaEsperadaPct(diasPlot);
+  const pisoEstimado = declarado * (1 - peorMermaPct / 100) * 0.99;
+  const conteoMin = conteosLote.length ? Math.min(...conteosLote.map(c => c.kgContado)) : pisoEstimado;
+  const yMin = Math.min(pisoEstimado, conteoMin) * 0.985;
+  const yMax = declarado * 1.02;
+  const y = (kg) => padT + plotH - ((Math.max(yMin, kg) - yMin) / (yMax - yMin)) * plotH;
+
+  // Banda esperada, muestreada cada pocos días para que la curva de
+  // merma (no lineal) se vea curva y no como escalones.
+  const steps = 24;
+  const bandPoints = [];
+  for (let i = 0; i <= steps; i++) {
+    const dias = (diasPlot / steps) * i;
+    const pct = mermaEsperadaPct(dias);
+    const esperado = declarado * (1 - pct / 100);
+    bandPoints.push({ dias, upper: esperado * 1.01, lower: esperado * 0.99 });
+  }
+  const bandaSup = bandPoints.map(p => `${x(p.dias)},${y(p.upper)}`).join(' ');
+  const bandaInf = bandPoints.slice().reverse().map(p => `${x(p.dias)},${y(p.lower)}`).join(' ');
+  const bandaPath = `${bandaSup} ${bandaInf}`;
+
+  // Puntos de conteo real para este lote, ubicados por días desde el
+  // ingreso (no desde hoy) para que caigan en el punto correcto de la
+  // curva de merma.
+  const puntos = conteosLote.map(c => {
+    const diasConteo = Math.max(0, Math.round((new Date(c.fecha).getTime() - fechaIngreso) / 86400000));
+    const ok = c.clasificacion === 'dentro_de_merma';
+    return { cx: x(diasConteo), cy: y(c.kgContado), ok, relleno: c.confianza === 'alta' };
+  });
+
+  // Grilla de referencia: ticks de días y de kg.
+  const diaTicks = [0, Math.round(diasPlot / 2), diasPlot];
+  const kgTicks = [yMin, (yMin + yMax) / 2, yMax].map(Math.round);
+
+  return `
+    <svg class="chart-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      ${kgTicks.map(kg => `<line x1="${padL}" y1="${y(kg)}" x2="${W - padR}" y2="${y(kg)}" stroke="var(--color-border)" stroke-width="1" />`).join('')}
+      <polygon points="${bandaPath}" fill="var(--color-confirmado)" fill-opacity="0.14" stroke="none" />
+      <line x1="${padL}" y1="${y(declarado)}" x2="${W - padR}" y2="${y(declarado)}" stroke="var(--color-inferido)" stroke-width="1.5" stroke-dasharray="4,3" />
+      ${puntos.map(p => `<circle cx="${p.cx}" cy="${p.cy}" r="4" fill="${p.relleno ? (p.ok ? 'var(--color-confirmado)' : 'var(--color-error)') : 'var(--color-bg)'}" stroke="${p.ok ? 'var(--color-confirmado)' : 'var(--color-error)'}" stroke-width="2" />`).join('')}
+      ${kgTicks.map(kg => `<text x="2" y="${y(kg) + 3}" font-size="7.5" fill="var(--color-text-faint)">${Math.round(kg).toLocaleString('es-AR')}</text>`).join('')}
+      ${diaTicks.map(d => `<text x="${x(d)}" y="${H - 6}" font-size="8" fill="var(--color-text-faint)" text-anchor="middle">d${d}</text>`).join('')}
+    </svg>
+    <div class="chart-legend">
+      <div class="chart-legend-row"><span class="chart-legend-swatch" style="background:var(--color-inferido); border-top:2px dashed var(--color-inferido); background:none;"></span>declarado (libro) — ${fmtKg(declarado)}, constante desde el ingreso</div>
+      <div class="chart-legend-row"><span class="chart-legend-swatch" style="background:var(--color-confirmado); opacity:0.5;"></span>rango esperado — merma curva ± 1% de tolerancia</div>
+      <div class="chart-legend-row"><span class="chart-legend-dot" style="background:var(--color-confirmado);"></span>conteo dentro de merma · <span class="chart-legend-dot" style="background:var(--color-error);"></span>conteo que excede — relleno = pesaje confirmado, hueco = estimado</div>
+    </div>`;
 }
 
 // ============================================================

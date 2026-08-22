@@ -174,14 +174,41 @@
               <label>Kg contados</label>
               <input type="number" class="number-input" id="conteoKgInput" oninput="renderDiscrepancia()" />
             </div>
+            <div class="input-group" style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="conteoEstimadoCheckbox" style="width:20px; height:20px;" />
+              <label style="margin:0;">Peso estimado (pendiente de pesaje)</label>
+            </div>
           </div>
 
           <div id="discrepanciaResult"></div>
+
+          <div style="height:4px;"></div>
+          <button class="btn btn-primary" onclick="registrarConteo()">Registrar conteo</button>
+          <div id="registrarConteoResult"></div>
+
+          <div style="height:8px;"></div>
+          <button class="btn btn-secondary" onclick="pushView('historial')">📋 Ver historial de conteos</button>
 
           <div class="section-label">Por qué no es un simple resta</div>
           <div class="card" style="font-size:13px; color:var(--color-text-dim); line-height:1.5;">
             "No te aviso cuando la papa pierde peso; te aviso cuando pierde más peso del que debería."
           </div>
+        </div>
+
+        <!-- ===================== VISTA: HISTORIAL DE CONTEOS (auditoría) ===================== -->
+        <div class="view" data-view="historial">
+          <div class="card">
+            <div class="input-group" style="margin-top:0;">
+              <label>Lote</label>
+              <select class="select-input" id="historialLoteSelect" onchange="renderHistorial()"></select>
+            </div>
+          </div>
+
+          <div class="section-label">Evolución de stock vs. tiempo</div>
+          <div class="card" id="historialChartWrap"></div>
+
+          <div class="section-label">Registros (lote + fecha + usuario + contado)</div>
+          <div id="historialList"></div>
         </div>
 
         <!-- ===================== VISTA: LOTES (listado + nuevo lote / linaje) ===================== -->
