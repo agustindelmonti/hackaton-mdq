@@ -151,8 +151,19 @@ export default function MobileApp({ data, oportunidades, fase, user, onRecargar 
       case "perfil":
         return <MiPerfil user={user} />;
       case "angela":
-        return <AngelaView inputInicial={consultaAngela} user={user} onNavigate={navegarMobile} onDatosCambiaron={onRecargar}
-                    placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />;
+        return (
+          <div className="-mx-5 -mt-4 flex min-h-[calc(100dvh-11.5rem-env(safe-area-inset-top))] flex-col">
+            <AngelaView
+              variant="fullscreen"
+              inputInicial={consultaAngela}
+              user={user}
+              onNavigate={navegarMobile}
+              onDatosCambiaron={onRecargar}
+              placeholderChips={chipsAngelaDe(user)}
+              saludoInicial={t(saludoKeyDe(user))}
+            />
+          </div>
+        );
       default:
         return null;
     }
@@ -218,7 +229,7 @@ export default function MobileApp({ data, oportunidades, fase, user, onRecargar 
         <div className="mt-2 empty:hidden"><VerComoChip /></div>
         </div>
 
-        <main className="flex-1 overflow-y-auto px-5 pb-24 pt-4">
+        <main className={`flex-1 ${view === "angela" ? "overflow-hidden px-5 pb-20 pt-0" : "overflow-y-auto px-5 pb-24 pt-4"}`}>
           <AnimatePresence mode="wait">
             <motion.div key={view} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22 }} className={view === "angela" ? "h-full" : ""}>
               {/* P29·A2 — nunca una pantalla muda, tampoco en el celular */}

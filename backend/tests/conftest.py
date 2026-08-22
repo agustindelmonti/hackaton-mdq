@@ -39,6 +39,8 @@ if "POLPILOT_DATA_DIR" not in os.environ:
                "lotes_real.json", "movimientos_real.json", "stock_real.json",
                "bloqueo_alternativa_real.json", "plantadas_real.json",
                "catalogos_real.json",
+               "ordenes_carga_real.json", "recepciones_planta_real.json",
+               "reclasificaciones_real.json",
                # El libro que salió de la planilla de verdad.
                "pedidos_abiertos.seed.json"):
         _src = os.path.join(_origen, _f)

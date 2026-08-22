@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@assistant-ui/core": "^0.3.15",
+    "@assistant-ui/react": "^0.15.16",
     "@xyflow/react": "^12.11.2",
     "d3-force-3d": "^3.0.6",
     "framer-motion": "^11.15.0",
@@ -17,7 +19,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-force-graph-2d": "^1.29.1",
-    "recharts": "^2.15.4"
+    "recharts": "^2.15.4",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",

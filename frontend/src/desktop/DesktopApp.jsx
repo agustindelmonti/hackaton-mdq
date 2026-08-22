@@ -6,7 +6,7 @@ import {
 import { api } from "../lib/api";
 import { contarACorregir } from "../lib/alertas";
 import AngelaMark from "../components/AngelaMark";
-import AngelaView from "../views/AngelaView";
+import AngelaPanel from "../components/assistant/angela-panel";
 import Inicio from "./sections/Inicio";
 // La sección del mapa tiene dos vistas (árbol de fuentes / cerebro de
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -91,7 +91,7 @@ const BLOQUES_NAV = [
   { lk: "nav.grupo_sistema", ids: ["cargar", "documentos", "auditoria", "admin_contexto", "perfil"] },
 ];
 
-export default function DesktopApp({ data, oportunidades, fase, user, onRecargar }) {
+export default function DesktopApp({ data, oportunidades, fase, user, onRecargar, angelaOpen: angelaOpenProp, setAngelaOpen: setAngelaOpenProp }) {
   const t = useT();
   const session = useSession();
   // P39·2 — un empleado no aterriza en el foco de la fase (eso es del dueño):
@@ -116,8 +116,11 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   const [highlight, setHighlight] = useState(null);
   // El panel de Ángela vive abierto por defecto cuando la pantalla lo banca
   // (la referencia de diseño: Ángela siempre presente a la derecha).
-  const [angelaOpen, setAngelaOpen] = useState(() => window.innerWidth >= 1280);
+  const [angelaOpenLocal, setAngelaOpenLocal] = useState(() => window.innerWidth >= 1280);
+  const angelaOpen = angelaOpenProp ?? angelaOpenLocal;
+  const setAngelaOpen = setAngelaOpenProp ?? setAngelaOpenLocal;
   const [consultaAngela, setConsultaAngela] = useState(null);
+  const [angelaFullscreen, setAngelaFullscreen] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const [faseVisible, setFaseVisible] = useState(true);
   const [stagingCount, setStagingCount] = useState(0);
@@ -424,24 +427,19 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
 
           <AnimatePresence>
             {angelaOpen && (
-              <motion.aside
-                initial={{ x: 380, opacity: 0.4 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 380, opacity: 0.4 }}
-                transition={{ type: "spring", stiffness: 320, damping: 34 }}
-                className="flex w-[23.75rem] shrink-0 flex-col border-l border-linea bg-papel"
-              >
-                <div className="flex items-center justify-between border-b border-linea px-4 py-2.5">
-                  <span className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-tinta-suave">{t("angela.eyebrow")}</span>
-                  <button onClick={() => setAngelaOpen(false)} className="text-tinta-suave hover:text-tinta"><X size={18} /></button>
-                </div>
-                <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-3">
-                  <div className="min-h-0 flex-1 overflow-hidden">
-                    <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar}
-                                placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />
-                  </div>
-                </div>
-              </motion.aside>
+              <AngelaPanel
+                key="angela-panel"
+                fullscreen={angelaFullscreen}
+                onFullscreen={() => setAngelaFullscreen(true)}
+                onMinimize={() => setAngelaFullscreen(false)}
+                onClose={() => setAngelaOpen(false)}
+                onNavigate={navegar}
+                inputInicial={consultaAngela}
+                user={user}
+                onDatosCambiaron={onRecargar}
+                placeholderChips={chipsAngelaDe(user)}
+                saludoInicial={t(saludoKeyDe(user))}
+              />
             )}
           </AnimatePresence>
         </div>

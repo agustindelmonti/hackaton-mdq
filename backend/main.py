@@ -24,7 +24,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
 import angela
@@ -1816,6 +1816,68 @@ def chat(req: ChatRequest, request: Request):
     return angela.responder(req.mensaje, historial, rol="invitado", nombre=None, features=[])
 
 
+def _angela_stream_events(req: ChatRequest, request: Request):
+    """Auth/cap compartido entre /api/angela y /api/angela/stream."""
+    historial = [t.model_dump() for t in (req.historial or [])]
+    if _ip_excedido(_client_ip(request), _cap_ip()):
+        yield {"type": "done", "result": {**_mensaje_cap(request, req.token), "ok": True}}
+        return
+    if req.token:
+        u = auth.usuario_por_token(req.token)
+        if not u:
+            raise HTTPException(status_code=401, detail=i18n.t("api.sesion_invalida"))
+        cap = _cap_mensajes()
+        if cap > 0:
+            usados = _CHAT_POR_SESION.get(req.token, 0)
+            if usados >= cap:
+                yield {
+                    "type": "done",
+                    "result": {
+                        **{"respuesta": i18n.t("angela.cap_alcanzado", _lang(u)),
+                           "modo": "cap", "tools_usadas": [], "acciones": [], "opciones": []},
+                        "ok": True,
+                    },
+                }
+                return
+            _CHAT_POR_SESION[req.token] = usados + 1
+        import time as _time
+        _t0 = _time.monotonic()
+        for event in angela.stream_responder(
+            req.mensaje, historial, rol=u.get("rol"),
+            nombre=u.get("username"), features=u.get("features"),
+        ):
+            yield event
+        _ms = round((_time.monotonic() - _t0) * 1000)
+        print(f"[angela/stream] {_ms}ms user={u['username']}", flush=True)
+        try:
+            store.audit.record(actor=u["username"], accion="consulta_angela",
+                               despues={"stream": True, "ms": _ms})
+        except Exception:  # noqa: BLE001
+            pass
+        return
+    if _es_demo():
+        raise HTTPException(status_code=401, detail=i18n.t("api.sesion_requerida"))
+    for event in angela.stream_responder(
+        req.mensaje, historial, rol="invitado", nombre=None, features=[],
+    ):
+        yield event
+
+
+@app.post("/api/angela/stream")
+def chat_stream(req: ChatRequest, request: Request):
+    import json
+
+    def sse():
+        for event in _angela_stream_events(req, request):
+            yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(
+        sse(),
+        media_type="text/event-stream; charset=utf-8",
+        headers={"Cache-Control": "no-cache, no-transform", "Connection": "keep-alive"},
+    )
+
+
 @app.get("/api/oportunidades")
 def oportunidades(u: dict = Depends(usuario_actual)):
     # P27·A — el set CERRADO de tarjetas con drill-down (cards), servido por el
@@ -2434,6 +2496,7 @@ app.include_router(api_cerebro.router)
 from core import (  # noqa: E402
     modelo_real as _modelo_real,
     stock_real as _stock_real,
+    mapa_planta as _mapa_real,
     inconsistencias_papasud as _inconsistencias_papasud,
     liquidacion as _liquidacion,
     importer_papasud as _importer_papasud,
@@ -2452,10 +2515,37 @@ def papasud_lotes(_u: dict = Depends(usuario_actual)):
 
 @app.get("/api/papasud/mapa")
 def papasud_mapa(_u: dict = Depends(usuario_actual)):
-    """La foto de dónde está cada kilo: una fila por (lote, ubicación) con
-    stock vivo. Es la vista que el mapa de la operación (Track C) consume
-    directo, sin recalcular nada — el stock ya salió del núcleo."""
-    return {"filas": _stock_real.stock_por_ubicacion()}
+    """El mapa del flujo real: campos → planta (hub) ⇄ frigoríficos → clientes.
+    `filas` se mantiene para Track C (una fila por lote×ubicación). El grafo
+    (`nodos`, `aristas`, `capas`) es lo que pinta la pantalla nueva."""
+    return _mapa_real.flujo()
+
+
+@app.get("/api/papasud/planta")
+def papasud_planta(_u: dict = Depends(usuario_actual)):
+    """La planta como hub: zonas (báscula, reclasificación, playa), stock vivo
+    y las recepciones recientes. Números del libro, no del LLM."""
+    return _stock_real.detalle_planta()
+
+
+@app.get("/api/papasud/ordenes-carga")
+def papasud_ordenes_carga(_u: dict = Depends(usuario_actual)):
+    """Papel en el campo: a veces no hay señal. Cada tolva sale con una orden
+    de carga; el remito a menudo nace en la recepción de planta."""
+    return {"ordenes": _modelo_real.ordenes_carga()}
+
+
+@app.get("/api/papasud/recepciones")
+def papasud_recepciones(_u: dict = Depends(usuario_actual)):
+    """Planilla de recepción: el camión entra a planta, la báscula pesa, se
+    anota chofer, producto y lote."""
+    return {"recepciones": _modelo_real.recepciones()}
+
+
+@app.get("/api/papasud/sitios")
+def papasud_sitios(_u: dict = Depends(usuario_actual)):
+    """Kg vivos por planta / frigorífico / campo — el número grande del mapa."""
+    return _stock_real.resumen_sitios()
 
 
 @app.get("/api/papasud/disponibilidad")

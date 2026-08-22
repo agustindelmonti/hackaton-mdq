@@ -1,0 +1,1067 @@
+{
+ "reclasificaciones": [
+  {
+   "id": "RCL-0001",
+   "fecha": "2026-02-15",
+   "lote_id": "L30",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 16154.9,
+   "kg_embolsado": 16154.9,
+   "bolsas": 311,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 129.2,
+   "ingresos": [
+    "MOV-R-0001",
+    "MOV-R-0002",
+    "MOV-R-0003"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0002",
+   "fecha": "2026-03-02",
+   "lote_id": "L31",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 10315.4,
+   "kg_embolsado": 10315.4,
+   "bolsas": 200,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 82.5,
+   "ingresos": [
+    "MOV-R-0007",
+    "MOV-R-0008",
+    "MOV-R-0009"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0003",
+   "fecha": "2026-07-19",
+   "lote_id": "L32",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 49400.2,
+   "kg_embolsado": 49400.2,
+   "bolsas": 917,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 395.2,
+   "ingresos": [
+    "MOV-R-0011",
+    "MOV-R-0012",
+    "MOV-R-0013"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0004",
+   "fecha": "2026-06-19",
+   "lote_id": "L33",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 49361.0,
+   "kg_embolsado": 49361.0,
+   "bolsas": 1020,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 394.9,
+   "ingresos": [
+    "MOV-R-0017"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0005",
+   "fecha": "2026-06-08",
+   "lote_id": "L34",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 18447.4,
+   "kg_embolsado": 18447.4,
+   "bolsas": 371,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 147.6,
+   "ingresos": [
+    "MOV-R-0020"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0006",
+   "fecha": "2026-05-07",
+   "lote_id": "L35",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 54236.3,
+   "kg_embolsado": 54236.3,
+   "bolsas": 1051,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 433.9,
+   "ingresos": [
+    "MOV-R-0023",
+    "MOV-R-0024"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0007",
+   "fecha": "2026-02-13",
+   "lote_id": "L36",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 30228.5,
+   "kg_embolsado": 30228.5,
+   "bolsas": 599,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 241.8,
+   "ingresos": [
+    "MOV-R-0026"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0008",
+   "fecha": "2026-02-25",
+   "lote_id": "L37",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 41173.0,
+   "kg_embolsado": 41173.0,
+   "bolsas": 778,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 329.4,
+   "ingresos": [
+    "MOV-R-0030",
+    "MOV-R-0031"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0009",
+   "fecha": "2026-04-06",
+   "lote_id": "L38",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 38678.6,
+   "kg_embolsado": 38678.6,
+   "bolsas": 757,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 309.4,
+   "ingresos": [
+    "MOV-R-0034"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0010",
+   "fecha": "2026-04-11",
+   "lote_id": "L40",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 44156.0,
+   "kg_embolsado": 44156.0,
+   "bolsas": 894,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 353.2,
+   "ingresos": [
+    "MOV-R-0039"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0011",
+   "fecha": "2026-02-13",
+   "lote_id": "L41",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 39363.7,
+   "kg_embolsado": 39363.7,
+   "bolsas": 783,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 314.9,
+   "ingresos": [
+    "MOV-R-0043",
+    "MOV-R-0044"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0012",
+   "fecha": "2026-03-19",
+   "lote_id": "L42",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 49399.6,
+   "kg_embolsado": 49399.6,
+   "bolsas": 1019,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 395.2,
+   "ingresos": [
+    "MOV-R-0048"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0013",
+   "fecha": "2026-05-23",
+   "lote_id": "L43",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 47859.1,
+   "kg_embolsado": 47859.1,
+   "bolsas": 997,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 382.9,
+   "ingresos": [
+    "MOV-R-0052",
+    "MOV-R-0053"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0014",
+   "fecha": "2026-02-23",
+   "lote_id": "L44",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 32221.1,
+   "kg_embolsado": 32221.1,
+   "bolsas": 606,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 257.8,
+   "ingresos": [
+    "MOV-R-0055",
+    "MOV-R-0056"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0015",
+   "fecha": "2026-04-16",
+   "lote_id": "L45",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 41626.3,
+   "kg_embolsado": 41626.3,
+   "bolsas": 815,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 333.0,
+   "ingresos": [
+    "MOV-R-0060",
+    "MOV-R-0061"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0016",
+   "fecha": "2026-05-20",
+   "lote_id": "L46",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 23211.2,
+   "kg_embolsado": 23211.2,
+   "bolsas": 480,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 185.7,
+   "ingresos": [
+    "MOV-R-0063",
+    "MOV-R-0064",
+    "MOV-R-0065"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0017",
+   "fecha": "2026-03-02",
+   "lote_id": "L48",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 51761.5,
+   "kg_embolsado": 51761.5,
+   "bolsas": 1076,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 414.1,
+   "ingresos": [
+    "MOV-R-0071"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0018",
+   "fecha": "2026-03-18",
+   "lote_id": "L49",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 22272.4,
+   "kg_embolsado": 22272.4,
+   "bolsas": 437,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 178.2,
+   "ingresos": [
+    "MOV-R-0073",
+    "MOV-R-0074",
+    "MOV-R-0075"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0019",
+   "fecha": "2026-01-28",
+   "lote_id": "L50",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 48155.4,
+   "kg_embolsado": 48155.4,
+   "bolsas": 971,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 385.2,
+   "ingresos": [
+    "MOV-R-0079"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0020",
+   "fecha": "2026-02-21",
+   "lote_id": "L51",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 12974.4,
+   "kg_embolsado": 12974.4,
+   "bolsas": 271,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 103.8,
+   "ingresos": [
+    "MOV-R-0081",
+    "MOV-R-0082",
+    "MOV-R-0083"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0021",
+   "fecha": "2026-02-28",
+   "lote_id": "L52",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 9580.8,
+   "kg_embolsado": 9580.8,
+   "bolsas": 202,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 76.6,
+   "ingresos": [
+    "MOV-R-0087",
+    "MOV-R-0088"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0022",
+   "fecha": "2026-06-16",
+   "lote_id": "L54",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 25934.9,
+   "kg_embolsado": 25934.9,
+   "bolsas": 545,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 207.5,
+   "ingresos": [
+    "MOV-R-0092",
+    "MOV-R-0093",
+    "MOV-R-0094"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0023",
+   "fecha": "2026-07-14",
+   "lote_id": "L55",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 27180.5,
+   "kg_embolsado": 27180.5,
+   "bolsas": 530,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 217.4,
+   "ingresos": [
+    "MOV-R-0096",
+    "MOV-R-0097"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0024",
+   "fecha": "2026-06-03",
+   "lote_id": "L56",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 24501.2,
+   "kg_embolsado": 24501.2,
+   "bolsas": 497,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 196.0,
+   "ingresos": [
+    "MOV-R-0101",
+    "MOV-R-0102"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0025",
+   "fecha": "2026-07-16",
+   "lote_id": "L57",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 33721.9,
+   "kg_embolsado": 33721.9,
+   "bolsas": 687,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 269.8,
+   "ingresos": [
+    "MOV-R-0106",
+    "MOV-R-0107"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0026",
+   "fecha": "2026-01-25",
+   "lote_id": "L58",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 35187.0,
+   "kg_embolsado": 35187.0,
+   "bolsas": 715,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 281.5,
+   "ingresos": [
+    "MOV-R-0109"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0027",
+   "fecha": "2026-04-27",
+   "lote_id": "L59",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 20598.0,
+   "kg_embolsado": 20598.0,
+   "bolsas": 438,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 164.8,
+   "ingresos": [
+    "MOV-R-0113",
+    "MOV-R-0114",
+    "MOV-R-0115"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0028",
+   "fecha": "2026-04-28",
+   "lote_id": "L60",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 12682.6,
+   "kg_embolsado": 12682.6,
+   "bolsas": 245,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 101.5,
+   "ingresos": [
+    "MOV-R-0117",
+    "MOV-R-0118",
+    "MOV-R-0119"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0029",
+   "fecha": "2026-05-11",
+   "lote_id": "L61",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 33084.0,
+   "kg_embolsado": 33084.0,
+   "bolsas": 671,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 264.7,
+   "ingresos": [
+    "MOV-R-0121",
+    "MOV-R-0122",
+    "MOV-R-0123"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0030",
+   "fecha": "2026-06-13",
+   "lote_id": "L62",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 17645.8,
+   "kg_embolsado": 17645.8,
+   "bolsas": 368,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 141.2,
+   "ingresos": [
+    "MOV-R-0125",
+    "MOV-R-0126",
+    "MOV-R-0127"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0031",
+   "fecha": "2026-01-28",
+   "lote_id": "L63",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 30442.7,
+   "kg_embolsado": 30442.7,
+   "bolsas": 567,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 243.5,
+   "ingresos": [
+    "MOV-R-0131",
+    "MOV-R-0132",
+    "MOV-R-0133"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0032",
+   "fecha": "2026-02-25",
+   "lote_id": "L64",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 20580.7,
+   "kg_embolsado": 20580.7,
+   "bolsas": 423,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 164.6,
+   "ingresos": [
+    "MOV-R-0137",
+    "MOV-R-0138"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0033",
+   "fecha": "2026-02-25",
+   "lote_id": "L65",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 56215.4,
+   "kg_embolsado": 56215.4,
+   "bolsas": 1077,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 449.7,
+   "ingresos": [
+    "MOV-R-0140"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0034",
+   "fecha": "2026-03-15",
+   "lote_id": "L66",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 30209.4,
+   "kg_embolsado": 30209.4,
+   "bolsas": 583,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 241.7,
+   "ingresos": [
+    "MOV-R-0143"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0035",
+   "fecha": "2026-03-13",
+   "lote_id": "L67",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 39443.9,
+   "kg_embolsado": 39443.9,
+   "bolsas": 790,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 315.6,
+   "ingresos": [
+    "MOV-R-0146"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0036",
+   "fecha": "2026-02-01",
+   "lote_id": "L68",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 42524.6,
+   "kg_embolsado": 42524.6,
+   "bolsas": 901,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 340.2,
+   "ingresos": [
+    "MOV-R-0148",
+    "MOV-R-0149"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0037",
+   "fecha": "2026-04-18",
+   "lote_id": "L69",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 49116.0,
+   "kg_embolsado": 49116.0,
+   "bolsas": 1030,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 392.9,
+   "ingresos": [
+    "MOV-R-0151",
+    "MOV-R-0152",
+    "MOV-R-0153"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0038",
+   "fecha": "2026-01-31",
+   "lote_id": "L70",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 14790.4,
+   "kg_embolsado": 14790.4,
+   "bolsas": 298,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 118.3,
+   "ingresos": [
+    "MOV-R-0155",
+    "MOV-R-0156",
+    "MOV-R-0157"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0039",
+   "fecha": "2026-04-29",
+   "lote_id": "L71",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 40355.5,
+   "kg_embolsado": 40355.5,
+   "bolsas": 770,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 322.8,
+   "ingresos": [
+    "MOV-R-0160"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0040",
+   "fecha": "2026-05-14",
+   "lote_id": "L73",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 36728.1,
+   "kg_embolsado": 36728.1,
+   "bolsas": 729,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 293.8,
+   "ingresos": [
+    "MOV-R-0164",
+    "MOV-R-0165",
+    "MOV-R-0166"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0041",
+   "fecha": "2026-04-18",
+   "lote_id": "L74",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 50910.4,
+   "kg_embolsado": 50910.4,
+   "bolsas": 1033,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 407.3,
+   "ingresos": [
+    "MOV-R-0170"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0042",
+   "fecha": "2026-05-06",
+   "lote_id": "L75",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 29079.6,
+   "kg_embolsado": 29079.6,
+   "bolsas": 608,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 232.6,
+   "ingresos": [
+    "MOV-R-0174"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0043",
+   "fecha": "2026-05-14",
+   "lote_id": "L76",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 20870.4,
+   "kg_embolsado": 20870.4,
+   "bolsas": 435,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 167.0,
+   "ingresos": [
+    "MOV-R-0177",
+    "MOV-R-0178"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0044",
+   "fecha": "2026-03-21",
+   "lote_id": "L77",
+   "variedad_id": "spunta",
+   "variedad": "Spunta",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 16580.8,
+   "kg_embolsado": 16580.8,
+   "bolsas": 340,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 132.6,
+   "ingresos": [
+    "MOV-R-0181",
+    "MOV-R-0182",
+    "MOV-R-0183"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0045",
+   "fecha": "2026-03-24",
+   "lote_id": "L78",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 50623.2,
+   "kg_embolsado": 50623.2,
+   "bolsas": 983,
+   "calibre_id": "sin_chicas",
+   "calibre": "Sin chicas",
+   "tierra_kg": 405.0,
+   "ingresos": [
+    "MOV-R-0185",
+    "MOV-R-0186",
+    "MOV-R-0187"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0046",
+   "fecha": "2026-02-22",
+   "lote_id": "L79",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 13491.3,
+   "kg_embolsado": 13491.3,
+   "bolsas": 274,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 107.9,
+   "ingresos": [
+    "MOV-R-0191",
+    "MOV-R-0192",
+    "MOV-R-0193"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0047",
+   "fecha": "2026-04-23",
+   "lote_id": "14",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 31536.8,
+   "kg_embolsado": 31536.8,
+   "bolsas": 612,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 252.3,
+   "ingresos": [
+    "MOV-R-0197"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0048",
+   "fecha": "2026-05-16",
+   "lote_id": "18",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 35426.9,
+   "kg_embolsado": 35426.9,
+   "bolsas": 674,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 283.4,
+   "ingresos": [
+    "MOV-R-0201"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0049",
+   "fecha": "2026-02-08",
+   "lote_id": "222",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 30288.0,
+   "kg_embolsado": 30288.0,
+   "bolsas": 567,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 242.3,
+   "ingresos": [
+    "MOV-R-0205",
+    "MOV-R-0206",
+    "MOV-R-0207"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0050",
+   "fecha": "2026-01-26",
+   "lote_id": "223",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 14020.0,
+   "kg_embolsado": 14020.0,
+   "bolsas": 283,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 112.2,
+   "ingresos": [
+    "MOV-R-0209",
+    "MOV-R-0210"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0051",
+   "fecha": "2026-04-13",
+   "lote_id": "224",
+   "variedad_id": "agata",
+   "variedad": "Agata",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 33170.3,
+   "kg_embolsado": 33170.3,
+   "bolsas": 676,
+   "calibre_id": "granel",
+   "calibre": "Granel",
+   "tierra_kg": 265.4,
+   "ingresos": [
+    "MOV-R-0213",
+    "MOV-R-0214"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0052",
+   "fecha": "2026-06-17",
+   "lote_id": "810",
+   "variedad_id": "king_russet",
+   "variedad": "King Russet",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 18222.7,
+   "kg_embolsado": 18222.7,
+   "bolsas": 379,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 145.8,
+   "ingresos": [
+    "MOV-R-0221",
+    "MOV-R-0222"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  },
+  {
+   "id": "RCL-0053",
+   "fecha": "2026-05-10",
+   "lote_id": "910",
+   "variedad_id": "asterix",
+   "variedad": "Asterix",
+   "zona_id": "reclasificacion",
+   "zona": "Reclasificación y empaque",
+   "kg_granel": 53438.5,
+   "kg_embolsado": 53438.5,
+   "bolsas": 997,
+   "calibre_id": "exportacion",
+   "calibre": "Exportación",
+   "tierra_kg": 427.5,
+   "ingresos": [
+    "MOV-R-0227",
+    "MOV-R-0228",
+    "MOV-R-0229"
+   ],
+   "observaciones": "Granel con tierra → bolsas. La merma de tierra ya la descontó la báscula; acá no se vuelve a restar del stock."
+  }
+ ]
+}

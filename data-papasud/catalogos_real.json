@@ -1,20 +1,49 @@
 {
+ "laboratorio": {
+  "id": "lab_invitro",
+  "nombre": "Laboratorio in vitro",
+  "tipo": "laboratorio",
+  "detalle": "Cultivo de meristemas. De acá salen las categorías más altas, no mercadería a granel."
+ },
  "campos": [
   {
    "id": "santa_ana",
-   "nombre": "Santa Ana"
+   "nombre": "Santa Ana",
+   "partido": "San Cayetano",
+   "provincia": "Buenos Aires",
+   "tipo": "campo"
   },
   {
    "id": "marisol",
-   "nombre": "Marisol"
+   "nombre": "Marisol",
+   "partido": "Tres Arroyos",
+   "provincia": "Buenos Aires",
+   "tipo": "campo"
   },
   {
    "id": "trevelin",
-   "nombre": "Trevelin"
+   "nombre": "Trevelin",
+   "partido": "Futaleufú",
+   "provincia": "Chubut",
+   "tipo": "campo"
   },
   {
    "id": "oriente",
-   "nombre": "Oriente"
+   "nombre": "Oriente",
+   "partido": "Coronel Dorrego",
+   "provincia": "Buenos Aires",
+   "tipo": "campo"
+  },
+  {
+   "id": "san_cayetano",
+   "nombre": "Cayetano Chávez",
+   "partido": "San Cayetano",
+   "provincia": "Buenos Aires",
+   "tipo": "campo",
+   "alias": [
+    "San Cayetano",
+    "Campo San Cayetano"
+   ]
   }
  ],
  "variedades": [
@@ -38,26 +67,91 @@
  "frigorificos": [
   {
    "id": "dospanca",
-   "nombre": "Dospanca"
+   "nombre": "Dospanca",
+   "tipo": "frigorifico",
+   "subcontratado": true
   },
   {
    "id": "galpon_mdp",
-   "nombre": "Galpón Mar del Plata"
+   "nombre": "Galpón Mar del Plata",
+   "tipo": "frigorifico",
+   "subcontratado": true
   },
   {
    "id": "pancani",
-   "nombre": "Pancani"
+   "nombre": "Pancani",
+   "tipo": "frigorifico",
+   "subcontratado": true
   },
   {
    "id": "sasula",
-   "nombre": "Sasula"
+   "nombre": "Sasula",
+   "tipo": "frigorifico",
+   "subcontratado": true
   }
  ],
  "planta": {
   "id": "planta_mdp",
   "nombre": "Planta Mar del Plata",
-  "tiene_bascula": true
+  "tipo": "planta",
+  "localidad": "Mar del Plata",
+  "provincia": "Buenos Aires",
+  "tiene_bascula": true,
+  "zonas": [
+   {
+    "id": "recepcion",
+    "nombre": "Recepción / báscula",
+    "rol": "primer_ingreso",
+    "detalle": "El camión (tolva) entra, se pesa, se anota chofer, producto y lote. Nace la planilla de recepción."
+   },
+   {
+    "id": "reclasificacion",
+    "nombre": "Reclasificación y empaque",
+    "rol": "calibre_empaque",
+    "detalle": "La papa llegó a granel, con tierra. Acá se prolija, se calibra y se embalsa."
+   },
+   {
+    "id": "playa",
+    "nombre": "Playa de carga",
+    "rol": "despacho",
+    "detalle": "De acá sale a cliente, a frigorífico, o se recibe el retiro de frío para despachar."
+   }
+  ]
  },
+ "zonas_planta": [
+  {
+   "id": "recepcion",
+   "nombre": "Recepción / báscula",
+   "rol": "primer_ingreso",
+   "detalle": "El camión (tolva) entra, se pesa, se anota chofer, producto y lote. Nace la planilla de recepción."
+  },
+  {
+   "id": "reclasificacion",
+   "nombre": "Reclasificación y empaque",
+   "rol": "calibre_empaque",
+   "detalle": "La papa llegó a granel, con tierra. Acá se prolija, se calibra y se embalsa."
+  },
+  {
+   "id": "playa",
+   "nombre": "Playa de carga",
+   "rol": "despacho",
+   "detalle": "De acá sale a cliente, a frigorífico, o se recibe el retiro de frío para despachar."
+  }
+ ],
+ "tipos_vehiculo": [
+  {
+   "id": "tolva",
+   "nombre": "Tolva",
+   "carga": "granel",
+   "detalle": "Camión que trae la papa suelta, con tierra, desde el campo a la planta."
+  },
+  {
+   "id": "camion_bolsas",
+   "nombre": "Camión de bolsas",
+   "carga": "bolsas",
+   "detalle": "Mercadería ya embolsada: envío a frío, retiro de frío, o entrega a cliente."
+  }
+ ],
  "clientes": [
   {
    "id": "wemar_mc_cain",
@@ -147,11 +241,80 @@
    "nombre": "Sin chicas"
   }
  ],
+ "roles_operacion": [
+  {
+   "id": "campo",
+   "nombre": "Operario de campo",
+   "ve": [
+    "orden_carga",
+    "lote",
+    "mapa_campo"
+   ],
+   "carga": "orden de carga en papel (a veces no hay señal)"
+  },
+  {
+   "id": "planta",
+   "nombre": "Operario de planta",
+   "ve": [
+    "recepcion",
+    "stock_planta",
+    "reclasificacion",
+    "playa"
+   ],
+   "carga": "planilla de recepción + báscula"
+  },
+  {
+   "id": "frigorifico",
+   "nombre": "Depósito subcontratado",
+   "ve": [
+    "stock_frio",
+    "retiro_frio",
+    "envio_frio"
+   ],
+   "carga": "conteo al guardar / al retirar"
+  },
+  {
+   "id": "administracion",
+   "nombre": "Administración",
+   "ve": [
+    "fletes",
+    "liquidacion",
+    "remitos",
+    "mano_de_obra"
+   ],
+   "carga": "paga camiones y servicios con el mismo libro"
+  },
+  {
+   "id": "comercial",
+   "nombre": "Comercial / gerencia",
+   "ve": [
+    "disponibilidad",
+    "clientes",
+    "mapa"
+   ],
+   "carga": "consulta: ¿tengo 1.200 bolsas de Spunta?"
+  }
+ ],
+ "sistema_contable": {
+  "id": "albor_agro",
+  "nombre": "Albor Agro",
+  "uso": "paquete_contable",
+  "rol": "no_reemplazar",
+  "detalle": "Papasud usa sólo el módulo contable. Esta plataforma no lo pisa: el movimiento confirmado es lo que después se liquida allá."
+ },
+ "tipos_movimiento": [
+  "ingreso_tolva",
+  "campo_a_frio",
+  "envio_frio",
+  "retiro_frio",
+  "entrega_cliente"
+ ],
  "meta": {
   "empresa": "Papasud S.A.",
   "hoy": "2026-08-22",
   "campania": "2025/26",
   "sintetico": true,
-  "nota": "Catálogos (variedades, campos, lotes, frigoríficos, clientes, transportistas) son datos REALES provistos por Papasud. Los movimientos y kilos son sintéticos pero deterministas."
+  "regla_flujo": "lote → planta (recepción/báscula → reclasificación → playa) → cliente | frío. El frío suele volver a planta. Atajos: campo→frío y campo→cliente.",
+  "nota": "Catálogos (variedades, campos, lotes, frigoríficos, clientes, transportistas) son datos REALES provistos por Papasud. Los movimientos y kilos son sintéticos pero deterministas. Cayetano Chávez / lote 300 sale de la charla del 22/08."
  }
 }
