@@ -17,7 +17,7 @@ import subprocess
 import sys
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DEMO = os.path.join(os.path.dirname(BACKEND), "data-demo")
+DATA_DEMO = os.path.join(os.path.dirname(BACKEND), "data-papasud")
 
 _SNIPPET = r"""
 import json

@@ -1,0 +1,62 @@
+name: Deploy a Render
+
+# Dispara en cada push a main (o sea, en cada merge). El deploy real en
+# Render NO ocurre solo con el push — render.yaml tiene autoDeploy: false a
+# propósito — lo dispara el último step de este workflow, y solo si el smoke
+# check anterior pasó. Así un merge que rompe el import del backend o el
+# build del frontend nunca gasta un build de Render ni pisa el demo público.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}   # botón "Run workflow" en la pestaña Actions, para un redeploy manual
+
+concurrency:
+  group: deploy-render
+  cancel-in-progress: false   # nunca cancelar un deploy a mitad de camino
+
+jobs:
+  smoke-check:
+    name: Smoke check (backend import + frontend build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias del backend
+        run: pip install -r backend/requirements.txt
+
+      - name: El backend importa sin romperse
+        # No es la suite de tests completa (heredada de un boilerplate previo
+        # a Papasud, con módulos legacy sin portar) — es el chequeo mínimo real:
+        # si algo rompe un import, el contenedor de Render tampoco va a levantar.
+        run: python -c "import main"
+        working-directory: backend
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias del frontend
+        run: npm ci
+        working-directory: frontend
+
+      - name: El frontend compila (el mismo build que corre el Dockerfile)
+        run: npm run build
+        working-directory: frontend
+
+  deploy:
+    name: Disparar deploy en Render
+    needs: smoke-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Hook
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: ./scripts/deploy_render.sh

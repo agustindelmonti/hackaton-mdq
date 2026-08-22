@@ -100,7 +100,7 @@ def test_auditoria_sugerencias_demo():
     import sys as _sys
     backend = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
     env = {**_os.environ, "POLPILOT_TENANT": "demo",
-           "POLPILOT_DATA_DIR": _os.path.join(_os.path.dirname(backend), "data-demo"),
+           "POLPILOT_DATA_DIR": _os.path.join(_os.path.dirname(backend), "data-papasud"),
            "PYTHONIOENCODING": "utf-8"}
     env.pop("ANTHROPIC_API_KEY", None)
     r = _sp.run([_sys.executable, "-c", """

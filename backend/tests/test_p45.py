@@ -31,7 +31,7 @@ from core import oportunidades_neg as opn
 def _en_demo(expr: str):
     """Evalúa una expresión en el tenant DEMO y devuelve su JSON."""
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_demo = os.path.join(os.path.dirname(backend), "data-demo")
+    data_demo = os.path.join(os.path.dirname(backend), "data-papasud")
     env = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": data_demo,
            "POLPILOT_DEMO_TODAY": "2026-07-07", "PYTHONIOENCODING": "utf-8"}
     env.pop("ANTHROPIC_API_KEY", None)

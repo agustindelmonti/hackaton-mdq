@@ -14,7 +14,7 @@ import pytest
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAIZ = os.path.dirname(BACKEND)
-DATA_DEMO = os.path.join(RAIZ, "data-demo")
+DATA_DEMO = os.path.join(RAIZ, "data-papasud")
 
 
 def _en_demo(codigo: str) -> str:
@@ -34,7 +34,7 @@ def test_piloto_en_la_suite():
     from core import paths
     import auth
     assert paths.TENANT == "piloto"
-    assert not paths.DATA_DIR.endswith("data-demo")   # la copia scratch, no el seed
+    assert not paths.DATA_DIR.endswith("data-papasud")   # la copia scratch, no el seed
     assert os.path.isfile(os.path.join(paths.DATA_DIR, "inventory.json"))
     assert "emilio" in auth.USUARIOS and "aldo" not in auth.USUARIOS
     assert paths.EMPRESA == "Supermercados Horizonte"

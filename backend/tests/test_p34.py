@@ -32,7 +32,7 @@ def test_familia_evento_slugs_reales():
 
 def test_demo_equipo_actividad_estructura_y_verdad():
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_demo = os.path.join(os.path.dirname(backend), "data-demo")
+    data_demo = os.path.join(os.path.dirname(backend), "data-papasud")
     env = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": data_demo,
            "POLPILOT_DEMO_TODAY": "2026-07-07", "POLPILOT_DEMO_AUTOLOGIN": "1",
            "PYTHONIOENCODING": "utf-8"}

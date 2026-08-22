@@ -9,7 +9,7 @@ from core import fase, store, memoria
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAIZ = os.path.dirname(BACKEND)
-DATA_DEMO = os.path.join(RAIZ, "data-demo")
+DATA_DEMO = os.path.join(RAIZ, "data-papasud")
 
 
 @pytest.fixture(autouse=True)

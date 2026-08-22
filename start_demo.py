@@ -42,16 +42,16 @@ for _stream in (sys.stdout, sys.stderr):
 HERE = os.path.dirname(os.path.abspath(__file__))
 BACKEND = os.path.join(HERE, "backend")
 FRONTEND = os.path.join(HERE, "frontend")
-DATA_DEMO = os.path.join(HERE, "data-demo")
-API_PORT = 8001
-FRONT_PORT = 5174
+DATA_DEMO = os.path.join(HERE, "data-papasud")
+API_PORT = 8020
+FRONT_PORT = 5210
 ES_WINDOWS = os.name == "nt"
 
+# El dataset se generó con "hoy" = 2026-08-22 (ver README, "Cómo se levanta");
+# el resto queda en el default del tenant papasud (paths.py) — no hace falta
+# pisar TENANT/DATA_DIR/DEFAULT_LANG a mano.
 DEMO_ENV = {
-    "POLPILOT_TENANT": "demo",
-    "POLPILOT_DATA_DIR": "../data-demo",
-    "POLPILOT_DEFAULT_LANG": "en",
-    "POLPILOT_DEMO_TODAY": "2026-07-07",
+    "POLPILOT_DEMO_TODAY": "2026-08-22",
     "POLPILOT_DEMO_ROLE_SWITCH": "1",
     "POLPILOT_DEMO_MSG_CAP": "35",
     "POLPILOT_DEMO_AUTOLOGIN": "1",
@@ -129,7 +129,7 @@ def limpiar_puerto(puerto: int) -> None:
 
 def guard_snapshot() -> None:
     try:
-        out = subprocess.run(["git", "status", "--porcelain", "data-demo/"],
+        out = subprocess.run(["git", "status", "--porcelain", "data-papasud/"],
                              capture_output=True, text=True, cwd=HERE, timeout=15).stdout
     except (subprocess.SubprocessError, FileNotFoundError):
         return  # sin git (p.ej. deploy): el seed determinista es la fuente de verdad
@@ -138,9 +138,25 @@ def guard_snapshot() -> None:
         warn("EL DATASET VERSIONADO DIFIERE DEL SNAPSHOT COMMITEADO:")
         for l in sucios:
             warn(f"   {l.strip()}")
-        warn("   (residuos de pruebas manuales — `git checkout -- data-demo/` para el estado canónico)")
+        warn("   (residuos de pruebas manuales — `git checkout -- data-papasud/` para el estado canónico)")
     else:
         ok("dataset versionado = snapshot commiteado")
+
+
+def asegurar_env() -> None:
+    """backend/.env con key real (ver README) o, si no hay, LLM_MODE=simulado
+    para que el demo arranque igual — Ángela responde por reglas, no se cae."""
+    env_path = os.path.join(BACKEND, ".env")
+    if os.path.exists(env_path):
+        ok("backend/.env presente")
+        return
+    ejemplo = os.path.join(BACKEND, ".env.example")
+    with open(ejemplo, "r", encoding="utf-8") as f:
+        contenido = f.read().replace("LLM_MODE=gateway", "LLM_MODE=simulado", 1)
+    with open(env_path, "w", encoding="utf-8") as f:
+        f.write(contenido)
+    warn("no había backend/.env — creado con LLM_MODE=simulado (sin key de LLM)")
+    warn("   Ángela responde por reglas, no por modelo. Pegá una key en backend/.env para el modo completo.")
 
 
 def sembrar() -> None:
@@ -218,38 +234,31 @@ def healthcheck(proc: subprocess.Popen) -> None:
         problemas.append(f"/api/inventario falló: {e}")
 
     try:
-        ini = _http("GET", "/api/inicio", token)
-        feed = (ini.get("actividad") or {}).get("feed") or []
-        if feed:
-            ok(f"actividad sembrada: {len(feed)} eventos en el feed")
+        mov = _http("GET", "/api/movimientos", token)
+        total = (mov.get("resumen") or {}).get("total", 0)
+        if total > 0:
+            ok(f"movimientos sembrados: {total} (libro append-only)")
         else:
-            problemas.append("feed de actividad vacío (el Home diría 'no pasó nada' — mentira)")
+            problemas.append("libro de movimientos vacío (¿generar.py corrió? ¿DATA_DIR correcto?)")
     except Exception as e:  # noqa: BLE001
-        problemas.append(f"/api/inicio falló: {e}")
+        problemas.append(f"/api/movimientos falló: {e}")
 
     try:
-        # además de verificar, este hit deja el cache caliente si el precálculo
-        # del arranque todavía está corriendo
-        for _ in range(10):
-            an = _http("GET", "/api/analisis", token, timeout=30)
-            if an.get("disponible"):
-                ok("análisis precalentado (Oportunidades entra instantáneo)")
-                break
-            time.sleep(1)
+        ubi = _http("GET", "/api/ubicaciones", token)
+        n_ubi = len(ubi.get("ubicaciones") or [])
+        if n_ubi > 0:
+            ok(f"ubicaciones sembradas: {n_ubi} (frigoríficos + galpón)")
         else:
-            problemas.append("el análisis no reporta disponible (¿ventas sin validar?)")
+            problemas.append("no hay ubicaciones sembradas")
     except Exception as e:  # noqa: BLE001
-        problemas.append(f"/api/analisis falló: {e}")
+        problemas.append(f"/api/ubicaciones falló: {e}")
 
-    # El mapa dispara ~16 fetches al abrirse (señales + cruces + conocimiento) y
-    # el backend es un worker sync: si esos endpoints entran FRÍOS, la primera
-    # apertura tarda ~45s (tormenta de requests serializada). Precalentarlos acá
-    # deja la primera apertura del mapa en pocos segundos (revisitas: instantáneas
-    # por el cache del front). Best-effort: si alguno falla, el mapa igual carga.
-    endpoints_mapa = ("/api/oportunidades", "/api/cuentas", "/api/ventas",
-                      "/api/pagos", "/api/deposito", "/api/evolucion",
-                      "/api/inicio", "/api/calidad", "/api/macro",
-                      "/api/anomalias", "/api/equipo/actividad", "/api/conocimiento")
+    # El mapa dispara varios fetches al abrirse y el backend es un worker sync:
+    # si esos endpoints entran FRÍOS, la primera apertura tarda. Precalentarlos
+    # acá deja la primera apertura rápida (revisitas: instantáneas por el cache
+    # del front). Best-effort: si alguno falla, el mapa igual carga.
+    endpoints_mapa = ("/api/conciliacion", "/api/exportacion",
+                      "/api/inicio", "/api/equipo/actividad")
     calientes = 0
     for ruta in endpoints_mapa:
         try:
@@ -269,6 +278,19 @@ def healthcheck(proc: subprocess.Popen) -> None:
 # ----------------------------------------------------------------------------
 # 6 · Frontend
 # ----------------------------------------------------------------------------
+
+def asegurar_node_modules() -> None:
+    if os.path.isdir(os.path.join(FRONTEND, "node_modules")):
+        ok("frontend/node_modules presente")
+        return
+    warn("no había frontend/node_modules — corriendo npm install (una vez, puede tardar)")
+    npm = "npm.cmd" if ES_WINDOWS else "npm"
+    r = subprocess.run([npm, "install"], cwd=FRONTEND, timeout=600)
+    if r.returncode != 0:
+        fail("npm install falló — corré `cd frontend && npm install` a mano y reintentá")
+        sys.exit(1)
+    ok("npm install listo")
+
 
 def levantar_frontend() -> subprocess.Popen:
     # Re-limpiar justo antes de lanzar: si el arranque mató a un start_demo
@@ -305,10 +327,12 @@ def esperar_puerto(puerto: int, proc: subprocess.Popen, timeout_s: int = 60) -> 
 
 
 def main() -> None:
-    print("\nPolPilot - demo Distribuidora del Litoral\n" + "-" * 45)
+    print("\nPolPilot x Papasud - demo\n" + "-" * 45)
     limpiar_puerto(API_PORT)
     limpiar_puerto(FRONT_PORT)
     guard_snapshot()
+    asegurar_env()
+    asegurar_node_modules()
     sembrar()
     backend = levantar_backend()
     frontend = None

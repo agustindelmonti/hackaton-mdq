@@ -26,7 +26,7 @@ import subprocess
 import sys
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DEMO = os.path.join(os.path.dirname(BACKEND), "data-demo")
+DATA_DEMO = os.path.join(os.path.dirname(BACKEND), "data-papasud")
 ENV = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": DATA_DEMO,
        "POLPILOT_DEMO_TODAY": "2026-07-07", "PYTHONIOENCODING": "utf-8"}
 ENV.pop("ANTHROPIC_API_KEY", None)

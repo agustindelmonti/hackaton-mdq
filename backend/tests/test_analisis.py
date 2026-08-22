@@ -11,7 +11,7 @@ import sys
 
 BACKEND = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAIZ = os.path.dirname(BACKEND)
-DATA_DEMO = os.path.join(RAIZ, "data-demo")
+DATA_DEMO = os.path.join(RAIZ, "data-papasud")
 
 
 def _en_demo(codigo: str) -> str:

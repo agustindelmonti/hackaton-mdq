@@ -225,7 +225,7 @@ def test_caso1_contra_demo_real():
     """El caso literal, contra el dataset demo CANÓNICO (subprocess, como
     test_kpis): 24 puntos reales del vino, sin tocar nada."""
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_demo = os.path.join(os.path.dirname(backend), "data-demo")
+    data_demo = os.path.join(os.path.dirname(backend), "data-papasud")
     env = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": data_demo,
            "POLPILOT_DEMO_TODAY": "2026-07-07", "PYTHONIOENCODING": "utf-8"}
     env.pop("ANTHROPIC_API_KEY", None)

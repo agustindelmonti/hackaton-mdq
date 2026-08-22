@@ -61,7 +61,7 @@ def test_cap_ip_es_cero_en_piloto():
 
 def test_demo_sin_token_401_y_cap_por_ip():
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_demo = os.path.join(os.path.dirname(backend), "data-demo")
+    data_demo = os.path.join(os.path.dirname(backend), "data-papasud")
     env = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": data_demo,
            "POLPILOT_DEMO_TODAY": "2026-07-07", "POLPILOT_DEMO_AUTOLOGIN": "1",
            "POLPILOT_DEMO_IP_CAP": "2", "POLPILOT_DEMO_MSG_CAP": "35",

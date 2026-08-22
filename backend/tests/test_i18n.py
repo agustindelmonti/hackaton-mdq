@@ -249,7 +249,7 @@ def test_analisis_objetivos_en_ingles_en_demo():
     import subprocess
     import sys
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_demo = os.path.join(os.path.dirname(backend), "data-demo")
+    data_demo = os.path.join(os.path.dirname(backend), "data-papasud")
     env = {**os.environ, "POLPILOT_TENANT": "demo", "POLPILOT_DATA_DIR": data_demo,
            "PYTHONIOENCODING": "utf-8"}
     env.pop("ANTHROPIC_API_KEY", None)

@@ -21,7 +21,7 @@ if "POLPILOT_DATA_DIR" not in os.environ:
     _raiz = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     _scratch = os.path.join(tempfile.mkdtemp(prefix="polpilot-suite-"), "data")
     os.makedirs(_scratch)
-    shutil.copy2(os.path.join(_raiz, "data-demo", "inventory.json"),
+    shutil.copy2(os.path.join(_raiz, "data-papasud", "inventory.json"),
                  os.path.join(_scratch, "inventory.json"))
     os.environ["POLPILOT_DATA_DIR"] = _scratch
 

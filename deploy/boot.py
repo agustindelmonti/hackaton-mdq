@@ -22,7 +22,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(HERE)
-DATA_DIR = os.environ.get("POLPILOT_DATA_DIR") or os.path.join(RAIZ, "data-demo")
+DATA_DIR = os.environ.get("POLPILOT_DATA_DIR") or os.path.join(RAIZ, "data-papasud")
 CANONICAL = os.environ.get("POLPILOT_CANONICAL_DIR")
 
 
@@ -35,7 +35,7 @@ def main() -> None:
     # 1 · seed idempotente (el mismo generar.py de siempre)
     gen = os.path.join(DATA_DIR, "generar.py")
     if not os.path.exists(gen):
-        fallar(f"no existe {gen} — ¿la imagen copió data-demo/?")
+        fallar(f"no existe {gen} — ¿la imagen copió data-papasud/?")
     r = subprocess.run([sys.executable, gen], capture_output=True, text=True,
                        cwd=DATA_DIR, timeout=180)
     if r.returncode != 0:

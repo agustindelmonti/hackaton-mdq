@@ -1,37 +1,49 @@
-# P22·C — Blueprint de Render para el DEMO público (link de la aplicación a YC).
-# SOLO el tenant demo: los data dirs de otros tenants no viajan — los excluye
+# Blueprint de Render para el demo público de Papasud.
+# SOLO data-papasud/ (sintético, ver README) viaja a la imagen — lo excluye
 # .dockerignore y lo verifica la guardia del Dockerfile (el build falla si se cuela).
 #
-# "New +" → "Blueprint" → conectar este repo → Render lee este archivo.
-# Los dos secrets (sync: false) se cargan a mano en el dashboard:
-#   ANTHROPIC_API_KEY   → la key real (jamás en el repo)
-#   POLPILOT_RESET_TOKEN → cualquier string largo random (protege el reset manual)
+# "New +" -> "Blueprint" -> conectar este repo -> Render lee este archivo.
+#
+# autoDeploy queda en false a propósito: el deploy NO lo dispara Render solo
+# con cada push. Lo dispara el pipeline de GitHub Actions
+# (.github/workflows/deploy.yml) DESPUÉS de que el smoke check pasa, pegándole
+# a este Deploy Hook. Así un push a main con el backend roto nunca llega a
+# construir imagen. Ver deploy/DEPLOY.md.
+#
+# Secrets (sync: false) — se cargan a mano en el dashboard, jamás en el repo:
+#   AI_GATEWAY_API_KEY   -> key del AI Gateway de Vercel (LLM_MODE=gateway, el default)
+#   ANTHROPIC_API_KEY    -> alternativa directa (LLM_MODE=anthropic) si el gateway no responde
+#   POLPILOT_RESET_TOKEN -> string largo random; protege el reset manual del demo
 services:
   - type: web
-    name: polpilot-demo
+    name: papasud-polpilot
     runtime: docker
-    plan: starter          # 512 MB alcanzan; free se duerme y arruina la primera impresión
+    plan: starter          # 512 MB alcanzan; el free tier se duerme y arruina la primera impresión
     healthCheckPath: /api/health
+    autoDeploy: false       # el deploy lo dispara el Deploy Hook desde el pipeline, no cada push
     envVars:
+      - key: AI_GATEWAY_API_KEY
+        sync: false
       - key: ANTHROPIC_API_KEY
-        sync: false        # secret: se carga en el dashboard, nunca en el repo
+        sync: false
       - key: POLPILOT_RESET_TOKEN
         sync: false        # secret: token del reset manual (/api/admin/reset-demo)
-      # El modelo de Ángela. NO es un secreto (es config), pero tampoco puede
-      # quedar implícito: sin esta línea el código cae a su default histórico
-      # (`claude-sonnet-4-6`, ver backend/config.MODELO_VALIDACION) y producción
-      # correría con un modelo distinto al que se validó. Comprobado el 04/08:
-      # /api/health del demo público devolvía `modelo_angela: claude-sonnet-4-6`.
+      # LLM_MODE, GATEWAY_MODEL y ANGELA_MODEL NO son secretos (son config), pero
+      # tampoco pueden quedar implícitos: sin esta línea el código autodetecta por
+      # env, y un typo en el dashboard correría producción con un modo/modelo
+      # distinto al validado. Se comprueba en /api/health -> modo_angela / modelo_angela.
+      - key: LLM_MODE
+        value: gateway
+      - key: GATEWAY_MODEL
+        value: anthropic/claude-sonnet-5
       - key: ANGELA_MODEL
         value: claude-sonnet-5
       # El resto ya viene con defaults correctos en el Dockerfile (ENV):
-      # POLPILOT_TENANT=demo, POLPILOT_DATA_DIR, POLPILOT_DEFAULT_LANG=en,
-      # POLPILOT_DEMO_TODAY=2026-07-07, POLPILOT_DEMO_ROLE_SWITCH=1,
+      # POLPILOT_DATA_DIR, POLPILOT_DEFAULT_LANG=es, POLPILOT_DEMO_TODAY=2026-08-22,
       # POLPILOT_DEMO_AUTOLOGIN=1, POLPILOT_DEMO_MSG_CAP=35 (cap por sesión),
-      # POLPILOT_DEMO_IP_CAP=60 (freno de gasto por IP/día, sobrevive al
-      # re-login), POLPILOT_STATIC_DIR, POLPILOT_CANONICAL_DIR.
-      # Para pisar alguno, agregarlo acá con su valor.
+      # POLPILOT_DEMO_IP_CAP=60 (freno de gasto por IP/día), POLPILOT_STATIC_DIR,
+      # POLPILOT_CANONICAL_DIR. Para pisar alguno, agregarlo acá con su valor.
       #
       # OJO (techo duro real del gasto): el cap por IP es una barrera blanda.
       # El límite que NO se puede evadir se pone FUERA de la app: en la consola
-      # de Anthropic, un spend limit / budget alert sobre la API key.
+      # de Anthropic / Vercel, un spend limit sobre la key.
