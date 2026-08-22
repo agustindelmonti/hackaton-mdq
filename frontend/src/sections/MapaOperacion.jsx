@@ -18,12 +18,14 @@ import { useT } from "../lib/i18n";
 // ----------------------------------------------------------------------------
 // El orden es el del negocio y va de izquierda a derecha:
 //
-//     DE DÓNDE VIENE      →      DÓNDE ESTÁ      →      ADÓNDE VA
-//   laboratorio in vitro      ┌────┬────┐          órdenes de carga
-//   los cinco campos          │ TL │ TR │          clientes
-//                             ├──[PAPASUD]──┤      puerto · país
-//                             │ BL │ BR │
-//                             └────┴────┘
+//     DE DÓNDE VIENE   →   PLANTA   →      DÓNDE ESTÁ      →      ADÓNDE VA
+//   laboratorio in vitro    MdP        ┌────┬────┐          órdenes de carga
+//   los cinco campos                   │ TL │ TR │          clientes
+//                                      ├──[PAPASUD]──┤      puerto · país
+//                                      │ BL │ BR │
+//                                      └────┴────┘
+//
+// La planta va ENTRE el campo y el cuadro: el kilo no salta a la cámara.
 //
 // POR QUÉ LAS CUATRO UBICACIONES EN CUADRO Y NO EN COLUMNA. Porque los
 // traslados son ENTRE ellas: en una columna, doce flechas de ida y vuelta se
@@ -38,11 +40,13 @@ import { useT } from "../lib/i18n";
 // ============================================================================
 
 // --- la grilla del centro ---------------------------------------------------
-const W = { origen: 202, centro: 292, orden: 188, cliente: 208 };
+const W = { origen: 202, planta: 228, centro: 292, orden: 188, cliente: 208 };
 // El hueco entre las dos columnas del cuadro no es estético: es el corredor por
 // donde pasan los traslados. Con 46 px las flechas eran un garabato; con 200 el
 // logo entra en el medio y las flechas se leen.
-const COL = { origen: 0, gridL: 276, gridR: 768, orden: 1136, cliente: 1382 };
+const COL = {
+  origen: 0, planta: 230, gridL: 490, gridR: 982, orden: 1350, cliente: 1596,
+};
 const GRID_Y = [0, 232];                       // fila de arriba / fila de abajo
 const CENTRO_MEDIO = { x: (COL.gridL + COL.gridR + W.centro) / 2, y: GRID_Y[1] / 2 + 78 };
 const EJE_Y = CENTRO_MEDIO.y;                  // todas las columnas se centran acá
@@ -67,21 +71,31 @@ const LADOS = [
   ["b", Position.Bottom], ["l", Position.Left],
 ];
 
-function Handles({ centro }) {
-  if (!centro) {
+function Handles({ centro, columna }) {
+  if (centro) {
+    return LADOS.map(([id, pos]) => (
+      <span key={id}>
+        <Handle type="target" position={pos} id={`t-${id}`} style={{ opacity: 0 }} />
+        <Handle type="source" position={pos} id={`s-${id}`} style={{ opacity: 0 }} />
+      </span>
+    ));
+  }
+  if (columna) {
     return (
       <>
         <Handle type="target" position={Position.Left} id="t-l" style={{ opacity: 0 }} />
         <Handle type="source" position={Position.Right} id="s-r" style={{ opacity: 0 }} />
+        <Handle type="source" position={Position.Bottom} id="s-b" style={{ opacity: 0 }} />
+        <Handle type="target" position={Position.Top} id="t-t" style={{ opacity: 0 }} />
       </>
     );
   }
-  return LADOS.map(([id, pos]) => (
-    <span key={id}>
-      <Handle type="target" position={pos} id={`t-${id}`} style={{ opacity: 0 }} />
-      <Handle type="source" position={pos} id={`s-${id}`} style={{ opacity: 0 }} />
-    </span>
-  ));
+  return (
+    <>
+      <Handle type="target" position={Position.Left} id="t-l" style={{ opacity: 0 }} />
+      <Handle type="source" position={Position.Right} id="s-r" style={{ opacity: 0 }} />
+    </>
+  );
 }
 
 // --- el nodo de la empresa --------------------------------------------------
@@ -111,7 +125,8 @@ function NodoOperacion({ data }) {
   const Icono = esPlanta ? Factory
     : (esGalpon ? Warehouse : (ICONO[data.tipo] || Package));
   const t = esPlanta ? TONO.verde : (TONO[data.estado] || TONO.neutro);
-  const esCentro = data.capa === "centro" || esPlanta;
+  const esCuadro = data.tipo === "ubicacion";
+  const esGrande = esCuadro || esPlanta;
   const apagado = data.atenuado;
 
   return (
@@ -120,20 +135,20 @@ function NodoOperacion({ data }) {
       style={{
         borderColor: data.resaltado ? "#2b7a8c" : (esPlanta ? "#2f7d5b" : t.borde),
         background: esPlanta ? "#f2f8f5" : t.fondo,
-        width: esCentro ? W.centro : data.ancho,
-        padding: esCentro ? "12px 14px" : "9px 11px",
+        width: esCuadro ? W.centro : data.ancho,
+        padding: esCuadro ? "12px 14px" : "9px 11px",
         opacity: apagado ? 0.16 : 1,
         boxShadow: data.resaltado
           ? "0 0 0 3px rgba(43,122,140,.2)"
           : esPlanta ? "0 6px 22px rgba(47,125,91,.22)"
-          : esCentro ? "0 2px 12px rgba(33,32,29,.08)" : "0 1px 3px rgba(33,32,29,.05)",
+          : esCuadro ? "0 2px 12px rgba(33,32,29,.08)" : "0 1px 3px rgba(33,32,29,.05)",
       }}
     >
-      <Handles centro={esCentro || data.tipo === "frigorifico"} />
+      <Handles centro={esCuadro} columna={esPlanta || data.tipo === "galpon"} />
       <div className="flex items-start gap-2">
-        <Icono size={esCentro ? 19 : 15} className="mt-0.5 shrink-0 text-tinta-suave" />
+        <Icono size={esGrande ? 19 : 15} className="mt-0.5 shrink-0 text-tinta-suave" />
         <div className="min-w-0 flex-1">
-          <p className={`truncate font-display font-bold leading-tight ${esCentro ? "text-[1.02rem]" : "text-[0.95rem]"}`}>
+          <p className={`truncate font-display font-bold leading-tight ${esGrande ? "text-[1.02rem]" : "text-[0.95rem]"}`}>
             {data.etiqueta}
           </p>
           {data.subtitulo && (
@@ -143,7 +158,7 @@ function NodoOperacion({ data }) {
         {data.bloqueada && <Lock size={14} className="mt-0.5 shrink-0 text-rojo" />}
       </div>
 
-      {esCentro && data.metricas && (
+      {esGrande && data.metricas && (
         <>
           <div className="mt-2.5 flex items-baseline gap-2">
             <span className="plata text-[1.35rem] font-medium leading-none">
@@ -189,7 +204,7 @@ function NodoOperacion({ data }) {
         </>
       )}
 
-      {!esCentro && data.metricas && (
+      {!esGrande && data.metricas && (
         <p className="mt-1 text-[0.76rem] tabular-nums text-tinta-suave">
           {data.metricas.toneladas != null && `${num(data.metricas.toneladas)} t`}
           {data.metricas.kg != null && `${num(data.metricas.kg)} kg`}
@@ -254,13 +269,24 @@ export default function MapaOperacion({ onPreguntar }) {
     const idx = new Map(ubis.map((u, i) => [u.id, i]));
 
     columna(origen, COL.origen, W.origen, 84);
+    if (planta) {
+      nodos.push({
+        id: planta.id, type: "operacion", draggable: false,
+        position: { x: COL.planta, y: EJE_Y - 78 },
+        data: { ...planta, ancho: W.planta },
+      });
+    }
+    galpones.forEach((g, i) => nodos.push({
+      id: g.id, type: "operacion", draggable: false,
+      position: { x: COL.planta, y: EJE_Y + 96 + i * 100 },
+      data: { ...g, ancho: W.planta },
+    }));
     ubis.forEach((u, i) => nodos.push({
       id: u.id, type: "operacion", draggable: false,
       position: { x: i % 2 ? COL.gridR : COL.gridL, y: GRID_Y[i > 1 ? 1 : 0] },
       data: { ...u },
     }));
     // El hueco del cuadro es del logo, como en el mapa de siempre.
-    // Planta y galpones nuevos van ABAJO, no ocupan ese centro.
     if (marca) {
       nodos.push({
         id: marca.id, type: "marca", draggable: false, selectable: false,
@@ -268,16 +294,6 @@ export default function MapaOperacion({ onPreguntar }) {
         data: { ...marca },
         zIndex: 1200,
       });
-    }
-    const extra = [planta, ...galpones].filter(Boolean);
-    if (extra.length) {
-      const yExtra = GRID_Y[1] + 250;
-      const x0 = CENTRO_MEDIO.x - (extra.length * (W.centro + 20)) / 2;
-      extra.forEach((n, i) => nodos.push({
-        id: n.id, type: "operacion", draggable: false,
-        position: { x: x0 + i * (W.centro + 20), y: yExtra },
-        data: { ...n },
-      }));
     }
     columna(ordenes, COL.orden, W.orden, 90);
     columna(salida, COL.cliente, W.cliente, 84);
@@ -340,14 +356,19 @@ export default function MapaOperacion({ onPreguntar }) {
     }
 
     const idsGalpon = new Set(galpones.map((g) => g.id));
+    const idPlanta = planta?.id;
     for (const a of otras) {
       const esIngreso = a.tipo === "ingreso";
       if (esIngreso && !todosLosIngresos && !a.principal) continue;
-      // Las flechas planta→cámaras ensucian el cuadro de siempre. Sólo se
-      // dibuja planta→galpón nuevo, al lado, debajo del logo.
-      if (a.tipo === "desde_planta" && !idsGalpon.has(a.destino)) continue;
       let sh = "s-r", th = "t-l";
       if (a.tipo === "desde_planta" && idsGalpon.has(a.destino)) {
+        sh = "s-b";
+        th = "t-t";
+      } else if (a.tipo === "desde_planta" && a.origen === idPlanta) {
+        const j = idx.get(a.destino);
+        sh = "s-r";
+        th = (j != null && j % 2 === 1) ? "t-t" : "t-l";
+      } else if (esIngreso && a.destino === idPlanta) {
         sh = "s-r";
         th = "t-l";
       }
@@ -667,7 +688,7 @@ function Esqueleto() {
   return (
     <div className="space-y-4" aria-busy="true">
       <div className="h-9 w-72 animate-pulse rounded bg-linea" />
-      <div className="h-[31rem] animate-pulse rounded-[var(--radius-card)] bg-linea/60" />
+      <div className="h-[38rem] animate-pulse rounded-[var(--radius-card)] bg-linea/60" />
     </div>
   );
 }

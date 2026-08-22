@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Snowflake, Warehouse, TriangleAlert, Sprout, MapPin, ArrowRight,
-  ShieldCheck, PackageCheck,
+  ShieldCheck, PackageCheck, Factory,
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
 import { api } from "../lib/api";
@@ -21,7 +21,7 @@ import { useT } from "../lib/i18n";
 // sobrevive a que alguien pregunte «¿y esto está verificado?».
 // ============================================================================
 
-const ICONO = { frigorifico: Snowflake, galpon: Warehouse };
+const ICONO = { frigorifico: Snowflake, galpon: Warehouse, planta: Factory };
 
 const COLOR = {
   verde: { borde: "border-salvia/30", chip: "bg-salvia/10 text-salvia", punto: "bg-salvia" },
@@ -116,7 +116,7 @@ function Tarjeta({ u, onPreguntar }) {
   const t = useT();
   const Icono = ICONO[u.tipo] || MapPin;
   const c = COLOR[u.estado] || COLOR.verde;
-  const sinFrio = u.tipo === "galpon";
+  const sinFrio = u.tipo === "galpon" || u.tipo === "planta";
 
   return (
     <section className={`overflow-hidden rounded-[var(--radius-card)] border ${c.borde} bg-superficie sombra-papel`}>

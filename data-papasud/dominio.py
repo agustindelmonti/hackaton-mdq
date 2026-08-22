@@ -35,10 +35,15 @@ FUENTES (verificadas, no inventadas):
 """
 from __future__ import annotations
 
-# --- Las cuatro ubicaciones ------------------------------------------------
+# --- Las cuatro ubicaciones de frío / galpón -------------------------------
 # Tres frigoríficos y un galpón, como dice el brief. El galpón NO tiene frío:
 # es acondicionamiento y armado de carga, y por eso es el que corre contra el
 # reloj — lo que entra ahí ya empezó a envejecer.
+#
+# La PLANTA no es la quinta cámara: es el hub. El kilo entra acá (báscula,
+# reclasificación, playa) y de acá sale a frío o a cliente. Vive aparte de las
+# cuatro para que el generador no la elija como destino de un traslado al azar
+# y se corra la semilla de los tres casos plantados.
 UBICACIONES = [
     {"id": "sierra", "nombre": "Frigorífico Sierra de los Padres",
      "tipo": "frigorifico", "camaras": ["Cámara 1", "Cámara 2", "Cámara 3", "Cámara 4"],
@@ -57,7 +62,28 @@ UBICACIONES = [
      "capacidad_kg": 900_000, "temp_objetivo": None, "temp_tolerancia": None,
      "direccion": "Camino Viejo a Chapadmalal km 8"},
 ]
-UBIC_POR_ID = {u["id"]: u for u in UBICACIONES}
+ZONAS_PLANTA = [
+    {"id": "recepcion", "nombre": "Recepción / báscula", "rol": "primer_ingreso",
+     "detalle": "El camión entra, se pesa, nace la planilla de recepción."},
+    {"id": "reclasificacion", "nombre": "Reclasificación y empaque", "rol": "calibre_empaque",
+     "detalle": "De granel con tierra a bolsas calibradas."},
+    {"id": "playa", "nombre": "Playa de carga", "rol": "despacho",
+     "detalle": "De acá sale a frío, a cliente o a exportación."},
+]
+PLANTA = {
+    "id": "planta_mdp",
+    "nombre": "Planta Mar del Plata",
+    "tipo": "planta",
+    "camaras": ["Recepción / báscula", "Reclasificación", "Playa de carga"],
+    "capacidad_kg": 800_000,
+    "temp_objetivo": None,
+    "temp_tolerancia": None,
+    "direccion": "Parque Industrial — Mar del Plata",
+    "tiene_bascula": True,
+    "zonas": ZONAS_PLANTA,
+}
+SITIOS = UBICACIONES + [PLANTA]
+UBIC_POR_ID = {u["id"]: u for u in SITIOS}
 
 
 def ubicacion_nombre(uid: str) -> str:

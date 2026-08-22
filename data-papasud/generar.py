@@ -13,9 +13,11 @@ CÓMO CRUZA TODO (si un número no cruza, el generador aborta con un assert):
     calibre declarado. El costo por kilo lo fija la CATEGORÍA (una Preinicial II
     cuesta seis veces una Certificada); el precio, el destino (exportación paga
     más que el mercado interno).
-  · Los movimientos son la historia: ingreso desde el campo → traslados entre
-    frigoríficos → egresos por despacho. El stock de HOY es el resultado de
-    aplicar todos los movimientos, no un número puesto a mano.
+  · Los movimientos son la historia: ingreso de cosecha a la planta (báscula)
+    → salida de planta a frío / galpón → traslados entre frigoríficos →
+    egresos por despacho. El stock de HOY es el resultado de aplicar todos
+    los movimientos, no un número puesto a mano. Un lote puede quedar en
+    playa de planta: no todo sale a cámara el mismo día.
   · Los conteos físicos son la otra fuente: alguien fue, contó bolsones y anotó.
     Donde el conteo no coincide con el saldo de movimientos, hay discrepancia —
     y la causa está PLANTADA en los datos, no inventada por el modelo.
@@ -391,7 +393,8 @@ def generar_movimientos(lotes: list[dict]) -> list[dict]:
         movs.append(m)
         return m
 
-    # (a) INGRESOS desde los campos: cada lote entró a cámara al cosecharse.
+    # (a) INGRESOS desde los campos: cada lote entra a planta (báscula).
+    #     El salto campo→cámara lo arma después `pasar_por_planta`.
     for l in sorted(lotes, key=lambda x: x["fecha_ingreso"]):
         f = datetime.date.fromisoformat(l["fecha_ingreso"])
         nuevo(f, "ingreso", l, abs(l["stock"]), l["campo_origen"], l["ubicacion"],
@@ -432,6 +435,92 @@ def generar_movimientos(lotes: list[dict]) -> list[dict]:
         if not m["numero"].startswith("MOV-2026-09"):   # los plantados conservan su número
             m["numero"] = f"MOV-2026-{i:04d}"
     return movs
+
+
+# Lotes de los tres casos plantados: no se tocan ni se mueven a planta.
+LOTES_PLANTADOS = {24004, 24006, 24015}
+
+
+def pasar_por_planta(lotes: list[dict], movs: list[dict]) -> None:
+    """El kilo no salta del campo a la cámara.
+
+    1. Unos lotes se quedan HOY en playa de planta (stock vivo en planta).
+    2. El resto pasó por báscula y salió a frío al día siguiente: el ingreso
+       original se reescribe a planta y se agrega el traslado planta→cámara.
+
+    No usa el Random del generador: si se insertara un `R.choice` acá se
+    correrían los conteos y los tres casos plantados.
+    """
+    planta = D.PLANTA
+    nombres_sitio = {u["nombre"] for u in D.UBICACIONES}
+    # Doce lotes, repartidos por campo, que no son los plantados ni el galpón
+    # de exportación (Chapadmalal es tránsito de carga, no playa de planta).
+    candidatos = [
+        l for l in lotes
+        if l["codigo"] not in LOTES_PLANTADOS
+        and l["ubicacion_id"] in ("sierra", "ruta226", "batan")
+        and l["stock"] > 8_000
+    ]
+    candidatos.sort(key=lambda l: l["codigo"])
+    por_campo: dict[str, list] = {}
+    for l in candidatos:
+        por_campo.setdefault(l["campo_origen"], []).append(l)
+    quedarse: list[dict] = []
+    while len(quedarse) < 12:
+        avance = False
+        for campo in sorted(por_campo):
+            if por_campo[campo] and len(quedarse) < 12:
+                quedarse.append(por_campo[campo].pop(0))
+                avance = True
+        if not avance:
+            break
+    ids_playa = {l["codigo"] for l in quedarse}
+
+    for l in quedarse:
+        l["ubicacion_id"] = planta["id"]
+        l["ubicacion"] = planta["nombre"]
+        l["camara"] = "Playa de carga"
+        l["conservacion"] = "sin frío"
+        dias_efectivos = int(round(l["dormancia_dias"] * D.FACTOR_SIN_FRIO))
+        ingreso = datetime.date.fromisoformat(l["fecha_ingreso"])
+        brot = ingreso + datetime.timedelta(days=dias_efectivos)
+        l["dormancia_efectiva_dias"] = dias_efectivos
+        l["brotacion_estimada"] = iso(brot)
+        l["dias_hasta_brotacion"] = (brot - HOY).days
+
+    hops = []
+    n_extra = 1100
+    for m in movs:
+        if m.get("tipo") != "ingreso":
+            continue
+        dest_orig = m.get("destino")
+        if dest_orig == planta["nombre"] or dest_orig not in nombres_sitio:
+            continue
+        m["destino"] = planta["nombre"]
+        m["nota"] = "Ingreso de cosecha — báscula de planta"
+        if m.get("codigo") in ids_playa:
+            continue
+        n_extra += 1
+        f = datetime.date.fromisoformat(m["fecha"]) + datetime.timedelta(days=1)
+        hops.append({
+            "numero": f"MOV-2026-{n_extra:04d}",
+            "fecha": iso(f),
+            "tipo": "traslado",
+            "lote": m["lote"],
+            "codigo": m["codigo"],
+            "variedad": m["variedad"],
+            "kg": m["kg"],
+            "bolsones": m["bolsones"],
+            "origen": planta["nombre"],
+            "destino": dest_orig,
+            "registrado_por": "marcos",
+            "estado": "confirmado",
+            "confirmado_en_destino": True,
+            "canal": "planilla",
+            "nota": "Salida de planta a frío",
+        })
+    movs.extend(hops)
+    movs.sort(key=lambda m: (m["fecha"], m["numero"]))
 
 
 def plantar_inconsistencias(lotes: list[dict], movs: list[dict]) -> dict:
@@ -817,6 +906,7 @@ def main() -> None:
     inyectar_problemas(lotes)
     movs = generar_movimientos(lotes)
     plantadas = plantar_inconsistencias(lotes, movs)
+    pasar_por_planta(lotes, movs)
     conteos = generar_conteos(lotes, plantadas)
     ordenes = generar_ordenes_carga(lotes, plantadas)
     filas_dep = generar_filas_deposito(lotes)
@@ -868,7 +958,7 @@ def main() -> None:
     escribir("notas_equipo.json", {"notas": notas})
     escribir("conocimiento_negocio.json", {"piezas": conocimiento})
     escribir("catalogos.json", {
-        "ubicaciones": D.UBICACIONES,
+        "ubicaciones": D.SITIOS,
         "variedades": D.VARIEDADES,
         "categorias": D.CATEGORIAS,
         "calibres": {str(k): v for k, v in D.CALIBRES.items()},
@@ -904,9 +994,12 @@ Resumen del dataset
   Piezas de conocimiento    {len(conocimiento)}
 
 Ocupación por ubicación""".replace(",", "."))
-    for u in D.UBICACIONES:
+    for u in D.SITIOS:
         ocup = sum(abs(l["stock"]) for l in lotes if l["ubicacion_id"] == u["id"])
         n = sum(1 for l in lotes if l["ubicacion_id"] == u["id"])
+        if not u["capacidad_kg"]:
+            print(f"  {u['nombre']:<34} {ocup/1000:>7.1f} t  {n:>3} lotes")
+            continue
         print(f"  {u['nombre']:<34} {ocup/1000:>7.1f} t / {u['capacidad_kg']/1000:>7.1f} t"
               f"  ({ocup/u['capacidad_kg']*100:>4.1f}%)  {n:>3} lotes")
 

@@ -141,8 +141,31 @@ def test_mapa_operacion_conserva_cuatro_sitios_ordenes_clientes_y_suma_planta():
     assert galpones[0]["etiqueta"] == "Galpón Mar del Plata"
     planta = next(n for n in d["nodos"] if n["tipo"] == "planta")
     assert {z["id"] for z in planta["zonas"]} == {"recepcion", "reclasificacion", "playa"}
+    assert planta["metricas"]["lotes"] >= 8
+    assert planta["metricas"]["toneladas"] > 0
+    ingresos = [a for a in d["aristas"]
+                if a["tipo"] == "ingreso" and a["destino"] == planta["id"]]
+    assert ingresos, "el campo tiene que entrar a planta, no saltar a la cámara"
+    hacia_camara = [a for a in d["aristas"]
+                    if a["tipo"] == "desde_planta" and a["origen"] == planta["id"]
+                    and a["destino"].startswith("ubi_")]
+    assert len(hacia_camara) >= 3
     assert any(n["tipo"] == "orden" for n in d["nodos"])
     assert any(n["tipo"] == "cliente" for n in d["nodos"])
+
+
+def test_el_seed_tiene_stock_vivo_en_planta():
+    """La planta no es un overlay: hay lotes y movimientos en el seed viejo."""
+    from core import store, semilla, movimientos
+    assert any(u["id"] == "planta_mdp" and u["tipo"] == "planta"
+               for u in semilla.ubicaciones())
+    en_planta = [a for a in store.raw_actual() if a.get("ubicacion_id") == "planta_mdp"]
+    assert len(en_planta) >= 8
+    movs = movimientos.listar()
+    assert any(m.get("tipo") == "ingreso" and m.get("destino") == "Planta Mar del Plata"
+               for m in movs)
+    assert any(m.get("origen") == "Planta Mar del Plata" and m.get("tipo") == "traslado"
+               for m in movs)
 
 
 def test_mapa_papasud_sigue_siendo_el_flujo_campo_planta():
