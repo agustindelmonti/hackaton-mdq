@@ -163,8 +163,12 @@ def resumen_pieza(p: dict) -> dict:
     """La forma compacta que viaja al frontend en `conocimiento_aplicado`: lo que
     el mapa necesita para el chip, el panel 'Lo que Aldo me enseñó' y el nodo del
     camino de conocimiento. Lleva ambos idiomas — el frontend elige por idioma."""
-    return {"id": p["id"], "tipo": p["tipo"], "texto": p["texto"],
-            "texto_en": p.get("texto_en"), "nodo": p["nodo"], "efecto": p["efecto"],
+    # .get() y no [] a propósito: acá llegan piezas del dataset del tenant, y
+    # una clave faltante en un JSON de datos hacía reventar /api/onboarding con
+    # un 500 — el que recién entró abría la app y no veía nada.
+    return {"id": p.get("id"), "tipo": p.get("tipo", "regla"), "texto": p.get("texto", ""),
+            "texto_en": p.get("texto_en"), "nodo": p.get("nodo"),
+            "efecto": p.get("efecto"),
             "efecto_profundo": p.get("efecto_profundo", False),
             "veces_aplicada": p.get("veces_aplicada", 0),
             "cuando": (p.get("origen") or {}).get("cuando")}

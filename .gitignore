@@ -44,3 +44,6 @@ frontend/*.png
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# La marca de la semilla del equipo: estado vivo, no dataset.
+data-papasud/.semilla_equipo

@@ -67,7 +67,7 @@ function ObjetivoCard({ o }) {
 
       <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[0.78rem] text-tinta-suave">
         <span className="inline-flex items-center gap-1">
-          <User size={12} /> {cap(o.responsable)}
+          <User size={12} /> {o.responsable_nombre || cap(o.responsable)}
         </span>
         <span className="inline-flex items-center gap-1">
           <AngelaMark size={12} /> {t("obj.mide_desde")}: {t(o.fuente_lk)}

@@ -3,6 +3,7 @@ import { Users, Monitor, Smartphone, Check, Send, X, Inbox, MessageSquare, Penci
 import AngelaSays from "../components/AngelaSays";
 import AngelaMark from "../components/AngelaMark";
 import ObjetivosPanel from "./ObjetivosPanel";
+import TareasEquipo from "./TareasEquipo";
 import Avatar from "../components/Avatar";
 import BadgeNuevo, { antiguedadTexto } from "../components/BadgeNuevo";
 import { VerComoSelector, cambiarA } from "../components/VerComo";
@@ -205,33 +206,12 @@ function MatrizModulos({ token }) {
   );
 }
 
-// Avisos que Ángela propone mandar al equipo, derivados de lo detectado.
-// El responsable sale de los PERFILES REALES del tenant (nada hardcodeado):
-// datos/precios → quien tenga rol de administración; stock físico → depósito.
-function proponerNotificaciones(data, perfiles) {
-  if (!data || perfiles.length === 0) return [];
-  const buscar = (palabras) =>
-    perfiles.find((p) => !p.es_admin && palabras.some((w) => (p.rol || "").toLowerCase().includes(w)));
-  const admin = buscar(["administra", "caja", "oficina"]) || perfiles.find((p) => !p.es_admin);
-  const depo = buscar(["depós", "depos", "stock", "logíst", "logist"]) || admin;
-  if (!admin) return [];
-
-  const a = data.alertas;
-  const props = [];
-  if (a.calibre.cantidad > 0)
-    props.push({ id: "calibre", responsable: admin.nombre, username: admin.username,
-      mensaje: t("equipo.prop_balanza_msj", { nombre: admin.nombre, n: a.calibre.cantidad }),
-      tarea: t("equipo.prop_balanza_tarea", { n: a.calibre.cantidad }) });
-  if (a.negativos.cantidad > 0)
-    props.push({ id: "negativos", responsable: depo.nombre, username: depo.username,
-      mensaje: t("equipo.prop_negativos_msj", { nombre: depo.nombre, n: a.negativos.cantidad }),
-      tarea: t("equipo.prop_negativos_tarea", { n: a.negativos.cantidad }) });
-  if (a.sin_pvp.cantidad > 0)
-    props.push({ id: "sin_pvp", responsable: admin.nombre, username: admin.username,
-      mensaje: t("equipo.prop_sinpvp_msj", { nombre: admin.nombre, n: a.sin_pvp.cantidad }),
-      tarea: t("equipo.prop_sinpvp_tarea", { n: a.sin_pvp.cantidad }) });
-  return props;
-}
+// Los avisos que Ángela proponía se mudaron a <TareasEquipo/>: el generador
+// vivía acá, adivinaba el responsable con un regex sobre el rol ("administra",
+// "caja") y hablaba de errores de caja — vocabulario de otro cliente. Ahora las
+// propuestas las calcula el backend (core/tareas.py) contra señales reales y
+// con la persona resuelta por ROL Y UBICACIÓN, que es lo que hace que
+// "confirmá lo que llegó a Chapadmalal" le caiga a Néstor y no al encargado.
 
 // Tablero del equipo: objetivos + recordatorios (lo que era "Mi equipo",
 // sin el organigrama hardcodeado del piloto). Lo ven todos los que tienen equipo.
@@ -859,12 +839,13 @@ export default function GestionEquipo({ data, user, highlight }) {
   const lang = useLang(); // las propuestas memorizadas se rearman al cambiar el idioma
   const session = useSession();
   const esAdmin = !!user?.es_admin;
+  // Mismo criterio que el backend (core/tareas.puede_asignar): el dueño y el
+  // encargado reparten trabajo; el resto sólo ve lo suyo.
+  const puedeAsignar = esAdmin || /encargado/i.test(user?.rol || "");
   const [tab, setTab] = useState("equipo");
   const [perfiles, setPerfiles] = useState([]);
   const [pendientes, setPendientes] = useState(0);
   const [error, setError] = useState(null);
-  const [enviados, setEnviados] = useState({});
-  const [cancelados, setCancelados] = useState({});
   // P29·B1 — los insumos de la FICHA por persona (mismas fuentes que las tabs)
   const equipo = useEquipo();
   const [actividad, setActividad] = useState([]);
@@ -896,20 +877,6 @@ export default function GestionEquipo({ data, user, highlight }) {
     solicitudes: solicitudesList.filter((s) => s.username === p.username || s.nombre === p.nombre),
   });
 
-  const propuestas = useMemo(() => proponerNotificaciones(data, perfiles), [data, perfiles, lang]);
-
-  const aprobar = async (p) => {
-    try {
-      // Va por el sistema de notificaciones REAL: le llega a SU campanita.
-      await api.notificacionAvisar(p.username, t("equipo.aviso_titulo"), p.mensaje);
-      equipoStore.addRecordatorio(p.tarea, p.responsable);
-      setEnviados((s) => ({ ...s, [p.id]: true }));
-      toast(t("equipo.toast_enviado", { nombre: p.responsable }));
-    } catch {
-      toast(t("equipo.toast_enviar_error"), "error");
-    }
-  };
-
   return (
     <div className="space-y-6">
       <header className="flex items-center gap-2">
@@ -927,6 +894,10 @@ export default function GestionEquipo({ data, user, highlight }) {
         <>
           {/* P36·E4 — los objetivos que Ángela mide (el empleado ve los suyos) */}
           <ObjetivosPanel />
+          {/* El ENCARGADO reparte el día en la cámara: obligarlo a pedirle al
+              dueño que le asigne un conteo a Néstor volvería la herramienta un
+              trámite. El backend valida lo mismo (tareas.puede_asignar). */}
+          {puedeAsignar && <TareasEquipo onCambio={cargarPerfiles} />}
           <TableroEquipo />
           <AngelaSays>
             {t("equipo.angela_empleado")}
@@ -987,51 +958,9 @@ export default function GestionEquipo({ data, user, highlight }) {
 
           {tab === "equipo" && (
             <>
-              {/* P41·3.4 — los "heads-up" de Ángela, AGRUPADOS. Antes eran 3
-                  tarjetas grandes apiladas que se leían como spam. Ahora es UN
-                  bloque con una fila compacta por aviso: quién, qué le diría, y
-                  Enviar/Cancelar al lado. Sigue decidiendo el dueño — nada sale
-                  solo (por eso no hay push: hay un botón). */}
-              {propuestas.filter((p) => !cancelados[p.id]).length > 0 && (
-                <section className="rounded-[var(--radius-card)] border border-linea bg-crema sombra-papel">
-                  <div className="flex items-center gap-2 border-b border-linea px-4 py-2.5">
-                    <AngelaMark size={22} />
-                    <h2 className="font-display text-[0.98rem] font-bold">{t("equipo.propone_titulo")}</h2>
-                    <span className="grid h-5 min-w-5 place-items-center rounded-full bg-papel-hondo px-1.5 text-[0.7rem] font-bold text-tinta-suave">
-                      {num(propuestas.filter((p) => !cancelados[p.id]).length)}
-                    </span>
-                    <span className="ml-auto text-[0.76rem] text-tinta-suave">{t("equipo.vos_decidis")}</span>
-                  </div>
-                  <div>
-                    {propuestas.filter((p) => !cancelados[p.id]).map((p) => {
-                      const enviado = enviados[p.id];
-                      return (
-                        <div key={p.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-linea/70 px-4 py-2.5 last:border-0">
-                          <span className="text-[0.78rem] font-semibold uppercase tracking-wide text-tinta-suave">
-                            {t("equipo.para", { nombre: p.responsable })}
-                          </span>
-                          <p className="min-w-0 flex-1 basis-64 text-[0.86rem] italic leading-snug text-tinta">"{p.mensaje}"</p>
-                          {enviado ? (
-                            <span className="inline-flex shrink-0 items-center gap-1.5 text-[0.82rem] font-semibold text-salvia">
-                              <Check size={14} /> {t("equipo.enviado_tarea", { nombre: p.responsable })}
-                            </span>
-                          ) : (
-                            <span className="flex shrink-0 items-center gap-1.5">
-                              <button onClick={() => aprobar(p)} className="inline-flex items-center gap-1.5 rounded-full bg-tinta px-3.5 py-1.5 text-[0.8rem] font-semibold text-crema">
-                                <Send size={13} /> {t("equipo.enviar_a", { nombre: p.responsable })}
-                              </button>
-                              <button onClick={() => setCancelados((s) => ({ ...s, [p.id]: true }))} title={t("equipo.cancelar")}
-                                className="grid h-7 w-7 place-items-center rounded-full border border-linea text-tinta-suave hover:text-tinta">
-                                <X size={13} />
-                              </button>
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
-              )}
+              {/* Las tareas: lo que Ángela propone, el asignar a mano y quién
+                  tiene qué. Es lo que convierte el tablero en herramienta. */}
+              <TareasEquipo onCambio={cargarPerfiles} />
 
               {/* Objetivos y recordatorios ANTES de la lista de gente: primero
                   qué está pasando, después quién es quién (pedido de Lucas). */}

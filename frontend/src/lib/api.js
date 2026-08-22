@@ -133,6 +133,11 @@ export const api = {
   },
   documentosListado: () => get("/api/documentos/listado"),
   // P24·D6 — reglas de aviso del usuario (recordatorios condicionales)
+  // TAREAS · el trabajo repartido (core/tareas.py sobre el mismo almacén de
+  // recordatorios: destinatario, estado y campanita ya existían).
+  tareasSugeridas: () => get("/api/tareas/sugeridas"),
+  tareasPanorama: () => get("/api/tareas/panorama"),
+  tareaCrear: (t) => post("/api/tareas", t),
   recordatorios: () => get("/api/recordatorios"),
   // P41·4 — el dueño asigna una tarea a alguien; queda PERSISTIDA y la
   // persona la ve en su vista de trabajo y la marca hecha desde ahí.

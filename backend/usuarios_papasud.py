@@ -94,6 +94,9 @@ USUARIOS = {
     "ruben": {
         "username": "ruben", "nombre": "Rubén", "apellido": "Ocampo",
         "rol": "Encargado de depósito", "es_admin": False,
+        # El encargado responde por las cuatro: es el que recibe lo que no tiene
+        # un operario propio en destino.
+        "ubicaciones": ["sierra", "ruta226", "batan", "chapadmalal"],
         "telefono": "+5492230000003", "color": "#2f6f4f",
         "superficies": ["desktop", "mobile"],
         "descripcion": (
@@ -123,6 +126,10 @@ USUARIOS = {
     "marcos": {
         "username": "marcos", "nombre": "Marcos", "apellido": "Quiroga",
         "rol": "Operario de frigorífico", "es_admin": False,
+        # DÓNDE ESTÁ PARADO. No es decorativo: es lo que hace que "confirmá el
+        # traslado que llegó a Ruta 226" le caiga a él y no al encargado. El
+        # ruteo de tareas (core/tareas.py) lee esto, no una lista de usernames.
+        "ubicaciones": ["ruta226", "sierra"],
         "telefono": "+5492230000004", "color": "#3d7ea6",
         # El celular es su herramienta: está parado adentro de una cámara a 4 °C.
         "superficies": ["mobile", "desktop"],
@@ -171,6 +178,7 @@ USUARIOS = {
     "nestor": {
         "username": "nestor", "nombre": "Néstor", "apellido": "Painé",
         "rol": "Operario de galpón", "es_admin": False,
+        "ubicaciones": ["chapadmalal"],
         "telefono": "+5492230000006", "color": "#a65d3d",
         "superficies": ["mobile", "desktop"],
         # Entró hace poco: el sistema lo sabe y lo acompaña (core/onboarding.py).
