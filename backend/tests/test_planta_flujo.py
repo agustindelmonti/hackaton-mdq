@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import modelo_real as M
 from core import stock_real as S
 from core import mapa_real as MAPA
+from core import mapa as MAPA_OP
 
 
 @pytest.fixture(autouse=True)
@@ -116,19 +117,43 @@ def test_existen_los_tres_caminos_que_ellos_describieron():
     assert desde_planta >= len(entregas) / 3
 
 
-def test_mapa_de_la_operacion_tiene_nodo_planta_no_solo_depositos():
-    """El filtro viejo del frontend (capa=centro, tipo=ubicacion) no veía la
-    planta. El payload real tiene tipo=planta en el hub."""
+def test_mapa_operacion_conserva_cuatro_sitios_ordenes_clientes_y_suma_planta():
+    """El mapa de la operación no tira las 4 cámaras, las órdenes ni los
+    clientes: les suma la planta y el galpón nuevo."""
+    d = MAPA_OP.mapa()
+    assert d.get("modelo") != "real"
+    tipos = {n["tipo"] for n in d["nodos"]}
+    assert "ubicacion" in tipos
+    assert "orden" in tipos
+    assert "cliente" in tipos
+    assert "planta" in tipos
+    assert "galpon" in tipos
+    nombres = {n["etiqueta"] for n in d["nodos"]}
+    assert "Frigorífico Sierra de los Padres" in nombres
+    assert "Frigorífico Ruta 226" in nombres
+    assert "Frigorífico Batán" in nombres
+    assert "Galpón Chapadmalal" in nombres
+    assert "Planta Mar del Plata" in nombres
+    assert "Galpón Mar del Plata" in nombres
+    # Chapadmalal no se duplica como galpón nuevo
+    galpones = [n for n in d["nodos"] if n["tipo"] == "galpon"]
+    assert len(galpones) == 1
+    assert galpones[0]["etiqueta"] == "Galpón Mar del Plata"
+    planta = next(n for n in d["nodos"] if n["tipo"] == "planta")
+    assert {z["id"] for z in planta["zonas"]} == {"recepcion", "reclasificacion", "playa"}
+    assert any(n["tipo"] == "orden" for n in d["nodos"])
+    assert any(n["tipo"] == "cliente" for n in d["nodos"])
+
+
+def test_mapa_papasud_sigue_siendo_el_flujo_campo_planta():
+    """`/api/papasud/mapa` no se toca: sigue siendo el grafo real."""
     d = MAPA.flujo()
     assert d["modelo"] == "real"
     planta = next(n for n in d["nodos"] if n["tipo"] == "planta")
     assert planta["etiqueta"] == "Planta Mar del Plata"
     assert planta["capa"] == "hub"
     assert {z["id"] for z in planta["zonas"]} == {"recepcion", "reclasificacion", "playa"}
-    # el mapa viejo de 4 depósitos no existe en este grafo
     assert not any(n["tipo"] == "ubicacion" for n in d["nodos"])
-    d = MAPA.flujo()
-    assert d["modelo"] == "real"
     capas = {c["id"] for c in d["capas"]}
     assert capas == {"origen", "hub", "almacenamiento", "destino"}
     tipos = {n["tipo"] for n in d["nodos"]}
@@ -137,13 +162,9 @@ def test_mapa_de_la_operacion_tiene_nodo_planta_no_solo_depositos():
     assert "frigorifico" in tipos
     assert "laboratorio" in tipos
     assert "cliente" in tipos
-    planta = next(n for n in d["nodos"] if n["tipo"] == "planta")
-    assert planta["capa"] == "hub"
-    assert {z["id"] for z in planta["zonas"]} == {"recepcion", "reclasificacion", "playa"}
     campos = [n for n in d["nodos"] if n["tipo"] == "campo"]
     assert len(campos) == 5
     assert any(n["etiqueta"] == "Cayetano Chávez" for n in campos)
-    # filas se mantienen para quien ya consumía /api/papasud/mapa
     assert d["filas"]
     assert d["resumen"]["kg_en_planta"] > 0
     assert d["resumen"]["recepciones"] == len(M.recepciones())

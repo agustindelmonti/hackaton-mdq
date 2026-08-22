@@ -117,7 +117,7 @@ export const ES = {
   "mapa.corte_e_act": "actividad",
   "mapa.corte_x_ipc": "IPC",
   "mapa.corte_x_dolar": "tipo de cambio",
-  "mapa.subtitulo": "De dónde viene, dónde está y adónde va cada kilo. El centro es la planta; el frío es un desvío.",
+  "mapa.subtitulo": "De dónde viene, dónde está y adónde va cada kilo. Las cuatro cámaras, la planta y los galpones.",
   "mapa.cargando": "Cruzando tus fuentes…",
   // P29·C — el mapa que produce: caminos, conclusiones, cruces
   "mapa.angela_cruces": "De estos cruces salieron los {n} hallazgos de hoy — tocá cualquiera y te muestro de dónde salió.",
@@ -2546,6 +2546,7 @@ export const ES = {
   "mapa.tipo_ubicacion": "Ubicación",
   "mapa.tipo_campo": "Campo de producción",
   "mapa.tipo_planta": "Planta",
+  "mapa.tipo_galpon": "Galpón",
   "mapa.tipo_frigorifico": "Frigorífico",
   "mapa.tipo_laboratorio": "Laboratorio",
   "mapa.tipo_campania": "Campaña",
