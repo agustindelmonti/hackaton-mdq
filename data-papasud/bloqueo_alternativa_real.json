@@ -1,10 +1,10 @@
 {
- "descripcion": "Pedido de 7200 kg de Spunta contra el lote L77 en planta (hay 4509 kg) — bloquea, y el lote L32 (mismo calibre apto para exportación) tiene 27772 kg disponibles.",
- "variedad_id": "spunta",
- "lote_pedido_id": "L77",
+ "descripcion": "Pedido de 14100 kg de Agata contra el lote 18 en planta (hay 8808 kg) — bloquea, y el lote L43 (mismo calibre apto para exportación) tiene 29467 kg disponibles.",
+ "variedad_id": "agata",
+ "lote_pedido_id": "18",
  "ubicacion_pedido_id": "planta_mdp",
- "kg_pedido": 7200.0,
- "kg_disponible_en_lote": 4509.199999999999,
- "lote_alternativa_id": "L32",
- "kg_disponible_alternativa": 27772.1
+ "kg_pedido": 14100.0,
+ "kg_disponible_en_lote": 8808.0,
+ "lote_alternativa_id": "L43",
+ "kg_disponible_alternativa": 29466.8
 }
