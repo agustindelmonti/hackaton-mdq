@@ -259,14 +259,9 @@ export default function MapaOperacion({ onPreguntar }) {
       position: { x: i % 2 ? COL.gridR : COL.gridL, y: GRID_Y[i > 1 ? 1 : 0] },
       data: { ...u },
     }));
-    if (planta) {
-      nodos.push({
-        id: planta.id, type: "operacion", draggable: false,
-        position: { x: CENTRO_MEDIO.x - W.centro / 2, y: CENTRO_MEDIO.y - 70 },
-        data: { ...planta },
-        zIndex: 1200,
-      });
-    } else if (marca) {
+    // El hueco del cuadro es del logo, como en el mapa de siempre.
+    // Planta y galpones nuevos van ABAJO, no ocupan ese centro.
+    if (marca) {
       nodos.push({
         id: marca.id, type: "marca", draggable: false, selectable: false,
         position: { x: CENTRO_MEDIO.x - 95, y: CENTRO_MEDIO.y - 52 },
@@ -274,13 +269,14 @@ export default function MapaOperacion({ onPreguntar }) {
         zIndex: 1200,
       });
     }
-    if (galpones.length) {
-      const yG = GRID_Y[1] + 250;
-      const x0 = CENTRO_MEDIO.x - (galpones.length * (W.centro + 20)) / 2;
-      galpones.forEach((g, i) => nodos.push({
-        id: g.id, type: "operacion", draggable: false,
-        position: { x: x0 + i * (W.centro + 20), y: yG },
-        data: { ...g },
+    const extra = [planta, ...galpones].filter(Boolean);
+    if (extra.length) {
+      const yExtra = GRID_Y[1] + 250;
+      const x0 = CENTRO_MEDIO.x - (extra.length * (W.centro + 20)) / 2;
+      extra.forEach((n, i) => nodos.push({
+        id: n.id, type: "operacion", draggable: false,
+        position: { x: x0 + i * (W.centro + 20), y: yExtra },
+        data: { ...n },
       }));
     }
     columna(ordenes, COL.orden, W.orden, 90);
@@ -347,16 +343,13 @@ export default function MapaOperacion({ onPreguntar }) {
     for (const a of otras) {
       const esIngreso = a.tipo === "ingreso";
       if (esIngreso && !todosLosIngresos && !a.principal) continue;
+      // Las flechas planta→cámaras ensucian el cuadro de siempre. Sólo se
+      // dibuja planta→galpón nuevo, al lado, debajo del logo.
+      if (a.tipo === "desde_planta" && !idsGalpon.has(a.destino)) continue;
       let sh = "s-r", th = "t-l";
-      if (a.tipo === "desde_planta") {
-        const iUbi = idx.get(a.destino);
-        if (iUbi != null) {
-          sh = iUbi % 2 ? "s-r" : "s-l";
-          th = iUbi % 2 ? "t-l" : "t-r";
-        } else if (idsGalpon.has(a.destino)) {
-          sh = "s-b";
-          th = "t-t";
-        }
+      if (a.tipo === "desde_planta" && idsGalpon.has(a.destino)) {
+        sh = "s-r";
+        th = "t-l";
       }
       aristas.push({
         id: a.id, source: a.origen, target: a.destino,
@@ -500,7 +493,7 @@ export default function MapaOperacion({ onPreguntar }) {
       </div>
 
       {/* el lienzo, a todo el ancho: el mapa entra entero sin zoom */}
-      <div className="relative h-[31rem] overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema/40">
+      <div className="relative h-[38rem] overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema/40">
         <div className={`pointer-events-none absolute inset-x-0 top-0 z-10 grid border-b border-linea bg-superficie/85 px-6 py-1.5 backdrop-blur ${(d.capas || []).length > 3 ? "grid-cols-4" : "grid-cols-3"}`}>
           {(d.capas || []).map((c, i) => (
             <span key={c.id}

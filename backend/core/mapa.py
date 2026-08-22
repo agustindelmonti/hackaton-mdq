@@ -484,9 +484,6 @@ def _planta_y_galpones() -> tuple[list[dict], list[dict]]:
         ))
         aristas.append(_arista(planta["id"], f"galpon:{g['id']}", "desde_planta"))
 
-    for u in semilla.ubicaciones():
-        aristas.append(_arista(planta["id"], f"ubi:{u['id']}", "desde_planta"))
-
     return nodos, aristas
 
 
