@@ -24,6 +24,7 @@ export const ES = {
 
   // --- navegación (sidebar desktop + shell) ---
   "nav.panel": "Inicio",
+  "nav.disponibilidad": "¿Tengo o no tengo?",
   "nav.mapa": "El mapa de la operación",
   // P29·A2 — el estado de error honesto (nunca una pantalla muda)
   "error.seccion_titulo": "Esta sección tuvo un problema",

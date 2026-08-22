@@ -21,6 +21,7 @@ import AdminContexto from "../sections/AdminContexto";
 import Administracion from "../sections/Administracion";
 import Exportacion from "../sections/Exportacion";
 import MapaOperacion from "../sections/MapaOperacion";
+import Disponibilidad from "../sections/Disponibilidad";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
 import Conciliacion from "../sections/Conciliacion";
@@ -50,6 +51,8 @@ import Toasts from "../components/Toasts";
 // son identificadores y no se traducen jamás.
 const CATALOGO = {
   panel: { lk: "nav.panel", icon: LayoutDashboard },
+  // La pregunta que abre todo va primera: es la que hacen por teléfono.
+  disponibilidad: { lk: "nav.disponibilidad", icon: Search },
   mapa: { lk: "nav.mapa", icon: Waypoints },
   inventario: { lk: "nav.inventario", icon: Boxes },
   saneamiento: { lk: "nav.saneamiento", icon: ClipboardList },
@@ -77,7 +80,7 @@ const CATALOGO = {
 // ARRIBA (Alertas/Oportunidades/Evolución), sin label de grupo.
 const BLOQUES_NAV = [
   // P28 — "El mapa de tu negocio" vive entre Home y Alertas (el pedido literal).
-  { lk: null, ids: ["panel", "mapa", "alertas", "oportunidades", "evolucion"] },
+  { lk: null, ids: ["disponibilidad", "panel", "mapa", "alertas", "oportunidades", "evolucion"] },
   { lk: "nav.grupo_stock",
     ids: ["deposito", "inventario", "movimientos", "conciliacion", "trazabilidad"] },
   { lk: "nav.grupo_salida", ids: ["logistica", "exportacion"] },
@@ -391,6 +394,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                       onTarea={(x) => { const k = PREGUNTA_TAREA[x.tipo]; if (k) preguntar(t(k)); }}
                       onCerrada={onRecargar} onNavegar={navegar} /></div>
                   : <Inicio data={data} oportunidades={oportunidades} onNavegar={navegar} onPreguntar={preguntar} />)}
+                {section === "disponibilidad" && <Disponibilidad onPreguntar={preguntar} />}
                 {section === "mapa" && <MapaOperacion onPreguntar={preguntar} />}
                 {section === "inventario" && <Inventario data={data} highlight={highlight} onPreguntar={preguntar} onNavegar={navegar} />}
                 {section === "saneamiento" && <Saneamiento user={user} highlight={highlight} onNavegar={navegar} onPreguntar={preguntar} onRecargar={onRecargar} onStagingCambio={setStagingCount} />}

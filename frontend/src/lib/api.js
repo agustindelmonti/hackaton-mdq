@@ -44,6 +44,27 @@ async function post(path, body) {
 }
 
 export const api = {
+  // --- El cerebro de la información (feat/cerebro-info) ---------------------
+  // «¿tengo o no tengo?», el bloqueo con alternativa y lo comercial. Todo sale
+  // del libro de movimientos: la pantalla no calcula, muestra.
+  preguntar: (texto) => post("/api/cerebro/preguntar", { texto }),
+  cerebroDisponibilidad: (q = {}) =>
+    get("/api/cerebro/disponibilidad?" + new URLSearchParams(
+      Object.entries(q).filter(([, v]) => v !== null && v !== undefined && v !== "")).toString()),
+  cerebroPartidas: (q = {}) =>
+    get("/api/cerebro/partidas?" + new URLSearchParams(
+      Object.entries(q).filter(([, v]) => v !== null && v !== undefined && v !== "")).toString()),
+  pedidoEvaluar: (p) => post("/api/cerebro/pedido/evaluar", p),
+  pedidoComprometer: (p) => post("/api/cerebro/pedido/comprometer", p),
+  pedidosAbiertos: () => get("/api/cerebro/pedidos"),
+  cerebroCatalogo: () => get("/api/cerebro/catalogo"),
+  cerebroClientes: () => get("/api/cerebro/clientes"),
+  cerebroVentas: (q = {}) =>
+    get("/api/cerebro/ventas?" + new URLSearchParams(
+      Object.entries(q).filter(([, v]) => v)).toString()),
+  cerebroLiquidacion: () => get("/api/cerebro/liquidacion"),
+  cerebroPlanilla: () => get("/api/cerebro/planilla"),
+  cerebroRemito: (id) => get(`/api/cerebro/remito/${encodeURIComponent(id)}`),
   inventario: () => get("/api/inventario"),
   actividad: () => get("/api/actividad"),
   inicio: () => get("/api/inicio"),

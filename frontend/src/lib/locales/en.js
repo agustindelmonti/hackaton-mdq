@@ -24,6 +24,7 @@ export const EN = {
 
   // --- navigation (desktop sidebar + shell) ---
   "nav.panel": "Home",
+  "nav.disponibilidad": "Do I have it?",
   "nav.mapa": "The operation map",
   // P29·A2 — the honest error state (never a silent blank screen)
   "error.seccion_titulo": "This section hit a problem",

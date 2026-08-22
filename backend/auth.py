@@ -36,6 +36,9 @@ CREDS_FILE = os.path.join(_paths.DATA_DIR, "credenciales.json")
 # ---------------------------------------------------------------------------
 MODULOS = {
     "panel": "Panel principal",
+    # La pregunta que abre todo: «¿tenés 1.200 bolsas de Spunta?». La tienen
+    # TODOS los roles — el que atiende el teléfono no siempre es el dueño.
+    "disponibilidad": "¿Tengo o no tengo?",
     "mapa": "El mapa de la operación",
     "inventario": "Lotes de semilla",
     "deposito": "Las cuatro ubicaciones",

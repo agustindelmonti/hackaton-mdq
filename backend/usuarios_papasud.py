@@ -28,7 +28,7 @@ cual — son SUS palabras.
 
 # Todo lo que el dueño ve. El resto de los roles son un subconjunto.
 _TODO = [
-    "panel", "mapa", "inventario", "deposito", "movimientos", "conciliacion",
+    "panel", "disponibilidad", "mapa", "inventario", "deposito", "movimientos", "conciliacion",
     "logistica", "exportacion", "trazabilidad", "saneamiento", "evolucion",
     "alertas", "oportunidades", "equipo", "gestion_equipo", "cargar",
     "documentos", "auditoria", "perfil", "angela",
@@ -88,7 +88,7 @@ USUARIOS = {
             "I decide on: the order in which each certificate gets filed; the large "
             "amounts I check with Ernesto."
         ),
-        "features": ["exportacion", "documentos", "trazabilidad", "logistica",
+        "features": ["disponibilidad", "exportacion", "documentos", "trazabilidad", "logistica",
                      "inventario", "alertas", "equipo", "perfil", "angela"],
     },
     "ruben": {
@@ -116,7 +116,7 @@ USUARIOS = {
             "I decide on: where each lot is stored, when a chamber gets counted and which "
             "discrepancy needs investigating."
         ),
-        "features": ["panel", "deposito", "movimientos", "conciliacion", "inventario",
+        "features": ["disponibilidad", "panel", "deposito", "movimientos", "conciliacion", "inventario",
                      "logistica", "trazabilidad", "alertas", "cargar", "equipo",
                      "perfil", "angela"],
     },
@@ -140,7 +140,7 @@ USUARIOS = {
             "Every day I look at: what I have to move today and what's shipping. "
             "I decide on: nothing involving money — I report what I move and what I see."
         ),
-        "features": ["movimientos", "deposito", "cargar", "perfil", "angela"],
+        "features": ["disponibilidad", "movimientos", "deposito", "cargar", "perfil", "angela"],
     },
     "dalia": {
         "username": "dalia", "nombre": "Dalia", "apellido": "Ferreyra",
@@ -165,7 +165,7 @@ USUARIOS = {
             "sprouting ahead of schedule and which fell outside its category tolerance. "
             "I decide on: whether a lot can ship under the category printed on its label."
         ),
-        "features": ["inventario", "trazabilidad", "deposito", "conciliacion",
+        "features": ["disponibilidad", "inventario", "trazabilidad", "deposito", "conciliacion",
                      "alertas", "documentos", "perfil", "angela"],
     },
     "nestor": {
@@ -191,6 +191,6 @@ USUARIOS = {
             "Every day I look at: what arrived and what I need to have ready. "
             "I decide on: nothing yet — I ask a lot of questions."
         ),
-        "features": ["movimientos", "deposito", "cargar", "perfil", "angela"],
+        "features": ["disponibilidad", "movimientos", "deposito", "cargar", "perfil", "angela"],
     },
 }
