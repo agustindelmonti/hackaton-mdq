@@ -34,7 +34,11 @@ if "POLPILOT_DATA_DIR" not in os.environ:
     # que toque semilla. Todo lo demás (audit, staging, recordatorios) lo siembra
     # cada test — y sobre el temporal, jamás sobre el seed versionado.
     for _f in ("inventory.json", "catalogos.json", "apartados.json",
-               "notas_equipo.json", "plantadas.json", "conocimiento_negocio.json"):
+               "notas_equipo.json", "plantadas.json", "conocimiento_negocio.json",
+               # Track B (feat/modelo-real): el modelo real de Papasud.
+               "lotes_real.json", "movimientos_real.json", "stock_real.json",
+               "bloqueo_alternativa_real.json", "plantadas_real.json",
+               "catalogos_real.json"):
         _src = os.path.join(_origen, _f)
         if os.path.exists(_src):
             shutil.copy2(_src, os.path.join(_scratch, _f))

@@ -1,0 +1,609 @@
+{
+ "stock": [
+  {
+   "lote_id": "L30",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -16167.9
+  },
+  {
+   "lote_id": "L30",
+   "ubicacion_id": "planta_mdp",
+   "kg": 4988.9
+  },
+  {
+   "lote_id": "L31",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -38490.3
+  },
+  {
+   "lote_id": "L31",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 20902.0
+  },
+  {
+   "lote_id": "L32",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -56844.8
+  },
+  {
+   "lote_id": "L32",
+   "ubicacion_id": "planta_mdp",
+   "kg": 21495.9
+  },
+  {
+   "lote_id": "L33",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -18891.4
+  },
+  {
+   "lote_id": "L33",
+   "ubicacion_id": "planta_mdp",
+   "kg": 7451.1
+  },
+  {
+   "lote_id": "L34",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -29869.4
+  },
+  {
+   "lote_id": "L34",
+   "ubicacion_id": "planta_mdp",
+   "kg": 13048.9
+  },
+  {
+   "lote_id": "L35",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -49472.6
+  },
+  {
+   "lote_id": "L35",
+   "ubicacion_id": "planta_mdp",
+   "kg": 30261.6
+  },
+  {
+   "lote_id": "L36",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -30671.6
+  },
+  {
+   "lote_id": "L36",
+   "ubicacion_id": "planta_mdp",
+   "kg": 8822.8
+  },
+  {
+   "lote_id": "L37",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -11797.1
+  },
+  {
+   "lote_id": "L37",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 5304.9
+  },
+  {
+   "lote_id": "L38",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -52393.0
+  },
+  {
+   "lote_id": "L38",
+   "ubicacion_id": "planta_mdp",
+   "kg": 17061.6
+  },
+  {
+   "lote_id": "L39",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -24998.0
+  },
+  {
+   "lote_id": "L39",
+   "ubicacion_id": "frigorifico:sasula",
+   "kg": 9402.7
+  },
+  {
+   "lote_id": "L40",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -25178.6
+  },
+  {
+   "lote_id": "L40",
+   "ubicacion_id": "planta_mdp",
+   "kg": 9475.2
+  },
+  {
+   "lote_id": "L41",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -25779.3
+  },
+  {
+   "lote_id": "L41",
+   "ubicacion_id": "planta_mdp",
+   "kg": 9773.5
+  },
+  {
+   "lote_id": "L41",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": -3150.0
+  },
+  {
+   "lote_id": "L42",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -40931.3
+  },
+  {
+   "lote_id": "L42",
+   "ubicacion_id": "frigorifico:sasula",
+   "kg": 17316.8
+  },
+  {
+   "lote_id": "L43",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -55915.5
+  },
+  {
+   "lote_id": "L43",
+   "ubicacion_id": "planta_mdp",
+   "kg": 29466.8
+  },
+  {
+   "lote_id": "L44",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -16406.2
+  },
+  {
+   "lote_id": "L44",
+   "ubicacion_id": "planta_mdp",
+   "kg": 8872.5
+  },
+  {
+   "lote_id": "L45",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -51561.6
+  },
+  {
+   "lote_id": "L45",
+   "ubicacion_id": "planta_mdp",
+   "kg": 17749.1
+  },
+  {
+   "lote_id": "L46",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -15770.9
+  },
+  {
+   "lote_id": "L46",
+   "ubicacion_id": "planta_mdp",
+   "kg": 6617.2
+  },
+  {
+   "lote_id": "L47",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -52443.1
+  },
+  {
+   "lote_id": "L47",
+   "ubicacion_id": "planta_mdp",
+   "kg": 18698.7
+  },
+  {
+   "lote_id": "L48",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -20136.1
+  },
+  {
+   "lote_id": "L48",
+   "ubicacion_id": "planta_mdp",
+   "kg": 6358.0
+  },
+  {
+   "lote_id": "L49",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -23655.4
+  },
+  {
+   "lote_id": "L49",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 11619.7
+  },
+  {
+   "lote_id": "L50",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -23335.0
+  },
+  {
+   "lote_id": "L50",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": 13556.6
+  },
+  {
+   "lote_id": "L51",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -38919.2
+  },
+  {
+   "lote_id": "L51",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 16921.9
+  },
+  {
+   "lote_id": "L52",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -44342.2
+  },
+  {
+   "lote_id": "L52",
+   "ubicacion_id": "frigorifico:galpon_mdp",
+   "kg": 26348.4
+  },
+  {
+   "lote_id": "L53",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -46080.6
+  },
+  {
+   "lote_id": "L53",
+   "ubicacion_id": "frigorifico:sasula",
+   "kg": 13014.9
+  },
+  {
+   "lote_id": "L54",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -9668.1
+  },
+  {
+   "lote_id": "L54",
+   "ubicacion_id": "planta_mdp",
+   "kg": 2569.7
+  },
+  {
+   "lote_id": "L55",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -52724.4
+  },
+  {
+   "lote_id": "L55",
+   "ubicacion_id": "planta_mdp",
+   "kg": 20110.9
+  },
+  {
+   "lote_id": "L56",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -21060.2
+  },
+  {
+   "lote_id": "L56",
+   "ubicacion_id": "planta_mdp",
+   "kg": 11926.2
+  },
+  {
+   "lote_id": "L57",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -27337.7
+  },
+  {
+   "lote_id": "L57",
+   "ubicacion_id": "frigorifico:galpon_mdp",
+   "kg": 17262.6
+  },
+  {
+   "lote_id": "L58",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -38605.9
+  },
+  {
+   "lote_id": "L58",
+   "ubicacion_id": "planta_mdp",
+   "kg": 10569.4
+  },
+  {
+   "lote_id": "L59",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -19306.4
+  },
+  {
+   "lote_id": "L59",
+   "ubicacion_id": "planta_mdp",
+   "kg": 11439.5
+  },
+  {
+   "lote_id": "L60",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -15496.6
+  },
+  {
+   "lote_id": "L60",
+   "ubicacion_id": "planta_mdp",
+   "kg": 7404.5
+  },
+  {
+   "lote_id": "L61",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -44479.1
+  },
+  {
+   "lote_id": "L61",
+   "ubicacion_id": "frigorifico:sasula",
+   "kg": 15875.6
+  },
+  {
+   "lote_id": "L62",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -20478.6
+  },
+  {
+   "lote_id": "L62",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 9102.9
+  },
+  {
+   "lote_id": "L63",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -12753.3
+  },
+  {
+   "lote_id": "L63",
+   "ubicacion_id": "planta_mdp",
+   "kg": 7469.8
+  },
+  {
+   "lote_id": "L64",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -33165.2
+  },
+  {
+   "lote_id": "L64",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 8305.4
+  },
+  {
+   "lote_id": "L65",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -17713.8
+  },
+  {
+   "lote_id": "L65",
+   "ubicacion_id": "frigorifico:sasula",
+   "kg": 10983.5
+  },
+  {
+   "lote_id": "L66",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -43269.2
+  },
+  {
+   "lote_id": "L66",
+   "ubicacion_id": "planta_mdp",
+   "kg": 19283.2
+  },
+  {
+   "lote_id": "L67",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -25734.2
+  },
+  {
+   "lote_id": "L67",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 8358.8
+  },
+  {
+   "lote_id": "L68",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -45438.5
+  },
+  {
+   "lote_id": "L68",
+   "ubicacion_id": "planta_mdp",
+   "kg": 20908.1
+  },
+  {
+   "lote_id": "L69",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -30189.1
+  },
+  {
+   "lote_id": "L69",
+   "ubicacion_id": "planta_mdp",
+   "kg": 19533.9
+  },
+  {
+   "lote_id": "L70",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -29142.1
+  },
+  {
+   "lote_id": "L70",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": 14767.4
+  },
+  {
+   "lote_id": "L71",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -48917.5
+  },
+  {
+   "lote_id": "L71",
+   "ubicacion_id": "planta_mdp",
+   "kg": 24150.5
+  },
+  {
+   "lote_id": "L72",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -22819.3
+  },
+  {
+   "lote_id": "L72",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 13594.2
+  },
+  {
+   "lote_id": "L73",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -23100.5
+  },
+  {
+   "lote_id": "L73",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 9672.3
+  },
+  {
+   "lote_id": "L74",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -39834.1
+  },
+  {
+   "lote_id": "L74",
+   "ubicacion_id": "planta_mdp",
+   "kg": 14486.4
+  },
+  {
+   "lote_id": "L75",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -53665.3
+  },
+  {
+   "lote_id": "L75",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": 22384.7
+  },
+  {
+   "lote_id": "L76",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -39947.6
+  },
+  {
+   "lote_id": "L76",
+   "ubicacion_id": "planta_mdp",
+   "kg": 25335.4
+  },
+  {
+   "lote_id": "L77",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -36843.4
+  },
+  {
+   "lote_id": "L77",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": 20415.2
+  },
+  {
+   "lote_id": "L78",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -50786.7
+  },
+  {
+   "lote_id": "L78",
+   "ubicacion_id": "planta_mdp",
+   "kg": 12900.2
+  },
+  {
+   "lote_id": "L79",
+   "ubicacion_id": "campo:santa_ana",
+   "kg": -29332.9
+  },
+  {
+   "lote_id": "L79",
+   "ubicacion_id": "planta_mdp",
+   "kg": 8381.0
+  },
+  {
+   "lote_id": "14",
+   "ubicacion_id": "campo:marisol",
+   "kg": -23479.6
+  },
+  {
+   "lote_id": "14",
+   "ubicacion_id": "planta_mdp",
+   "kg": 8094.1
+  },
+  {
+   "lote_id": "18",
+   "ubicacion_id": "campo:trevelin",
+   "kg": -31655.9
+  },
+  {
+   "lote_id": "18",
+   "ubicacion_id": "planta_mdp",
+   "kg": 8808.0
+  },
+  {
+   "lote_id": "222",
+   "ubicacion_id": "campo:oriente",
+   "kg": -51946.3
+  },
+  {
+   "lote_id": "222",
+   "ubicacion_id": "planta_mdp",
+   "kg": 19209.7
+  },
+  {
+   "lote_id": "223",
+   "ubicacion_id": "campo:marisol",
+   "kg": -56413.5
+  },
+  {
+   "lote_id": "223",
+   "ubicacion_id": "planta_mdp",
+   "kg": 20982.0
+  },
+  {
+   "lote_id": "224",
+   "ubicacion_id": "campo:trevelin",
+   "kg": -38716.3
+  },
+  {
+   "lote_id": "224",
+   "ubicacion_id": "frigorifico:dospanca",
+   "kg": 21622.4
+  },
+  {
+   "lote_id": "241",
+   "ubicacion_id": "campo:oriente",
+   "kg": -11789.5
+  },
+  {
+   "lote_id": "241",
+   "ubicacion_id": "planta_mdp",
+   "kg": 5965.0
+  },
+  {
+   "lote_id": "300",
+   "ubicacion_id": "campo:marisol",
+   "kg": -35829.6
+  },
+  {
+   "lote_id": "300",
+   "ubicacion_id": "planta_mdp",
+   "kg": 15415.5
+  },
+  {
+   "lote_id": "810",
+   "ubicacion_id": "campo:trevelin",
+   "kg": -30251.0
+  },
+  {
+   "lote_id": "810",
+   "ubicacion_id": "planta_mdp",
+   "kg": 12078.5
+  },
+  {
+   "lote_id": "811",
+   "ubicacion_id": "campo:oriente",
+   "kg": -14108.5
+  },
+  {
+   "lote_id": "811",
+   "ubicacion_id": "planta_mdp",
+   "kg": 3712.0
+  },
+  {
+   "lote_id": "910",
+   "ubicacion_id": "campo:marisol",
+   "kg": -33265.5
+  },
+  {
+   "lote_id": "910",
+   "ubicacion_id": "frigorifico:pancani",
+   "kg": 9763.6
+  }
+ ]
+}
