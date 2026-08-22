@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Papasud — Una sola verdad (prototipo)</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="desk">
+
+  <div class="phone">
+    <div class="screen">
+
+      <!-- Top bar: title changes per view, sync pill always visible -->
+      <div class="topbar">
+        <div style="display:flex; align-items:center; min-width:0;">
+          <button class="back-btn" id="backBtn" style="display:none;" onclick="goBack()">‹</button>
+          <div class="topbar-title">
+            <h1 id="topTitle">Tablero</h1>
+            <div class="subtitle" id="topSubtitle">4 ubicaciones · en tiempo real</div>
+          </div>
+        </div>
+        <button class="sync-pill" id="syncPill" onclick="toggleOffline()">
+          <span class="dot"></span>
+          <span id="syncLabel">Conectado</span>
+          <span class="badge-count" id="syncBadge" style="display:none;">0</span>
+        </button>
+      </div>
+
+      <div class="content" id="content">
+
+        <!-- ===================== VISTA: TABLERO ===================== -->
+        <div class="view active" data-view="tablero">
+          <div class="section-label">Las 4 ubicaciones</div>
+          <div class="ubic-grid" id="ubicGrid"></div>
+
+          <div class="section-label">Alertas activas</div>
+          <div id="alertsFeed"></div>
+
+          <div class="section-label">Frase del proyecto</div>
+          <div class="card" style="font-size:13px; color:var(--color-text-dim); line-height:1.5;">
+            "El problema de la planilla no lo resuelve la IA — lo resuelve el modelo de datos. La IA resuelve la captura."
+          </div>
+        </div>
+
+        <!-- ===================== VISTA: UBICACIÓN (drill-down) ===================== -->
+        <div class="view" data-view="ubicacion">
+          <div class="card" id="ubicDetailHeader"></div>
+          <div class="section-label">Lotes en esta ubicación</div>
+          <div id="ubicLoteList"></div>
+        </div>
+
+        <!-- ===================== VISTA: LOTE (detalle + movimientos + remito) ===================== -->
+        <div class="view" data-view="lote">
+          <div class="card">
+            <div class="lote-header">
+              <div>
+                <div class="lote-id" id="loteId">—</div>
+                <div class="lote-cat" id="loteCat">—</div>
+              </div>
+              <div id="loteEstimadoTag"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="field-row"><span class="field-label">Variedad</span><span class="field-value" id="loteVariedad">—</span></div>
+            <div class="field-row"><span class="field-label">Ubicación actual</span><span class="field-value" id="loteUbic">—</span></div>
+            <div class="field-row"><span class="field-label">Stock neto de merma</span><span class="field-value tabular" id="loteStock">—</span></div>
+          </div>
+
+          <div class="section-label">Genealogía</div>
+          <div class="card">
+            <div class="linaje-chain" id="loteLinaje"></div>
+          </div>
+
+          <div class="section-label">Movimientos (libro append-only)</div>
+          <div class="card" id="loteMovs"></div>
+
+          <div class="section-label">Emitir remito</div>
+          <div class="card">
+            <div class="input-group">
+              <label>Cantidad a despachar (kg)</label>
+              <input type="number" class="number-input" id="remitoKg" value="500" />
+            </div>
+            <div style="height:10px;"></div>
+            <button class="btn btn-primary" onclick="intentarRemito()">Emitir remito</button>
+            <div id="remitoResult"></div>
+          </div>
+        </div>
+
+        <!-- ===================== VISTA: VOZ (captura) ===================== -->
+        <div class="view" data-view="voz">
+          <div class="section-label">Dictar movimiento de stock</div>
+          <div class="card">
+            <div class="mic-wrap">
+              <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙️</button>
+              <div class="amp-bars" id="ampBars"></div>
+              <div class="mic-hint" id="micHint">Mantené presionado o tocá para dictar en castellano</div>
+            </div>
+            <div class="transcript-box empty" id="transcriptBox">La transcripción va a aparecer acá, en azul, mientras escucha…</div>
+            <div class="suggestion-row">
+              <span class="suggestion-chip" onclick="simulateDictation('pasé 20 bolsones del lote 42 del frigorífico Gonzales Chaves al galpón')">Ejemplo: mover lote 42</span>
+              <span class="suggestion-chip" onclick="simulateDictation('salieron 15 bolsones del lote 8 desde Tres Arroyos hacia el galpón')">Ejemplo: mover lote 8</span>
+            </div>
+          </div>
+
+          <div id="parsedCardWrap"></div>
+        </div>
+
+        <!-- ===================== VISTA: CONTEO / DISCREPANCIA DE MERMA ===================== -->
+        <div class="view" data-view="conteo">
+          <div class="section-label">Registrar conteo físico</div>
+          <div class="card">
+            <div class="input-group">
+              <label>Lote</label>
+              <select class="select-input" id="conteoLoteSelect" onchange="renderConteoForm()"></select>
+            </div>
+            <div class="input-group">
+              <label>Kg contados</label>
+              <input type="number" class="number-input" id="conteoKgInput" oninput="renderDiscrepancia()" />
+            </div>
+          </div>
+
+          <div id="discrepanciaResult"></div>
+
+          <div class="section-label">Por qué no es un simple resta</div>
+          <div class="card" style="font-size:13px; color:var(--color-text-dim); line-height:1.5;">
+            "No te aviso cuando la papa pierde peso; te aviso cuando pierde más peso del que debería."
+          </div>
+        </div>
+
+        <!-- ===================== VISTA: LOTES (listado + nuevo lote / linaje) ===================== -->
+        <div class="view" data-view="lotes">
+          <div class="section-label">Catálogo de lotes</div>
+          <input type="text" class="select-input" id="loteSearch" placeholder="Buscar lote, variedad, subcategoría…" oninput="renderLotesList()" style="margin-bottom:10px;" />
+          <div id="lotesListWrap"></div>
+
+          <div class="section-label">Registrar lote nuevo</div>
+          <div class="card">
+            <div class="input-group">
+              <label>Subcategoría declarada</label>
+              <select class="select-input" id="nuevoLoteSub"></select>
+            </div>
+            <div class="input-group">
+              <label>Lote padre</label>
+              <select class="select-input" id="nuevoLotePadre"></select>
+            </div>
+            <div style="height:10px;"></div>
+            <button class="btn btn-primary" onclick="intentarNuevoLote()">Validar y registrar</button>
+            <div id="linajeResult"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================== NAV ===================== -->
+      <div class="bottomnav">
+        <button class="nav-btn active" data-nav="tablero" onclick="navTo('tablero')">
+          <span class="icon">🏭</span><span>Tablero</span>
+        </button>
+        <button class="nav-btn" data-nav="voz" onclick="navTo('voz')">
+          <span class="icon">🎙️</span><span>Voz</span>
+        </button>
+        <button class="nav-btn" data-nav="conteo" onclick="navTo('conteo')">
+          <span class="icon">⚖️</span><span>Conteo</span>
+        </button>
+        <button class="nav-btn" data-nav="lotes" onclick="navTo('lotes')">
+          <span class="icon">🌱</span><span>Lotes</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="desk-blurb">
+    <h1>Papasud — prototipo de UI</h1>
+    <p>Vertical 03 (stock, trazabilidad y compliance), niveles N01+N02. Datos mock, cálculos en JS plano — el mismo principio que la app real: <code>núcleo determinístico + narración</code>.</p>
+    <div class="legend">
+      <div class="legend-row"><span class="legend-dot" style="background:var(--color-inferido)"></span> inferido — la máquina lo escuchó o dedujo</div>
+      <div class="legend-row"><span class="legend-dot" style="background:var(--color-confirmado)"></span> confirmado — una persona lo validó</div>
+      <div class="legend-row"><span class="legend-dot" style="background:var(--color-dudoso)"></span> dudoso — la máquina pregunta</div>
+      <div class="legend-row"><span class="legend-dot" style="background:var(--color-error)"></span> error — discrepancia real / sync fallida</div>
+    </div>
+    <p style="margin-top:16px;">Probá: dictar el movimiento del lote 42 (pestaña Voz), después intentar un remito de 500&nbsp;kg en el lote 8 (Tablero → Tres Arroyos → lote 8), después cargar un conteo de 13.100&nbsp;kg en el lote 17 (pestaña Conteo).</p>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
