@@ -1,0 +1,157 @@
+{
+ "campos": [
+  {
+   "id": "santa_ana",
+   "nombre": "Santa Ana"
+  },
+  {
+   "id": "marisol",
+   "nombre": "Marisol"
+  },
+  {
+   "id": "trevelin",
+   "nombre": "Trevelin"
+  },
+  {
+   "id": "oriente",
+   "nombre": "Oriente"
+  }
+ ],
+ "variedades": [
+  {
+   "id": "agata",
+   "nombre": "Agata"
+  },
+  {
+   "id": "spunta",
+   "nombre": "Spunta"
+  },
+  {
+   "id": "asterix",
+   "nombre": "Asterix"
+  },
+  {
+   "id": "king_russet",
+   "nombre": "King Russet"
+  }
+ ],
+ "frigorificos": [
+  {
+   "id": "dospanca",
+   "nombre": "Dospanca"
+  },
+  {
+   "id": "galpon_mdp",
+   "nombre": "Galpón Mar del Plata"
+  },
+  {
+   "id": "pancani",
+   "nombre": "Pancani"
+  },
+  {
+   "id": "sasula",
+   "nombre": "Sasula"
+  }
+ ],
+ "planta": {
+  "id": "planta_mdp",
+  "nombre": "Planta Mar del Plata",
+  "tiene_bascula": true
+ },
+ "clientes": [
+  {
+   "id": "wemar_mc_cain",
+   "nombre": "Wemar-McCain"
+  },
+  {
+   "id": "parmentier",
+   "nombre": "Parmentier"
+  }
+ ],
+ "transportistas": [
+  {
+   "id": "serantes_vera",
+   "nombre": "Serantes-Vera",
+   "choferes": []
+  },
+  {
+   "id": "camillo",
+   "nombre": "Camillo",
+   "choferes": [
+    "Gastón",
+    "Mario"
+   ]
+  },
+  {
+   "id": "arenas",
+   "nombre": "Arenas",
+   "choferes": [
+    "Jaimez",
+    "De Grandis"
+   ]
+  },
+  {
+   "id": "cerone",
+   "nombre": "Cerone",
+   "choferes": [
+    "Raphael",
+    "Sotelo"
+   ]
+  },
+  {
+   "id": "fran_cambronera",
+   "nombre": "Fran Cambronera",
+   "choferes": []
+  },
+  {
+   "id": "s_garcia",
+   "nombre": "S. García",
+   "choferes": [
+    "Verdicchio",
+    "Scho",
+    "Stadler"
+   ]
+  },
+  {
+   "id": "jose_hernandez",
+   "nombre": "José Hernández",
+   "choferes": []
+  },
+  {
+   "id": "alvaro_arenas",
+   "nombre": "Álvaro Arenas",
+   "choferes": []
+  }
+ ],
+ "categorias": [
+  {
+   "id": "inicial_2",
+   "nombre": "Inicial 2"
+  },
+  {
+   "id": "inicial_3",
+   "nombre": "Inicial 3"
+  }
+ ],
+ "calibres": [
+  {
+   "id": "exportacion",
+   "nombre": "Exportación"
+  },
+  {
+   "id": "granel",
+   "nombre": "Granel"
+  },
+  {
+   "id": "sin_chicas",
+   "nombre": "Sin chicas"
+  }
+ ],
+ "meta": {
+  "empresa": "Papasud S.A.",
+  "hoy": "2026-08-22",
+  "campania": "2025/26",
+  "sintetico": true,
+  "nota": "Catálogos (variedades, campos, lotes, frigoríficos, clientes, transportistas) son datos REALES provistos por Papasud. Los movimientos y kilos son sintéticos pero deterministas."
+ }
+}

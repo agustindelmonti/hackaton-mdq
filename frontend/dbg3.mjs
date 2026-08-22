@@ -1,0 +1,15 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport:{width:390,height:844} });
+p.on("console", m=>console.log("C:", m.text().slice(0,160)));
+await p.goto("http://localhost:5210/", { waitUntil:"domcontentloaded" });
+await p.waitForSelector("input",{timeout:30000}).catch(()=>{});
+console.log("LOGIN img:", await p.evaluate(()=>[...document.images].map(i=>i.getAttribute("src")+"|"+i.naturalWidth)));
+await p.locator("input").first().fill("marcos");
+await p.locator('input[type="password"]').first().fill("campania-9443");
+await p.keyboard.press("Enter");
+await p.waitForFunction(()=>!/Leyendo tu negocio/.test(document.body.innerText),null,{timeout:60000}).catch(()=>{});
+await p.waitForTimeout(2500);
+console.log("APP img:", await p.evaluate(()=>[...document.images].map(i=>i.getAttribute("src")+"|"+i.naturalWidth)));
+console.log("HEADER:", await p.evaluate(()=>document.querySelector(".sticky")?.outerHTML.slice(0,900)));
+await b.close();

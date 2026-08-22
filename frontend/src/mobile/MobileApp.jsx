@@ -22,7 +22,7 @@ import OportunidadesNegocio from "../sections/OportunidadesNegocio";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { authStore, useSession } from "../lib/auth";
 import { PREGUNTA_TAREA } from "../lib/piso";
-import { tieneVistaHerramienta } from "../lib/roles";
+import { tieneVistaHerramienta, chipsAngelaDe, saludoKeyDe } from "../lib/roles";
 import { toast } from "../lib/toastStore";
 import Toasts from "../components/Toasts";
 import Campanita from "../components/Campanita";
@@ -151,21 +151,26 @@ export default function MobileApp({ data, oportunidades, fase, user, onRecargar 
       case "perfil":
         return <MiPerfil user={user} />;
       case "angela":
-        return <AngelaView inputInicial={consultaAngela} user={user} onNavigate={navegarMobile} onDatosCambiaron={onRecargar} />;
+        return <AngelaView inputInicial={consultaAngela} user={user} onNavigate={navegarMobile} onDatosCambiaron={onRecargar}
+                    placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />;
       default:
         return null;
     }
   };
 
   // P35·E2 — tab de la barra fija. El grid da columnas iguales (sin flex-1).
-  // Activo = color + peso, sin caja. Target táctil ≥44px (min-h-11).
+  // Activo = color + peso, sin caja.
+  //
+  // 56 px de alto: es la barra que se usa parado, con una mano y con guantes de
+  // cámara. Y el rótulo sube de 9,9 px a 11 px — a 9,9 no se lee de reojo.
   const TabBtn = ({ slot }) => {
     const Icon = slot.icon;
     const activo = view === slot.id;
     return (
-      <button onClick={() => setView(slot.id)} className="relative flex min-h-11 flex-col items-center justify-center gap-0.5 py-1.5">
-        <Icon size={21} className={activo ? "text-violeta" : "text-tinta-suave"} strokeWidth={activo ? 2.4 : 2} />
-        <span className={`text-[0.62rem] font-semibold ${activo ? "text-violeta" : "text-tinta-suave"}`}>{t(slot.lk)}</span>
+      <button onClick={() => setView(slot.id)}
+              className="relative flex min-h-14 flex-col items-center justify-center gap-0.5 py-1.5">
+        <Icon size={22} className={activo ? "text-violeta" : "text-tinta-suave"} strokeWidth={activo ? 2.4 : 2} />
+        <span className={`text-[0.69rem] font-semibold ${activo ? "text-violeta" : "text-tinta-suave"}`}>{t(slot.lk)}</span>
       </button>
     );
   };
@@ -194,10 +199,19 @@ export default function MobileApp({ data, oportunidades, fase, user, onRecargar 
               esAdmin={user.es_admin}
               onVerSolicitud={user.es_admin && navIds.includes("equipo") ? () => setView("equipo") : undefined}
             />
-            <button onClick={() => setView("perfil")} className="shrink-0">
+            {/* 44×44 los dos: el operario los toca con guantes de cámara, y
+                un ícono de 18 px no se acierta con el dedo frío. El tamaño
+                visible no cambia — cambia el área que responde. */}
+            <button onClick={() => setView("perfil")}
+                    aria-label={t("nav.perfil")}
+                    className="grid h-11 w-11 shrink-0 place-items-center">
               <Avatar persona={user} size={32} />
             </button>
-            <button onClick={() => authStore.logout({ manual: true })} className="text-tinta-suave hover:text-tinta"><LogOut size={18} /></button>
+            <button onClick={() => authStore.logout({ manual: true })}
+                    aria-label={t("nav.salir")}
+                    className="grid h-11 w-11 shrink-0 place-items-center text-tinta-suave hover:text-tinta">
+              <LogOut size={20} />
+            </button>
           </div>
         </div>
         {/* Indicador "Viewing as" (solo demo con View as activo, P9·E) */}

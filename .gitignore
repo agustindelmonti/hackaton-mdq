@@ -48,3 +48,5 @@ desktop.ini
 # Estado que la app escribe en vivo (los pedidos se comprometen durante la demo).
 # El seed versionado es data-papasud/pedidos_abiertos.seed.json
 data-papasud/pedidos.json
+# La marca de la semilla del equipo: estado vivo, no dataset.
+data-papasud/.semilla_equipo

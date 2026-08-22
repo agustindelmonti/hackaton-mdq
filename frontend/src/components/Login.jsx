@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { LogIn } from "lucide-react";
 import AngelaMark from "./AngelaMark";
-import LangSwitch from "./LangSwitch";
 import { authStore } from "../lib/auth";
 import { useEmpresa } from "../lib/useEmpresa";
 import { useT } from "../lib/i18n";
@@ -34,7 +33,6 @@ export default function Login() {
 
   return (
     <div className="relative flex min-h-[100dvh] items-center justify-center bg-papel px-5">
-      <LangSwitch className="absolute right-4 top-4" />
       <div className="w-full max-w-sm">
         <div className="mb-7 flex flex-col items-center text-center">
           <img src="/logos/polpilot.png" alt="PolPilot" className="h-9 w-auto" draggable="false" />

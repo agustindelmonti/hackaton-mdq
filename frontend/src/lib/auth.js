@@ -34,7 +34,11 @@ export const authStore = {
       const e = await res.json().catch(() => ({}));
       throw new Error(e.detail || "No pudimos iniciar sesión.");
     }
-    session = await res.json(); // { token, usuario }
+    // `suplantado` distingue "entré con mi usuario" de "el dueño me está
+    // mirando". Sin esta marca, Marcos entrando con SU contraseña en SU celular
+    // veía el cartel "Viendo como Marcos · Volver al dueño" — y el botón lo
+    // metía en la sesión del dueño.
+    session = { ...(await res.json()), suplantado: false }; // { token, usuario }
     localStorage.setItem(KEY, JSON.stringify(session));
     sessionStorage.removeItem("polpilot.logout.manual");
     emit();
@@ -51,9 +55,9 @@ export const authStore = {
   },
   // "View as / Ver como" del demo (P9·E): adopta la sesión LEGÍTIMA que emitió
   // el server para el usuario destino — misma forma que login ({token, usuario}).
-  adoptar(nueva) {
+  adoptar(nueva, { suplantado = true } = {}) {
     if (!nueva?.token || !nueva?.usuario) return;
-    session = nueva;
+    session = { ...nueva, suplantado };
     localStorage.setItem(KEY, JSON.stringify(session));
     emit();
   },

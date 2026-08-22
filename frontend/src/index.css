@@ -79,8 +79,15 @@
   --color-papel: #fbfbfa; /* fondo base */
   --color-papel-hondo: #f4f3f0; /* fondos secundarios / superficies hundidas */
   --color-crema: #ffffff; /* tarjetas elevadas */
+  /* `superficie` es el mismo blanco que `crema`, con otro nombre: las secciones
+     de la V3 (mapa, cerebro, conciliación, movimientos, despachos, exportación,
+     ubicaciones, tareas) usan `bg-superficie` para sus paneles. El token NO
+     existía: la clase no generaba nada y esos paneles quedaban TRANSPARENTES.
+     Sobre fondo claro no se notaba; sobre el lienzo oscuro del cerebro el panel
+     salía con texto negro sobre negro y no se leía. */
+  --color-superficie: #ffffff;
   --color-tinta: #21201d; /* texto principal */
-  --color-tinta-suave: #6e6a63; /* texto secundario */
+  --color-tinta-suave: #63605a; /* texto secundario (≥4,5:1 a 12px sobre tarjeta tintada) */
   --color-linea: #e9e7e2; /* hairlines */
 
   /* Azul PolPilot: EXCLUSIVO de Ángela / IA (esfera, acciones del agente,

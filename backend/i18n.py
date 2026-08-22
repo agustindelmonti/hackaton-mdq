@@ -2661,22 +2661,27 @@ CATALOGO: dict[str, dict[str, str]] = {
     "core.esquema.activa_logistica_0": {"es": "estado de envío por cliente", "en": "shipment status per customer"},
     "core.esquema.activa_logistica_1": {"es": "alertas de entregas atrasadas", "en": "late delivery alerts"},
     "core.esquema.activa_logistica_2": {"es": "resumen del día de reparto", "en": "delivery day summary"},
+    "core.esquema.remitos": {"es": "Remitos", "en": "Waybills"},
+    "core.esquema.transportes": {"es": "Transportes", "en": "Carriers"},
+    "core.esquema.activa_remitos_0": {"es": "un viaje con varios lotes", "en": "one trip with several lots"},
+    "core.esquema.activa_remitos_1": {"es": "DTV colgado del documento", "en": "DTV hanging off the document"},
+    "core.esquema.activa_transportes_0": {"es": "empresa y chofer de cada viaje", "en": "company and driver of each trip"},
     # --- core/fase.py · la etapa del negocio --------------------------------------
     "core.fase.titulo_puesta": {"es": "Puesta a punto", "en": "Getting set up"},
     "core.fase.titulo_operacion": {"es": "En operación", "en": "Up and running"},
     "core.fase.msj_saneamiento": {
-        "es": "Antes de arrancar a full, ordenemos tu sistema: tenés {issues} cosas para "
-              "corregir en tus datos. Empezá por ahí y después cargamos tus ventas para que "
-              "te muestre el margen real y las alertas de tu negocio.",
-        "en": "Before going full speed, let's tidy up your system: you have {issues} things to "
-              "fix in your data. Start there, and then we load your sales so I can show you "
-              "real margins and your business alerts.",
+        "es": "Antes de arrancar a full, ordenemos lo que quedó de la planilla: hay {issues} "
+              "cosas para corregir en tus datos. Empezá por ahí y después cargamos el "
+              "histórico de campañas, que es lo que me deja anticiparte los quiebres.",
+        "en": "Before going full speed, let's tidy up what the spreadsheet left behind: "
+              "{issues} things to fix in your data. Start there, and then we load the "
+              "season history, which is what lets me warn you about shortages.",
     },
     "core.fase.msj_cargar": {
-        "es": "Tu catálogo ya está limpio. El próximo paso es cargar tus ventas históricas "
-              "para desbloquear el margen por producto y las alertas de quiebre.",
-        "en": "Your catalog is already clean. The next step is loading your historical sales "
-              "to unlock per-product margin and stock-out alerts.",
+        "es": "Tus lotes ya están limpios. El próximo paso es cargar el histórico de "
+              "campañas para desbloquear el rinde por variedad y el aviso de quiebre.",
+        "en": "Your lots are clean. Next step is loading the season history to unlock "
+              "yield by variety and shortage warnings.",
     },
     "core.fase.msj_operacion": {
         "es": "Tu sistema está al día. Te voy avisando lo que necesita tu atención.",

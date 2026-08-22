@@ -111,7 +111,10 @@ export function VerComoChip() {
   const session = useSession();
   const { roleSwitch } = useEmpresa();
   const u = session?.usuario;
-  if (!roleSwitch || !u || u.rol === "Dueño") return null;
+  // El cartel es para el DUEÑO mirando con los ojos de otro. Si la persona
+  // entró con su propia contraseña (`suplantado: false`), esta es SU sesión y
+  // no hay nada de qué "volver".
+  if (!roleSwitch || !u || u.rol === "Dueño" || !session?.suplantado) return null;
   return (
     <div className="flex shrink-0 items-center gap-2 rounded-full border border-hielo/30 bg-hielo/[0.07] py-1 pl-3 pr-1">
       <Eye size={13} className="shrink-0 text-hielo" />

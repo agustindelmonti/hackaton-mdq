@@ -28,7 +28,7 @@ export default function Brand({ variant = "desktop" }) {
         <img
           src={logo}
           alt={empresa || ""}
-          className="max-h-full w-auto select-none object-contain"
+          className="h-full w-auto select-none object-contain"
           draggable="false"
         />
       </span>

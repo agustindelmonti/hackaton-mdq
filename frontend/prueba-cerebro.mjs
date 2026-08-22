@@ -1,0 +1,24 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport:{width:1600,height:1000} });
+p.on("pageerror",e=>console.log("PAGEERROR", String(e).slice(0,200)));
+p.on("console",m=>{ if(m.type()==="error") console.log("ERR", m.text().slice(0,140)); });
+await p.goto("http://localhost:5210/",{waitUntil:"domcontentloaded"});
+await p.waitForSelector("input",{timeout:30000}).catch(()=>{});
+await p.locator("input").first().fill("ernesto");
+await p.locator('input[type="password"]').first().fill("brote-8039");
+await p.keyboard.press("Enter");
+await p.waitForFunction(()=>!/Leyendo tu negocio/.test(document.body.innerText),null,{timeout:60000}).catch(()=>{});
+await p.waitForTimeout(2500);
+await p.getByRole("button",{name:/^El cerebro$/i}).first().click();
+await p.waitForTimeout(9000);
+const caja = p.getByPlaceholder(/Buscar lote/i).first();
+await caja.click(); await caja.type("SPU-015", {delay:60});
+await p.waitForTimeout(1200);
+const opciones = await p.locator("ul li button").count();
+console.log("resultados de busqueda:", opciones);
+if (opciones) { await p.locator("ul li button").first().click(); await p.waitForTimeout(2500); }
+const txt = await p.evaluate(()=>document.body.innerText);
+console.log("PANEL:", (txt.match(/Lote\n[\s\S]{0,240}/)||["(sin panel)"])[0].replace(/\n+/g," | "));
+await p.screenshot({path:"../docs/shots/cerebro-foco.png"});
+await b.close();

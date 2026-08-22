@@ -153,12 +153,12 @@ export default function MiDia({ user, onAbrirAngela, onTarea, onCerrada, onNaveg
               onChange={(e) => setConsulta(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && consulta.trim()) { onAbrirAngela?.(consulta.trim()); setConsulta(""); } }}
               placeholder={t("rol.consulta_ph")}
-              className="min-h-9 min-w-0 flex-1 bg-transparent text-[0.92rem] outline-none"
+              className="min-h-11 min-w-0 flex-1 bg-transparent text-[0.95rem] outline-none"
             />
             <button
               onClick={() => { if (consulta.trim()) { onAbrirAngela?.(consulta.trim()); setConsulta(""); } }}
               disabled={!consulta.trim()}
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-violeta text-crema disabled:opacity-40">
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-violeta text-crema disabled:opacity-40">
               <ArrowRight size={15} />
             </button>
           </div>
@@ -200,7 +200,11 @@ export default function MiDia({ user, onAbrirAngela, onTarea, onCerrada, onNaveg
         </section>
       )}
 
-      {/* MIS TAREAS DE HOY — derivadas de datos reales. Si no hay, se dice honesto. */}
+      {/* MIS TAREAS DE HOY — derivadas de datos reales. Si no hay NINGUNA y
+          arriba ya está lo que le asignaron, el bloque no se muestra: dos
+          listas de tareas seguidas, una de ellas diciendo "nada pendiente",
+          se lee como que el sistema se contradice. */}
+      {(tareas.length > 0 || asignadas.length === 0) && (
       <section>
         <h2 className="mb-2 font-display text-[1.05rem] font-bold">{t("piso.tareas_titulo")}</h2>
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-linea bg-crema px-3 sombra-papel">
@@ -255,6 +259,7 @@ export default function MiDia({ user, onAbrirAngela, onTarea, onCerrada, onNaveg
           )}
         </div>
       </section>
+      )}
 
       {/* P43·C2 — DECIRLE, sin teclado. La voz estaba sólo en la sección
           Depósito; el de reparto y el de mostrador aterrizan acá y no la tenían.

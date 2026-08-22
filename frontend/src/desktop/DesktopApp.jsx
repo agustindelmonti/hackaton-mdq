@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  LayoutDashboard, Boxes, Wallet, Banknote, Bell, Users, Upload, TrendingUp, HandCoins, ClipboardList, PackageX, UserCircle, Search, X, PanelRightOpen, LogOut, Sparkles, Globe, Inbox, FileText, ChevronDown, Waypoints, ShieldCheck, Snowflake, ArrowLeftRight, Scale, Ship, Route,
+  LayoutDashboard, Boxes, Wallet, Banknote, Bell, Users, Upload, TrendingUp, HandCoins, ClipboardList, PackageX, UserCircle, Search, X, PanelRightOpen, LogOut, Sparkles, Globe, Inbox, FileText, ChevronDown, Waypoints, Network, ShieldCheck, Snowflake, ArrowLeftRight, Scale, Ship, Route,
 } from "lucide-react";
 import { api } from "../lib/api";
 import { contarACorregir } from "../lib/alertas";
@@ -22,6 +22,7 @@ import Administracion from "../sections/Administracion";
 import Exportacion from "../sections/Exportacion";
 import MapaOperacion from "../sections/MapaOperacion";
 import Disponibilidad from "../sections/Disponibilidad";
+import CerebroSemilla from "../sections/CerebroSemilla";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
 import Conciliacion from "../sections/Conciliacion";
@@ -34,13 +35,12 @@ import Auditoria from "./sections/Auditoria";
 import Avatar from "../components/Avatar";
 import MiDia from "../mobile/MiDia";
 import { PREGUNTA_TAREA } from "../lib/piso";
-import { tieneVistaHerramienta } from "../lib/roles";
+import { tieneVistaHerramienta, chipsAngelaDe, saludoKeyDe } from "../lib/roles";
 import { authStore, useSession } from "../lib/auth";
 import { cargarSenales, contarAlertas } from "../lib/centroAlertas";
 import { useDocNuevo } from "../lib/docStore";
 import { resaltarPorId } from "../lib/navGuiada";
 import Campanita from "../components/Campanita";
-import LangSwitch from "../components/LangSwitch";
 import { VerComoChip } from "../components/VerComo";
 import { useT, tRol } from "../lib/i18n";
 import { toast } from "../lib/toastStore";
@@ -54,6 +54,7 @@ const CATALOGO = {
   // La pregunta que abre todo va primera: es la que hacen por teléfono.
   disponibilidad: { lk: "nav.disponibilidad", icon: Search },
   mapa: { lk: "nav.mapa", icon: Waypoints },
+  cerebro: { lk: "nav.cerebro", icon: Network },
   inventario: { lk: "nav.inventario", icon: Boxes },
   saneamiento: { lk: "nav.saneamiento", icon: ClipboardList },
   evolucion: { lk: "nav.evolucion", icon: TrendingUp },
@@ -80,7 +81,8 @@ const CATALOGO = {
 // ARRIBA (Alertas/Oportunidades/Evolución), sin label de grupo.
 const BLOQUES_NAV = [
   // P28 — "El mapa de tu negocio" vive entre Home y Alertas (el pedido literal).
-  { lk: null, ids: ["disponibilidad", "panel", "mapa", "alertas", "oportunidades", "evolucion"] },
+  { lk: null, ids: ["disponibilidad", "panel", "mapa", "cerebro", "alertas",
+                    "oportunidades", "evolucion"] },
   { lk: "nav.grupo_stock",
     ids: ["deposito", "inventario", "movimientos", "conciliacion", "trazabilidad"] },
   { lk: "nav.grupo_salida", ids: ["logistica", "exportacion"] },
@@ -324,7 +326,6 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
             />
           </form>
           <VerComoChip />
-          <LangSwitch />
           <Campanita
             token={session?.token}
             esAdmin={user.es_admin}
@@ -396,6 +397,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                   : <Inicio data={data} oportunidades={oportunidades} onNavegar={navegar} onPreguntar={preguntar} />)}
                 {section === "disponibilidad" && <Disponibilidad onPreguntar={preguntar} />}
                 {section === "mapa" && <MapaOperacion onPreguntar={preguntar} />}
+                {section === "cerebro" && <CerebroSemilla onPreguntar={preguntar} />}
                 {section === "inventario" && <Inventario data={data} highlight={highlight} onPreguntar={preguntar} onNavegar={navegar} />}
                 {section === "saneamiento" && <Saneamiento user={user} highlight={highlight} onNavegar={navegar} onPreguntar={preguntar} onRecargar={onRecargar} onStagingCambio={setStagingCount} />}
                 {section === "alertas" && <AlertasNegocio onPreguntar={preguntar} onNavegar={navegar} datos={fase?.datos} />}
@@ -435,7 +437,8 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-3">
                   <div className="min-h-0 flex-1 overflow-hidden">
-                    <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar} placeholderChips={chipsPorRol(user)} />
+                    <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar}
+                                placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />
                   </div>
                 </div>
               </motion.aside>
@@ -447,23 +450,3 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   );
 }
 
-// Los chips muestran el label traducido (lk) y mandan el payload en ES
-// (el motor de Ángela entiende castellano) — mismo patrón que CHIPS default.
-function chipsPorRol(user) {
-  if (user.features.includes("inventario"))
-    return [
-      { lk: "angela.chip_llevame_fantasma", enviar: "Llevame a los productos fantasma" },
-      { lk: "angela.chip_manteca", enviar: "¿Cuánta plata tengo en manteca?" },
-      { lk: "angela.chip_balanzas", enviar: "Mostrame los calibres fuera de grado" },
-      { lk: "angela.chip_riesgo", enviar: "¿Dónde está el mayor riesgo de mi inventario?" },
-    ];
-  if (user.features.includes("deposito"))
-    return [
-      { lk: "angela.chip_negativo", enviar: "Mostrame el stock negativo" },
-      { lk: "angela.chip_fantasma", enviar: "¿Cuáles son mis productos fantasma?" },
-    ];
-  return [
-    { lk: "angela.chip_hoy", enviar: "¿Qué tengo que hacer hoy?" },
-    { lk: "angela.chip_recordatorio", enviar: "Anotá un recordatorio" },
-  ];
-}

@@ -22,7 +22,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
@@ -39,7 +39,8 @@ from core import (store, saneamiento, fase, memoria, importer, staging, anomalia
                   trazabilidad, exportacion, mapa as mapa_op,
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
-                  evolucion, ventas, paths, conocimiento, piso, onboarding)
+                  evolucion, ventas, paths, conocimiento, piso, onboarding, tareas,
+                  cerebro as cerebro_mod, planilla)
 
 
 def _lang(u: dict | None = None) -> str:
@@ -84,6 +85,15 @@ async def lifespan(app: FastAPI):
                   "POLPILOT_PRINT_CREDS=1 para verlas)", flush=True)
     except Exception:
         pass
+    # La semana previa del equipo: sin esto, la pantalla que más promete abre
+    # diciendo "0/6 usaron PolPilot esta semana". Siembra UNA sola vez y nunca
+    # pisa lo que la gente hizo de verdad (ver core/semilla_equipo.py).
+    try:
+        from core import semilla_equipo
+        semilla_equipo.sembrar()
+    except Exception:
+        pass  # el arranque nunca depende de la semilla
+
     # P11·B4: precálculo de análisis al arrancar — la primera entrada a
     # Oportunidades/Alertas ya sale del cache (clave con YC en la URL pública).
     try:
@@ -490,52 +500,63 @@ def inicio(u: dict = Depends(usuario_actual)):
 
 @app.get("/api/objetivos-medidos")
 def objetivos_medidos_endpoint(u: dict = Depends(usuario_actual)):
-    """P36·E4 — Objetivos que Ángela MIDE contra datos reales. El `actual` de
-    cada objetivo sale del MISMO cálculo que ya alimenta el resto de la app (una
-    sola fuente de verdad); el baseline+historial son sintéticos (solo demo). El
-    progreso se calcula, nunca se hardcodea. Permisos server-side: el dueño ve
-    todos; cada empleado, sólo los suyos (sin bypass)."""
-    from core import analisis, analisis_cache, objetivos_medidos, oportunidades_neg, fechas
+    """Objetivos que Ángela MIDE contra datos reales.
+
+    El `actual` de cada uno sale del MISMO cálculo que ya alimenta la pantalla
+    correspondiente (una sola fuente de verdad: si el tablero dice 4 diferencias
+    abiertas, el objetivo dice 4). El baseline y el historial son sintéticos —
+    sin pasado la barra no cuenta si avanza o está estancada. El progreso se
+    calcula, nunca se hardcodea.
+
+    Permisos server-side: el dueño ve todos; cada empleado, sólo los suyos."""
+    from core import objetivos_medidos, fechas
+    from core.oportunidades_neg import DIAS_ANALISIS_EXPORTACION
     lang = _lang(u)
-    completo = analisis_cache.get_o_computar("analisis", lang, lambda: analisis.completo(lang))
-    k = (completo or {}).get("kpis") or {}
-    dormido = (k.get("dormido") or {}).get("monto")
-    sin_pvp = (k.get("margen_teorico") or {}).get("sin_pvp")
-    # concentración top-3: de la card REAL de oportunidades (misma cuenta que el mapa)
-    pct_top3 = None
-    try:
-        cards = analisis_cache.get_o_computar("oportunidades", lang,
-                                              lambda: oportunidades_neg.cards(lang))
-        if isinstance(cards, dict):
-            cards = cards.get("cards", [])
-        conc = next((c for c in (cards or []) if c.get("id") == "concentracion"), None)
-        pct_top3 = ((conc or {}).get("datos") or {}).get("pct_top3")
-    except Exception:
-        pass
+
+    # traslados sin confirmar y diferencias abiertas: las mismas listas que ven
+    # Movimientos y Conciliación
+    sin_conf = len(movimientos.sin_confirmar())
+    difs = len(conciliacion.abiertas())
+
+    # órdenes de carga que hoy no pueden emitirse (el freno del remito)
+    frenadas = sum(1 for o in ordenes_carga.pendientes_con_estado()
+                   if not o.get("puede_emitirse"))
+
+    arts = [a for a in store.raw_actual() if float(a.get("stock") or 0) > 0]
+    h = fechas.hoy()
+
+    # análisis de exportación fuera de vigencia (misma regla que la card)
+    fuera = 0
+    for a in arts:
+        if a.get("destino") != "exportacion":
+            continue
+        f = fechas.parse_fecha(a.get("analisis_fecha"))
+        if f and (h - f).days > DIAS_ANALISIS_EXPORTACION - 30:
+            fuera += 1
+
+    # lotes que se brotan adentro de la ventana (mismo umbral que el mapa)
+    por_brotar = 0
+    for a in arts:
+        b = fechas.parse_fecha(a.get("brotacion_estimada"))
+        if b and 0 < (b - h).days <= mapa_op.VENTANA_BROTACION_DIAS:
+            por_brotar += 1
+
+    # lo que está parado en el galpón, que no tiene frío
+    galpon = sum(1 for a in arts if a.get("ubicacion_id") == "chapadmalal")
+
     try:
         total_issues = store.libro_triado(lang).get("total_issues")
     except Exception:
         total_issues = None
-    mora = None
-    # P41·3.3 — productos por quebrar: los que tienen menos cobertura que el
-    # umbral del hallazgo de quiebre, sobre el detalle de rotación ya calculado.
-    por_quebrar = None
-    try:
-        det = ((completo or {}).get("rotacion") or {}).get("detalle") or []
-        umbral = objetivos_medidos.COBERTURA_QUIEBRE_DIAS
-        por_quebrar = sum(1 for x in det
-                          if x.get("dias_rotacion") is not None and 0 < x["dias_rotacion"] <= umbral)
-    except Exception:
-        pass
-    base_dormido = objetivos_medidos.DEFS["liberar_dormido"]["baseline_dormido"]
+
     actuales = {
-        "dias_cobro": k.get("cobro_dias"),
+        "traslados_confirmados": sin_conf,
+        "diferencias_cerradas": difs,
+        "ordenes_sin_bloqueo": frenadas,
+        "analisis_vigentes": fuera,
+        "brotacion_ventana": por_brotar,
+        "galpon_liviano": galpon,
         "datos_corregir": total_issues,
-        "liberar_dormido": (base_dormido - dormido) if dormido is not None else None,
-        "pvp_margen": sin_pvp,
-        "concentracion": pct_top3,
-        "cobrar_morosos": mora,
-        "reponer_quiebres": por_quebrar,
     }
     objs = objetivos_medidos.construir(actuales, fechas.hoy().isoformat())
     if not u.get("es_admin"):
@@ -967,9 +988,15 @@ def snapshot_offline(u: dict = Depends(require_feature("movimientos"))):
         lotes.append({
             "codigo": a["codigo"],
             "lote": a.get("lote"),
+            "lote_id": a.get("lote_id") or a.get("lote"),
+            "nro_lote": a.get("nro_lote"),
+            "chacra_id": a.get("chacra_id"),
+            "color_bolsa": a.get("color_bolsa"),
+            "color_hilo": a.get("color_hilo"),
             "descripcion": a.get("descripcion"),
             "variedad": a.get("variedad"),
             "categoria_semilla": a.get("categoria_semilla"),
+            "calibre_comercial": a.get("calibre_comercial"),
             "ubicacion_id": a.get("ubicacion_id"),
             "ubicacion": a.get("ubicacion"),
             "camara": a.get("camara"),
@@ -1009,6 +1036,39 @@ def movimientos_get(limite: int = 60, lote: str | None = None,
                                           ubicacion=ubicacion, tipo=tipo),
         "sin_confirmar": movimientos.sin_confirmar(),
     }
+
+
+@app.get("/api/remitos")
+def remitos_get(_u: dict = Depends(require_feature("movimientos"))):
+    """El viaje, no la fila: un remito con sus líneas, DTV y transporte."""
+    filas = planilla.remitos()
+    return {"total": len(filas), "remitos": filas, "activo": planilla.activo()}
+
+
+@app.get("/api/remitos/{rid}")
+def remito_get(rid: str, _u: dict = Depends(require_feature("movimientos"))):
+    r = planilla.remito(rid)
+    if not r:
+        raise HTTPException(404, f"remito {rid} no encontrado")
+    return r
+
+
+@app.get("/api/planilla/lotes")
+def planilla_lotes_get(nro: str | None = None, clave: str | None = None,
+                       _u: dict = Depends(require_feature("deposito"))):
+    """Busca por nro corto (puede devolver VARIOS) o por clave namespaced."""
+    if clave:
+        lote = planilla.lote_por_clave(clave)
+        return {"lotes": [lote] if lote else [], "unico": bool(lote)}
+    if nro:
+        hits = planilla.buscar_por_nro(nro)
+        return {"lotes": hits, "unico": len(hits) == 1, "nro": nro}
+    return {"lotes": planilla.lotes(), "unico": False}
+
+
+@app.get("/api/planilla/modelo")
+def planilla_modelo_get(_u: dict = Depends(require_feature("deposito"))):
+    return planilla.modelo()
 
 
 @app.get("/api/movimientos/disponibilidad")
@@ -1083,6 +1143,17 @@ def mapa_operacion(_u: dict = Depends(require_feature("mapa"))):
     """Tres capas fijas: de dónde viene, dónde está, adónde va. El centro son
     las cuatro ubicaciones — el ojo pasa obligatoriamente por el stock."""
     return mapa_op.mapa()
+
+
+@app.get("/api/cerebro")
+def cerebro_get(_u: dict = Depends(require_feature("mapa"))):
+    """EL CEREBRO — cada entidad del negocio y cómo se cruzan.
+
+    Es la capa de abajo del mapa: los lotes, variedades, categorías del INASE,
+    campos, cámaras, órdenes, clientes y países, con TODAS las relaciones que la
+    trazabilidad de semilla fiscalizada ya obliga a declarar. Acá no se infiere
+    ninguna arista — se lee el campo del lote."""
+    return cerebro_mod.completo()
 
 
 @app.get("/api/genealogia/{lote}")
@@ -1310,6 +1381,54 @@ class RecordatorioRequest(BaseModel):
     para: str | None = None
     creado_por: str | None = None
     condicion: dict | None = None
+
+
+# --- TAREAS · el trabajo repartido -----------------------------------------
+# Se apoyan en `recordatorios` (el mismo almacén, con destinatario y estado):
+# core/tareas.py agrega el ruteo por rol+ubicación y las propuestas de Ángela.
+
+class TareaRequest(BaseModel):
+    titulo: str
+    para: str
+    origen: str | None = None
+    seccion: str | None = None
+    prioridad: str = "semana"
+    detalle: str = ""
+
+
+@app.get("/api/tareas/sugeridas")
+def tareas_sugeridas(u: dict = Depends(usuario_actual)):
+    """Lo que Ángela detectó y propone asignar, con la persona ya calculada.
+    Sólo lo ve quien puede repartir trabajo: el dueño y el encargado."""
+    if not tareas.puede_asignar(u):
+        raise HTTPException(status_code=403, detail=i18n.t("api.error_403", _lang(u)))
+    return {"sugeridas": tareas.sugeridas()}
+
+
+@app.get("/api/tareas/panorama")
+def tareas_panorama(u: dict = Depends(usuario_actual)):
+    """Quién tiene qué y qué se cerró. La pregunta que hoy se contesta por
+    WhatsApp: «¿alguien confirmó lo de Chapadmalal?»."""
+    if not tareas.puede_asignar(u):
+        raise HTTPException(status_code=403, detail=i18n.t("api.error_403", _lang(u)))
+    return tareas.panorama()
+
+
+@app.post("/api/tareas")
+def tareas_crear(req: TareaRequest, u: dict = Depends(usuario_actual)):
+    """Asignar una tarea. El destinatario la ve en SU vista y le entra por la
+    campanita. Asignarle a OTRO es del dueño y del encargado; cualquiera puede
+    anotarse una a sí mismo."""
+    titulo = (req.titulo or "").strip()
+    if not titulo:
+        raise HTTPException(status_code=400,
+                            detail=i18n.t("api.recordatorio_vacio", _lang(u)))
+    para = req.para or u["username"]
+    if para != u["username"] and not tareas.puede_asignar(u):
+        raise HTTPException(status_code=403, detail=i18n.t("api.error_403", _lang(u)))
+    return tareas.asignar(titulo, para=para, creado_por=u["username"],
+                          origen=req.origen, seccion=req.seccion,
+                          prioridad=req.prioridad, detalle=req.detalle)
 
 
 @app.get("/api/recordatorios")
@@ -1976,6 +2095,51 @@ def import_preview(req: ImportPreviewRequest, _u: dict = Depends(require_feature
     return info
 
 
+@app.post("/api/import/preview-archivo")
+async def import_preview_archivo(
+    archivo: UploadFile = File(...),
+    destino: str = Form("venta_historica"),
+    usuario: str | None = Form(None),
+    _u: dict = Depends(require_feature("cargar")),
+):
+    """LA PUERTA PARA LA PLANILLA DE VERDAD.
+
+    Papasud lleva el stock en un Excel que editan varias personas. El preview
+    por texto sólo aceptaba CSV: el dueño soltaba su .xlsx y la app le pedía que
+    lo exportara a CSV primero — o sea, le pedía hacer a mano justo el paso que
+    venimos a sacar. El lector de openpyxl ya estaba en el backend; lo único que
+    faltaba era dejar SUBIR el archivo.
+
+    El .xlsx se guarda en un temporal, se lee, y se borra: el original nunca
+    queda dando vueltas en el server."""
+    import tempfile
+    nombre = archivo.filename or "archivo.xlsx"
+    ext = os.path.splitext(nombre)[1].lower() or ".xlsx"
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(status_code=400,
+                            detail=i18n.t("api.archivo_vacio", _lang(_u)))
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
+    try:
+        tmp.write(contenido)
+        tmp.close()
+        info, csv_equivalente = importer.leer_archivo(tmp.name, destino)
+    except Exception as e:  # noqa: BLE001 — un Excel roto es un 400, no un 500
+        raise HTTPException(status_code=400, detail=str(e)[:200])
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+    if usuario:
+        memoria.marcar_dato_cargado(usuario, destino)
+    # el CSV equivalente vuelve al cliente para que el flujo siga siendo UNO:
+    # preview → confirmar → staging → el dueño aprueba
+    info["csv"] = csv_equivalente
+    info["nombre"] = nombre
+    return info
+
+
 class OtroArchivoRequest(BaseModel):
     nombre: str
     descripcion: str = ""
@@ -2260,6 +2424,122 @@ def admin_reset_demo(token: str):
 # track del modelo y este no se pisen en el mismo archivo.
 import api_cerebro  # noqa: E402
 app.include_router(api_cerebro.router)
+
+# ---------------------------------------------------------------------------
+# TRACK B · feat/modelo-real — el modelo real de Papasud (Campo -> Lote,
+# libro de movimientos, bloqueo-con-alternativa, inconsistencias, liquidación).
+# Namespace propio (/api/papasud/...) para no pisar el modelo viejo que
+# Track A y Track C ya construyeron encima. Ver PLAN_TRACKS_PAPASUD.md.
+# ---------------------------------------------------------------------------
+from core import (  # noqa: E402
+    modelo_real as _modelo_real,
+    stock_real as _stock_real,
+    inconsistencias_papasud as _inconsistencias_papasud,
+    liquidacion as _liquidacion,
+    importer_papasud as _importer_papasud,
+)
+
+
+@app.get("/api/papasud/catalogos")
+def papasud_catalogos(_u: dict = Depends(usuario_actual)):
+    return _modelo_real.catalogos()
+
+
+@app.get("/api/papasud/lotes")
+def papasud_lotes(_u: dict = Depends(usuario_actual)):
+    return {"lotes": _modelo_real.lotes()}
+
+
+@app.get("/api/papasud/mapa")
+def papasud_mapa(_u: dict = Depends(usuario_actual)):
+    """La foto de dónde está cada kilo: una fila por (lote, ubicación) con
+    stock vivo. Es la vista que el mapa de la operación (Track C) consume
+    directo, sin recalcular nada — el stock ya salió del núcleo."""
+    return {"filas": _stock_real.stock_por_ubicacion()}
+
+
+@app.get("/api/papasud/disponibilidad")
+def papasud_disponibilidad(variedad_id: str, calibre_id: str | None = None,
+                           _u: dict = Depends(usuario_actual)):
+    """'¿Tengo 1.200 bolsas de Spunta?' — la consulta que abre la demo
+    (Track A la narra, esto la calcula)."""
+    return _stock_real.resumen_variedad(variedad_id)
+
+
+class VerificarPedidoRequest(BaseModel):
+    variedad_id: str
+    kg_pedido: float
+    lote_id: str | None = None
+    ubicacion_id: str | None = None
+    calibre_requerido: str | None = None
+
+
+@app.post("/api/papasud/pedido/verificar")
+def papasud_verificar_pedido(req: VerificarPedidoRequest, _u: dict = Depends(usuario_actual)):
+    """El bloqueo-con-alternativa: 'no hay tanto en este lugar, pero se puede
+    vender yendo a este otro lote'. Motor 100% determinista — Ángela sólo
+    narra este resultado, nunca elige un lote por su cuenta."""
+    return _stock_real.verificar_pedido(
+        req.variedad_id, req.kg_pedido, req.lote_id, req.ubicacion_id, req.calibre_requerido)
+
+
+@app.get("/api/papasud/pedido/verificar-demo")
+def papasud_verificar_pedido_demo(_u: dict = Depends(usuario_actual)):
+    """El escenario plantado en el dataset, listo para la demo: pedido que
+    excede un lote puntual con una alternativa real disponible."""
+    caso = _modelo_real.bloqueo_demo()
+    return _stock_real.verificar_pedido(
+        caso["variedad_id"], caso["kg_pedido"], caso["lote_pedido_id"], caso["ubicacion_pedido_id"])
+
+
+@app.get("/api/papasud/inconsistencias")
+def papasud_inconsistencias(_u: dict = Depends(usuario_actual)):
+    """'Arreglar el pasado': lo que está roto en la operación, con el/los
+    movimiento(s) exacto(s) que lo sostienen."""
+    hallazgos = _inconsistencias_papasud.detectar()
+    return {"hallazgos": hallazgos, "total": len(hallazgos)}
+
+
+@app.get("/api/papasud/liquidacion/transportistas")
+def papasud_liquidacion_transportistas(desde: str | None = None, hasta: str | None = None,
+                                       _u: dict = Depends(usuario_actual)):
+    return {"transportistas": _liquidacion.liquidacion_transportistas(desde, hasta)}
+
+
+@app.get("/api/papasud/liquidacion/frigorificos")
+def papasud_liquidacion_frigorificos(desde: str | None = None, hasta: str | None = None,
+                                     _u: dict = Depends(usuario_actual)):
+    return {"frigorificos": _liquidacion.liquidacion_frigorificos(desde, hasta)}
+
+
+@app.post("/api/papasud/importar-planilla")
+async def papasud_importar_planilla(
+    archivo: UploadFile = File(...),
+    _u: dict = Depends(require_feature("cargar")),
+):
+    """La puerta para la planilla real de 12 solapas. Sólo estructura y avisa
+    qué no pudo interpretar — nada se persiste acá (regla de arquitectura #4:
+    nada persiste sin confirmación humana)."""
+    import tempfile
+    nombre = archivo.filename or "planilla.xlsx"
+    ext = os.path.splitext(nombre)[1].lower() or ".xlsx"
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(status_code=400,
+                            detail=i18n.t("api.archivo_vacio", _lang(_u)))
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
+    try:
+        tmp.write(contenido)
+        tmp.close()
+        resultado = _importer_papasud.importar(tmp.name)
+    except Exception as e:  # noqa: BLE001 — un Excel roto es un 400, no un 500
+        raise HTTPException(status_code=400, detail=str(e)[:200])
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+    return resultado
 
 
 _STATIC_DIR = os.environ.get("POLPILOT_STATIC_DIR", "")

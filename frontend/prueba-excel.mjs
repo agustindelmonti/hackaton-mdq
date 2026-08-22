@@ -1,0 +1,22 @@
+// Verificación real: soltar un .xlsx en "La planilla de stock" y ver el preview.
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport:{width:1440,height:900} });
+p.on("pageerror",e=>console.log("PAGEERROR", String(e).slice(0,160)));
+await p.goto("http://localhost:5210/",{waitUntil:"domcontentloaded"});
+await p.waitForSelector("input",{timeout:30000}).catch(()=>{});
+await p.locator("input").first().fill("ernesto");
+await p.locator('input[type="password"]').first().fill("brote-8039");
+await p.keyboard.press("Enter");
+await p.waitForFunction(()=>!/Leyendo tu negocio/.test(document.body.innerText),null,{timeout:60000}).catch(()=>{});
+await p.waitForTimeout(2500);
+await p.getByRole("button",{name:/Cargar datos/i}).first().click();
+await p.waitForTimeout(3000);
+const inputs = await p.locator('input[type="file"]').all();
+console.log("inputs file:", inputs.length);
+await inputs[0].setInputFiles("../.tmp/planilla_stock_papasud.xlsx");
+await p.waitForTimeout(4000);
+const txt = await p.evaluate(()=>document.body.innerText);
+console.log("PREVIEW:", (txt.match(/Ángela leyó[\s\S]{0,320}/)||["(no aparece)"])[0].replace(/\n+/g," | "));
+await p.screenshot({path:"../docs/shots/cargar-excel.png"});
+await b.close();

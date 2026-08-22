@@ -210,7 +210,14 @@ def ubicaciones() -> dict:
         out.append({"ubicacion": g["ubicacion"], "lotes": g["lotes"],
                     "productos": len(g["productos"]), "ejemplos": g["ejemplos"]})
     out.sort(key=lambda x: x["ubicacion"])
-    frio = [x["ubicacion"] for x in out if "camara" in _norm(x["ubicacion"])]
+    # QUÉ CUENTA COMO FRÍO. Buscaba "cámara" en el nombre de la ubicación, que
+    # sirve en un depósito donde las ubicaciones SON las cámaras. Acá la
+    # ubicación es el sitio ("Frigorífico Ruta 226") y la cámara es un campo
+    # adentro: el conteo daba CERO cámaras de frío en una empresa que tiene tres
+    # frigoríficos. Y el galpón, que justamente NO tiene frío, es la mitad de la
+    # explicación que necesita el que recién entró.
+    frio = [x["ubicacion"] for x in out
+            if any(k in _norm(x["ubicacion"]) for k in ("camara", "frigorif"))]
     return {"hay_datos": True, "ubicaciones": out, "total": len(out),
             "lotes": len(filas), "frio": frio}
 

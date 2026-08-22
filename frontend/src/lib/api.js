@@ -154,6 +154,25 @@ export const api = {
   },
   documentosListado: () => get("/api/documentos/listado"),
   // P24·D6 — reglas de aviso del usuario (recordatorios condicionales)
+  // TAREAS · el trabajo repartido (core/tareas.py sobre el mismo almacén de
+  // recordatorios: destinatario, estado y campanita ya existían).
+  tareasSugeridas: () => get("/api/tareas/sugeridas"),
+  tareasPanorama: () => get("/api/tareas/panorama"),
+  tareaCrear: (t) => post("/api/tareas", t),
+  // El Excel viaja como archivo (multipart), no como texto: el .xlsx no es
+  // texto y pedirle al dueño que lo exporte a CSV es el paso manual que
+  // venimos a sacar.
+  importPreviewArchivo: async (file, destino, usuario) => {
+    const fd = new FormData();
+    fd.append("archivo", file);
+    fd.append("destino", destino || "stock_semilla");
+    if (usuario) fd.append("usuario", usuario);
+    const res = await fetch("/api/import/preview-archivo", {
+      method: "POST", headers: _headers(), body: fd,
+    });
+    if (!res.ok) throw _error("/api/import/preview-archivo", res);
+    return res.json();
+  },
   recordatorios: () => get("/api/recordatorios"),
   // P41·4 — el dueño asigna una tarea a alguien; queda PERSISTIDA y la
   // persona la ve en su vista de trabajo y la marca hecha desde ahí.
@@ -201,6 +220,8 @@ export const api = {
     post(`/api/ordenes-carga/${numero}/emitir`, { aceptar_advertencias: aceptarAdvertencias }),
   // El mapa de la operación (stock en el centro) y la genealogía de un lote
   mapa: () => get("/api/mapa-operacion"),
+  // EL CEREBRO: cada entidad y cómo se cruza (la capa de abajo del mapa)
+  cerebro: () => get("/api/cerebro"),
   genealogia: (lote) => get(`/api/genealogia/${encodeURIComponent(lote)}`),
   // N03 · la carpeta de exportación, pre-completada desde la trazabilidad
   exportacion: () => get("/api/exportacion"),

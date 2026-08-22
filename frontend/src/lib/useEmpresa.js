@@ -24,11 +24,15 @@ export function useEmpresa() {
           roleSwitch: !!h.role_switch,
           fuente: h.meta?.fuente || "",
         };
-        // Pre-sesión (Login): el default de idioma del tenant (demo=en, piloto=es).
-        langStore.syncDefaultTenant(h.idioma_default);
-        // El tablero del equipo se siembra POR TENANT (P9·C1) — solo con el
-        // tenant YA resuelto (nunca con un default, que filtraría el piloto).
-        if (h.tenant) equipoStore.setTenant(h.tenant);
+        // LOS EFECTOS LATERALES VAN ADENTRO DE SU PROPIO try.
+        // Estaban sueltos en el then: si cualquiera de los dos tiraba (un ciclo
+        // de imports deja el módulo a medio evaluar y `equipoStore` llega
+        // undefined), el .catch de abajo pisaba la marca entera con nulls y el
+        // logo del cliente NO APARECÍA — sin un solo error en pantalla.
+        try {
+          langStore.syncDefaultTenant(h.idioma_default);
+          if (h.tenant) equipoStore.setTenant(h.tenant);
+        } catch { /* la marca ya está resuelta: no se pierde por esto */ }
         setMeta(_cache);
       })
       .catch(() => setMeta({ empresa: null, tenant: null, logo: null, roleSwitch: false, fuente: "" }));

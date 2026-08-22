@@ -5,6 +5,9 @@ import {
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
 import { api } from "../lib/api";
+import { generarPdfDocumento } from "../lib/pdfDocumento";
+import { useEmpresa } from "../lib/useEmpresa";
+import { toast } from "../lib/toastStore";
 import { num, fecha } from "../lib/format";
 import { useT } from "../lib/i18n";
 
@@ -207,81 +210,53 @@ function ListaDocumentos({ carpeta, activo, onAbrir, t }) {
 
 // --- el documento, con la forma de un documento -----------------------------
 function Documento({ doc, carpeta, t }) {
+  const { empresa, logo } = useEmpresa();
+  const [bajando, setBajando] = useState(false);
   const descargar = async () => {
-    const { jsPDF } = await import("jspdf");
-    const pdf = new jsPDF({ unit: "mm", format: "a4" });
-    const M = 18;
-    let y = M;
-    const ancho = 210 - M * 2;
-
-    const linea = (txt, { size = 9, bold = false, gap = 4.6, color = [33, 32, 29] } = {}) => {
-      if (y > 275) { pdf.addPage(); y = M; }
-      pdf.setFont("helvetica", bold ? "bold" : "normal");
-      pdf.setFontSize(size);
-      pdf.setTextColor(...color);
-      for (const l of pdf.splitTextToSize(String(txt), ancho)) {
-        pdf.text(l, M, y); y += gap;
-      }
-    };
-
-    // membrete
-    pdf.setFillColor(30, 47, 111);
-    pdf.rect(0, 0, 210, 3, "F");
-    y = M;
-    linea("PAPASUD S.A.", { size: 15, bold: true, gap: 5.6 });
-    linea("CUIT 30-54187629-3 · RNCyFS N° 14.328", { size: 8, color: [110, 106, 99] });
-    linea("Ruta 226 km 14,5 — Sierra de los Padres, Mar del Plata, Argentina",
-          { size: 8, color: [110, 106, 99], gap: 7 });
-    linea(doc.titulo.toUpperCase(), { size: 12, bold: true, gap: 5 });
-    if (doc.subtitulo) linea(doc.subtitulo, { size: 8, color: [110, 106, 99], gap: 6 });
-    linea(`${carpeta.orden} · ${carpeta.cliente} · ${carpeta.pais}`,
-          { size: 8, color: [110, 106, 99], gap: 7 });
-
-    for (const s of doc.secciones || []) {
-      linea(s.titulo, { size: 9.5, bold: true, gap: 5 });
-      for (const c of s.campos) {
-        const v = Array.isArray(c.valor) ? c.valor.join(" · ") : c.valor;
-        linea(`${c.etiqueta}: ${v ?? "________________"}`, { size: 8.5 });
-      }
-      y += 2;
+    setBajando(true);
+    try {
+      await generarPdfDocumento({ doc, carpeta, empresa, logo, t });
+    } catch {
+      toast(t("exp.pdf_error"), "error");
     }
-    if (doc.items?.length) {
-      linea(t("exp.detalle"), { size: 9.5, bold: true, gap: 5 });
-      for (const it of doc.items) {
-        linea(Object.entries(it)
-          .filter(([k]) => k !== "fuente")
-          .map(([k, v]) => `${k}: ${v}`).join("  |  "), { size: 8 });
-      }
-      y += 2;
-    }
-    for (const c of doc.totales || []) linea(`${c.etiqueta}: ${c.valor}`, { size: 9, bold: true });
-    for (const c of doc.pie || []) linea(`${c.etiqueta}: ${c.valor ?? "____________________"}`, { size: 8.5 });
-    y += 6;
-    linea(doc.nota_legal || "", { size: 7.2, color: [110, 106, 99], gap: 3.6 });
-
-    pdf.save(`${carpeta.orden}-${doc.id}.pdf`);
+    setBajando(false);
   };
 
   return (
     <article className="overflow-hidden rounded-[var(--radius-card)] border border-linea bg-superficie sombra-papel">
-      {/* membrete */}
+      {/* EL MEMBRETE, IGUAL QUE EN EL PDF. Lo que se ve en pantalla y lo que
+          sale impreso tienen que ser el mismo papel: si el dueño aprueba acá y
+          después baja otra cosa, deja de confiar en los dos. */}
       <header className="border-b-2 border-[#1e2f6f] px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="font-display text-lg font-bold tracking-wide text-[#1e2f6f]">PAPASUD S.A.</p>
-            <p className="text-[0.72rem] text-tinta-suave">
-              CUIT 30-54187629-3 · RNCyFS N° 14.328
-            </p>
+          <div className="flex items-center gap-3">
+            {logo ? (
+              <img src={logo} alt={empresa || ""} className="h-10 w-auto" draggable="false" />
+            ) : (
+              <p className="font-display text-lg font-bold tracking-wide text-[#1e2f6f]">
+                {(empresa || "Papasud S.A.").toUpperCase()}
+              </p>
+            )}
+            <div className="text-[0.7rem] leading-tight text-tinta-suave">
+              <p>CUIT 30-54187629-3 · RNCyFS N° 14.328</p>
+              <p>Ruta 226 km 14,5 — Sierra de los Padres, Mar del Plata</p>
+            </div>
           </div>
           <button
             type="button"
             onClick={descargar}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-linea px-3 py-1.5 text-[0.83rem] transition hover:bg-crema"
+            disabled={bajando}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-linea px-3 py-1.5 text-[0.83rem] transition hover:bg-crema disabled:opacity-60"
           >
-            <Download size={14} /> {t("exp.descargar")}
+            <Download size={14} /> {bajando ? t("exp.bajando") : t("exp.descargar")}
           </button>
         </div>
-        <h2 className="mt-3 font-display text-xl font-bold">{doc.titulo}</h2>
+        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="font-display text-xl font-bold">{doc.titulo}</h2>
+          {doc.numero && (
+            <span className="plata text-[0.9rem] font-medium">N° {doc.numero}</span>
+          )}
+        </div>
         {doc.subtitulo && (
           <p className="mt-0.5 text-[0.8rem] text-tinta-suave">{doc.subtitulo}</p>
         )}

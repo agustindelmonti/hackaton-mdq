@@ -44,6 +44,33 @@ const CATALOGO = [
     ],
   },
   {
+    // NÉSTOR ES OTRO ROL AUNQUE TENGA EL MISMO PUESTO.
+    // Entró hace tres semanas. Su problema no es registrar rápido: es no saber
+    // todavía dónde va cada cosa. Matchea ANTES que "operario" y su vista
+    // arranca por lo que le toca hoy y por preguntas de aprendizaje — las que
+    // hoy le hace a un compañero y le cortan el trabajo a los dos.
+    id: "nuevo",
+    match: /galp[oó]n/i,
+    voz: true,
+    nuevo: true,
+    acciones: [
+      { id: "que_me_toca", icon: "ListChecks", need: ["deposito"],
+        kind: "angela", pregunta: "rol.chip_que_me_toca", destaca: true },
+      { id: "registrar_movimiento", icon: "ArrowLeftRight", need: ["movimientos"],
+        kind: "navegar", a: "movimientos" },
+      { id: "donde_va", icon: "Snowflake", need: ["deposito"],
+        kind: "angela", pregunta: "rol.chip_donde_va" },
+      { id: "reportar_faltante", icon: "TriangleAlert", need: ["deposito"],
+        kind: "reporte", tipo: "faltante" },
+    ],
+    chips: [
+      { k: "rol.chip_que_me_toca", need: ["deposito"] },
+      { k: "rol.chip_donde_va", need: ["deposito"] },
+      { k: "rol.chip_como_se_anota", need: ["movimientos"] },
+      { k: "rol.chip_que_es_categoria", need: ["deposito"] },
+    ],
+  },
+  {
     id: "operario",
     match: /operario|frigor[ií]fico|galp[oó]n/i,
     voz: true,
@@ -101,6 +128,18 @@ const CATALOGO = [
       { k: "rol.chip_pedigri", need: ["trazabilidad"] },
     ],
   },
+];
+
+
+// EL DUEÑO NO TIENE VISTA-HERRAMIENTA, PERO SÍ TIENE OFICIO.
+// Ernesto no registra movimientos: mira si el negocio cierra. Sus preguntas van
+// aparte del CATALOGO porque `rolDe` devuelve null para el admin (su pantalla
+// es el panel completo, no una vista de trabajo).
+const CHIPS_DUENO = [
+  { k: "rol.chip_panorama" },
+  { k: "rol.chip_que_esta_trabado" },
+  { k: "rol.chip_plata_parada" },
+  { k: "rol.chip_dif_abiertas" },
 ];
 
 /** El rol-herramienta de una persona (null = el dueño, que tiene su propio panel). */
@@ -190,3 +229,25 @@ export const CAMPOS_REPORTE = {
     { id: "nota", lk: "rol.f_nota_pedido", tipo: "texto" },
   ],
 };
+
+
+/** Las preguntas que Ángela ofrece a ESTA persona, en su oficio.
+ *
+ *  Una sola fuente para el chat de desktop, el de mobile y la vista de trabajo.
+ *  Antes cada pantalla traía su propia lista hardcodeada y por eso el dueño de
+ *  una semillera se encontraba con "¿cuánta plata tengo en manteca?".
+ *
+ *  Devuelve {lk, enviar}: `lk` es lo que se MUESTRA y `enviar` es el payload —
+ *  acá son la misma frase, porque el producto es en castellano. */
+export function chipsAngelaDe(user) {
+  const r = rolDe(user);
+  const base = r ? r.chips.filter((c) => tieneFeats(user, c.need)) : CHIPS_DUENO;
+  return base.map((c) => ({ lk: c.k, enviarLk: c.k }));
+}
+
+/** El saludo con el que Ángela abre para esta persona. */
+export function saludoKeyDe(user) {
+  const r = rolDe(user);
+  if (!r) return "angela.saludo_dueno";
+  return `angela.saludo_${r.id}`;
+}

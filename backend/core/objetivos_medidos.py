@@ -22,64 +22,80 @@ from __future__ import annotations
 # Definiciones: responsable = empleado REAL del demo; `fuente_lk`/`seccion` = de
 # qué cruce sale; `direccion` = hacia dónde es "mejor".
 DEFS = {
-    "dias_cobro": {
-        "responsable": "marta", "fuente_lk": "obj.f_cuentas", "seccion": "cuentas",
-        "unidad": "dias", "direccion": "menor", "baseline": 29, "meta": 20,
-        "hist": [("2026-06-16", 29), ("2026-06-23", 27), ("2026-06-30", 26)],
+    # LOS SIETE OBJETIVOS SON LOS DEL BRIEF, NO METAS DE OFICINA.
+    # Cada uno mide la MISMA cuenta que ya muestra una pantalla —el endpoint le
+    # pasa el `actual` vivo—, y cada uno tiene un dueño real del organigrama. El
+    # baseline y los tres puntos de historial son SINTÉTICOS (sólo demo, fechas
+    # ≤ la fecha congelada): sin pasado la barra no dice si avanza o está
+    # estancada. Criterio en OBJETIVOS_SINTETICOS.md.
+    "traslados_confirmados": {
+        # actual = movimientos.sin_confirmar(). Meta CERO y no "pocos": un
+        # traslado sin confirmar en destino son kilos que no están en ningún
+        # lado. Es el problema textual del brief.
+        "responsable": "ruben", "fuente_lk": "obj.f_movimientos", "seccion": "movimientos",
+        "unidad": "traslados", "direccion": "menor", "baseline": 9, "meta": 0,
+        "hist": [("2026-08-01", 9), ("2026-08-08", 7), ("2026-08-15", 5)],
+    },
+    "diferencias_cerradas": {
+        # actual = conciliacion.abiertas(). Meta cero: una diferencia que queda
+        # abierta dos semanas ya no se puede reconstruir.
+        "responsable": "ruben", "fuente_lk": "obj.f_conciliacion", "seccion": "conciliacion",
+        "unidad": "diferencias", "direccion": "menor", "baseline": 12, "meta": 0,
+        "hist": [("2026-08-01", 12), ("2026-08-08", 9), ("2026-08-15", 6)],
+    },
+    "ordenes_sin_bloqueo": {
+        # actual = órdenes de carga que HOY no pueden emitirse. Meta cero: el
+        # camión en la playa con el cliente esperando es el papelón que este
+        # sistema vino a evitar.
+        "responsable": "cecilia", "fuente_lk": "obj.f_ordenes", "seccion": "logistica",
+        "unidad": "ordenes", "direccion": "menor", "baseline": 5, "meta": 0,
+        "hist": [("2026-08-01", 5), ("2026-08-08", 4), ("2026-08-15", 2)],
+    },
+    "analisis_vigentes": {
+        # actual = lotes de exportación con el DAS-ELISA fuera de la ventana de
+        # vigencia. Sin análisis vigente el SENASA no emite el fitosanitario.
+        "responsable": "dalia", "fuente_lk": "obj.f_analisis", "seccion": "trazabilidad",
+        "unidad": "lotes", "direccion": "menor", "baseline": 33, "meta": 0,
+        "hist": [("2026-08-01", 33), ("2026-08-08", 27), ("2026-08-15", 20)],
+    },
+    "brotacion_ventana": {
+        # actual = lotes que se brotan adentro de la ventana de 45 días. Meta
+        # cero: un lote que brota antes de despacharse deja de ser semilla de su
+        # categoría, y eso no se recupera.
+        "responsable": "ruben", "fuente_lk": "obj.f_brotacion", "seccion": "deposito",
+        "unidad": "lotes", "direccion": "menor", "baseline": 21, "meta": 0,
+        "hist": [("2026-08-01", 21), ("2026-08-08", 16), ("2026-08-15", 11)],
+    },
+    "galpon_liviano": {
+        # actual = lotes parados en el galpón, que no tiene frío. Meta 3: el
+        # galpón es TRÁNSITO, no depósito — ahí la dormancia corre a reloj
+        # natural y la semilla se brota mucho antes que en cámara.
+        "responsable": "nestor", "fuente_lk": "obj.f_galpon", "seccion": "deposito",
+        "unidad": "lotes", "direccion": "menor", "baseline": 24, "meta": 3,
+        "hist": [("2026-08-01", 24), ("2026-08-08", 18), ("2026-08-15", 13)],
     },
     "datos_corregir": {
-        "responsable": "marta", "fuente_lk": "obj.f_saneamiento", "seccion": "saneamiento",
+        # actual = los registros del libro triado (los mismos 17 del badge).
+        "responsable": "dalia", "fuente_lk": "obj.f_saneamiento", "seccion": "saneamiento",
         "unidad": "registros", "direccion": "menor", "baseline": 44, "meta": 0,
-        "hist": [("2026-06-16", 44), ("2026-06-23", 34), ("2026-06-30", 26)],
-    },
-    "liberar_dormido": {
-        # el "actual" que recibe es lo YA LIBERADO ($): baseline_dormido − dormido_vivo.
-        "responsable": "celeste", "fuente_lk": "obj.f_inventario", "seccion": "inventario",
-        "unidad": "pesos", "direccion": "mayor", "baseline": 0, "meta": 20_000_000,
-        "baseline_dormido": 88_000_000,
-        "hist": [("2026-06-16", 8_000_000), ("2026-06-23", 14_000_000), ("2026-06-30", 17_000_000)],
-    },
-    "pvp_margen": {
-        # el "actual" es cuántos productos SIGUEN sin precio (baja hacia 0).
-        "responsable": "aldo", "fuente_lk": "obj.f_margen", "seccion": "inventario",
-        "unidad": "productos", "direccion": "menor", "baseline": 20, "meta": 0,
-        "hist": [("2026-06-16", 20), ("2026-06-23", 15), ("2026-06-30", 11)],
-    },
-    "concentracion": {
-        "responsable": "aldo", "fuente_lk": "obj.f_clientes", "seccion": "cuentas",
-        "unidad": "pct", "direccion": "menor", "baseline": 44, "meta": 15,
-        "hist": [("2026-06-16", 44), ("2026-06-23", 42), ("2026-06-30", 41)],
-    },
-    # P41·3.3 — dos objetivos nuevos. Mismo contrato que los 5 anteriores: el
-    # `actual` es el dato REAL vivo (lo arma el endpoint desde la misma fuente
-    # que ya usa la app) y baseline+historial son SINTÉTICOS del demo, con el
-    # criterio de OBJETIVOS_SINTETICOS.md. No mueven ningún número canónico:
-    # los leen.
-    "cobrar_morosos": {
-        # actual = la mora viva ($) = cuentas.alertas().impacto_pesos ($85,7M hoy).
-        # Meta $20M: la mora nunca es cero en una distribuidora — el objetivo es
-        # que no pase de un colchón sano, no perseguir un imposible.
-        "responsable": "marta", "fuente_lk": "obj.f_mora", "seccion": "cuentas",
-        "unidad": "pesos", "direccion": "menor", "baseline": 132_000_000, "meta": 20_000_000,
-        "hist": [("2026-06-16", 132_000_000), ("2026-06-23", 118_400_000),
-                 ("2026-06-30", 99_100_000)],
-    },
-    "reponer_quiebres": {
-        # actual = productos con MENOS de 14 días de cobertura (el mismo umbral
-        # que usa el hallazgo de quiebre inminente), sobre el detalle de rotación
-        # que la app ya calcula. Meta 10: siempre hay algo por reponer.
-        "responsable": "celeste", "fuente_lk": "obj.f_quiebres", "seccion": "inventario",
-        "unidad": "productos", "direccion": "menor", "baseline": 58, "meta": 10,
-        "hist": [("2026-06-16", 58), ("2026-06-23", 49), ("2026-06-30", 41)],
+        "hist": [("2026-08-01", 44), ("2026-08-08", 34), ("2026-08-15", 26)],
     },
 }
-ORDEN = ["liberar_dormido", "cobrar_morosos", "reponer_quiebres", "pvp_margen",
-         "datos_corregir", "dias_cobro", "concentracion"]
+ORDEN = ["traslados_confirmados", "diferencias_cerradas", "ordenes_sin_bloqueo",
+         "analisis_vigentes", "brotacion_ventana", "galpon_liviano", "datos_corregir"]
 
 # El umbral de cobertura que define "por quebrar" — el MISMO que
 # oportunidades_neg.COBERTURA_QUIEBRE_DIAS, para que el objetivo y el hallazgo
 # no cuenten cosas distintas.
 COBERTURA_QUIEBRE_DIAS = 14
+
+
+def _nombre_de(username: str) -> str:
+    try:
+        import usuarios_papasud
+        return usuarios_papasud.USUARIOS.get(username, {}).get("nombre") or username.capitalize()
+    except Exception:
+        return username.capitalize()
 
 
 def _progreso(baseline, actual, meta, direccion):
@@ -115,7 +131,11 @@ def construir(actuales: dict, hoy_iso: str) -> list[dict]:
         serie = [{"fecha": f, "valor": v} for f, v in d["hist"]]
         serie.append({"fecha": hoy_iso, "valor": actual})
         out.append({
-            "id": oid, "responsable": d["responsable"], "fuente_lk": d["fuente_lk"],
+            "id": oid, "responsable": d["responsable"],
+            # El NOMBRE, no el username: "Ruben" con la e sin tilde en la ficha
+            # de una persona real se lee como un dato mal cargado.
+            "responsable_nombre": _nombre_de(d["responsable"]),
+            "fuente_lk": d["fuente_lk"],
             "seccion": d["seccion"], "unidad": d["unidad"], "direccion": d["direccion"],
             "baseline": d["baseline"], "meta": d["meta"], "actual": actual,
             "progreso": round(prog, 3), "estado": _estado(d, actual, prog),

@@ -43,10 +43,12 @@ from .fechas import hoy, parse_fecha
 APARTADO = "movimientos"
 
 TIPOS = {
-    "ingreso":   "entra semilla desde un campo de producción",
-    "traslado":  "se mueve entre dos ubicaciones propias",
-    "egreso":    "sale hacia un cliente",
-    "descarte":  "se da de baja por sanidad o brotación",
+    "ingreso":    "entra semilla desde un campo de producción",
+    "traslado":   "se mueve entre dos ubicaciones propias",
+    "egreso":     "sale hacia un cliente",
+    "descarte":   "se da de baja por sanidad o brotación",
+    "reproceso":  "sale del frío a planta para trabajar o repasar",
+    "retorno":    "vuelve al origen (galpón, planta, frío) sin ser un egreso",
 }
 
 # Un traslado que nadie confirmó en destino después de esto es un problema, no
@@ -272,7 +274,8 @@ def registrar(codigo: int, kg: float, destino: str, actor: str,
     filas = _filas()
     numero = _siguiente_numero(filas)
     art = next((a for a in store.raw_actual() if a.get("codigo") == codigo), {})
-    es_traslado_interno = tipo == "traslado" and semilla.ubicacion_por_nombre(destino)
+    es_traslado_interno = (tipo in ("traslado", "reproceso", "retorno")
+                           and semilla.ubicacion_por_nombre(destino))
 
     mov = {
         "numero": numero,

@@ -95,6 +95,19 @@ TIPOS = {
         "relaciona_con": ["cliente", "ordenes_carga"],
         "activa": ["estado de cada despacho", "alertas de embarque atrasado"],
     },
+    # Libro real (data-planilla): el remito es el viaje, las filas son líneas.
+    "remitos": {
+        "nombre": "Remitos",
+        "senales": ["remito", "dtv", "lineas", "bolsas", "kg.prom"],
+        "relaciona_con": ["producto", "movimientos", "transportes"],
+        "activa": ["un viaje con varios lotes", "DTV colgado del documento"],
+    },
+    "transportes": {
+        "nombre": "Transportes",
+        "senales": ["transporte", "chofer", "camion", "fletero"],
+        "relaciona_con": ["remitos", "movimientos"],
+        "activa": ["empresa y chofer de cada viaje"],
+    },
 }
 
 def _norm(s: str) -> str:

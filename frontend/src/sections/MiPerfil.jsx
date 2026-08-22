@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Camera, Pencil, Send, Clock, XCircle, Mic, MicOff, Globe, Target } from "lucide-react";
 import AngelaMark from "../components/AngelaMark";
-import LangSwitch from "../components/LangSwitch";
 import { api } from "../lib/api";
 import { useSession, authStore } from "../lib/auth";
 import { equipoStore, useEquipo, ESTADO_LABEL } from "../lib/equipoStore";
@@ -472,21 +471,12 @@ export default function MiPerfil({ user }) {
           ver el negocio, listado y borrable una por una. Nada de memoria oculta. */}
       {esMiPerfil && <PreferenciasAngela />}
 
-      {/* Idioma (scope usuario: se persiste en el perfil, en el servidor —
-          mañana WhatsApp le habla a cada uno en su idioma leyendo lo mismo) */}
-      {esMiPerfil && (
-        <section>
-          <h2 className="mb-3 font-display text-[1.1rem] font-bold">{t("perfil.idioma_titulo")}</h2>
-          <div className="flex items-center gap-3 rounded-xl border border-linea bg-crema px-3.5 py-3">
-            <Globe size={16} className="shrink-0 text-hielo" />
-            <p className="flex-1 text-[0.85rem] text-tinta-suave">{t("perfil.idioma_nota")}</p>
-            <LangSwitch />
-          </div>
-        </section>
-      )}
-
-      {/* P24·F2 — el switcher de usuarios se mudó a Equipo: Mi perfil queda
-          con lo propio (foto, bloques, idioma, preferencias). */}
+      {/* El bloque de idioma se fue: el producto es en castellano. El motor
+          bilingüe sigue adentro (la documentación de exportación viaja en
+          inglés porque la ONPF de destino la pide así), pero la interfaz no
+          ofrece cambiarlo — un toggle de idioma en el perfil de un operario de
+          frigorífico es una palanca que sólo sirve para romper la demo.
+          P24·F2 — el switcher de usuarios vive en Equipo. */}
     </div>
   );
 }
