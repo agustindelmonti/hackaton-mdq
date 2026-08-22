@@ -86,6 +86,61 @@
             <button class="btn btn-primary" onclick="intentarRemito()">Emitir remito</button>
             <div id="remitoResult"></div>
           </div>
+
+          <div class="section-label">Cierre</div>
+          <button class="btn btn-secondary" onclick="pushView('exportacion', {loteId: ctx.loteId})">📄 Generar documentación de exportación</button>
+        </div>
+
+        <!-- ===================== VISTA: EXPORTACIÓN (pantalla de cierre, N03) ===================== -->
+        <div class="view" data-view="exportacion">
+          <div class="card">
+            <div class="input-group" style="margin-top:0;">
+              <label>País destino</label>
+              <select class="select-input" id="expPaisSelect" onchange="renderExportacion()"></select>
+            </div>
+          </div>
+
+          <div class="section-label">Pre-completado desde trazabilidad</div>
+          <div class="card" id="expPrecompletado"></div>
+
+          <div class="section-label">Campos faltantes — dictado o carga rápida</div>
+          <div class="card">
+            <div class="mic-wrap" style="padding:10px 0 4px;">
+              <button class="mic-btn" id="expMicBtn" style="width:64px; height:64px; font-size:24px;" onclick="dictarCamposExportacion()">🎙️</button>
+              <div class="mic-hint">Dictar NCM, factura, certificado de origen, packing list</div>
+            </div>
+            <div class="input-group">
+              <label>NCM declarado</label>
+              <input type="text" class="number-input" style="font-size:16px;" id="expNcm" value="0701.90.00" oninput="renderExportacion()" />
+            </div>
+            <div class="input-group">
+              <label>N° factura E</label>
+              <input type="text" class="select-input" id="expFactura" placeholder="no dictado" oninput="renderExportacion()" />
+            </div>
+            <div class="input-group">
+              <label>Fecha certificado de origen</label>
+              <input type="date" class="select-input" id="expFechaCert" oninput="renderExportacion()" />
+            </div>
+            <div class="input-group">
+              <label>Peso packing list (kg)</label>
+              <input type="number" class="number-input" id="expPesoPacking" oninput="renderExportacion()" />
+            </div>
+            <div class="input-group">
+              <label>Kg por envase rotulado</label>
+              <input type="number" class="number-input" id="expEnvaseKg" value="55" oninput="renderExportacion()" />
+            </div>
+            <div class="input-group" style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="expPlagaCheckbox" onchange="renderExportacion()" style="width:20px; height:20px;" />
+              <label style="margin:0;">Declaración adicional de plaga adjunta</label>
+            </div>
+          </div>
+
+          <div class="section-label">Inconsistencias detectadas</div>
+          <div id="expChecks"></div>
+
+          <div style="height:4px;"></div>
+          <button class="btn btn-primary" onclick="generarDocumentoExportacion()">Generar documento</button>
+          <div id="expDocResult"></div>
         </div>
 
         <!-- ===================== VISTA: VOZ (captura) ===================== -->

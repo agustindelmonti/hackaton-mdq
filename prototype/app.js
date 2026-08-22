@@ -148,6 +148,7 @@ const TITLES = {
   voz: ['Captura por voz', 'Dictá un movimiento de stock'],
   conteo: ['Conteo físico', 'Discrepancia neta de merma'],
   lotes: ['Catálogo de lotes', 'Linaje y registro'],
+  exportacion: ['Exportación', 'Documentación — cierre, DEMO sin valor legal'],
 };
 
 function navTo(view, params) {
@@ -176,6 +177,7 @@ function renderView(view) {
   if (view === 'voz') { setTitle('Captura por voz', 'Dictá un movimiento de stock'); }
   if (view === 'conteo') { setTitle('Conteo físico', 'Discrepancia neta de merma'); initConteoView(); }
   if (view === 'lotes') { setTitle('Catálogo de lotes', 'Linaje y registro'); initLotesView(); }
+  if (view === 'exportacion') { setTitle('Exportación', 'Documentación — cierre, DEMO sin valor legal'); initExportacionView(ctx.loteId); }
 }
 function setTitle(title, subtitle) {
   document.getElementById('topTitle').textContent = title;
@@ -765,6 +767,163 @@ function updateSyncPill() {
   } else {
     badge.style.display = 'none';
   }
+}
+
+// ============================================================
+// ------------- EXPORTACIÓN (pantalla de cierre, N03) -----------
+// ============================================================
+// El sistema lee los requisitos documentales por destino y los cruza
+// con la trazabilidad del lote para pre-completar lo que ya sabe.
+// Igual que el resto de la app: el chequeo es determinístico. En la
+// versión real, acá es donde el LLM redactaría una nota narrando
+// SOLO los resultados de estos checks — nunca decidiendo el checkeo.
+let currentExportLoteId = null;
+
+function initExportacionView(loteId) {
+  currentExportLoteId = loteId;
+  const sel = document.getElementById('expPaisSelect');
+  if (!sel.dataset.filled) {
+    sel.innerHTML = PAISES_DESTINO.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+    sel.dataset.filled = '1';
+  }
+  renderExportacion();
+}
+
+function renderExportacion() {
+  const loteId = currentExportLoteId;
+  const lote = LOTE_BY_ID[loteId];
+  const sub = SUBCATEGORIAS.find(s => s.id === lote.subcategoria);
+  const variedad = VARIEDADES.find(v => v.id === lote.variedadId);
+  const ubic = ubicacionActualDeLote(loteId);
+  const stockDeclarado = ubic ? stockPorLoteUbic(loteId, ubic.id) : stockTotalLote(loteId);
+  const pais = PAISES_DESTINO.find(p => p.id === document.getElementById('expPaisSelect').value) || PAISES_DESTINO[0];
+  const inase = certificadoInaseInfo(loteId);
+
+  // ---- Pre-completado desde trazabilidad (nunca editable acá) ----
+  document.getElementById('expPrecompletado').innerHTML = `
+    <div class="field-row"><span class="field-label">Variedad</span><span class="chip confirmado">${variedad.nombre} (${variedad.obtentor})</span></div>
+    <div class="field-row"><span class="field-label">Categoría</span><span class="chip confirmado">${sub.categoria} – ${sub.nombre}</span></div>
+    <div class="field-row"><span class="field-label">Zona de producción</span><span class="chip confirmado">${lote.zonaProduccion}</span></div>
+    <div class="field-row"><span class="field-label">Año de cosecha</span><span class="chip confirmado">${lote.anioCosecha}</span></div>
+    <div class="field-row"><span class="field-label">Semillero / N° inscripción</span><span class="chip confirmado">${lote.semillero} · ${lote.nroInscripcion}</span></div>
+    <div class="field-row"><span class="field-label">Peso declarado (trazabilidad)</span><span class="chip confirmado tabular">${fmtKg(stockDeclarado)}</span></div>
+    <div class="field-row"><span class="field-label">Certificado INASE</span><span class="chip ${inase.vencido ? 'error' : 'confirmado'}">${inase.vencido ? 'vencido' : 'vigente'} · ${fechaCorta(inase.fecha.toISOString())}</span></div>
+  `;
+
+  let checksBannerHtml = '';
+  if (pais.id === 'egipto') {
+    checksBannerHtml = `<div class="alert-box dudoso"><div class="alert-title">🟡 Destino no habilitado</div><div class="alert-body">${escapeHtml(pais.plagaAdicional)}. Se muestra igual, a título ilustrativo — DEMO.</div></div>`;
+  }
+
+  const ncm = document.getElementById('expNcm').value.trim();
+  const factura = document.getElementById('expFactura').value.trim();
+  const fechaCertStr = document.getElementById('expFechaCert').value;
+  const pesoPacking = parseFloat(document.getElementById('expPesoPacking').value);
+  const envaseKg = parseFloat(document.getElementById('expEnvaseKg').value);
+  const plagaOk = document.getElementById('expPlagaCheckbox') ? document.getElementById('expPlagaCheckbox').checked : false;
+
+  const tope = sub.id.startsWith('preinicial') ? 20 : 50;
+
+  const checks = [];
+
+  checks.push(ncm === NCM_SEMILLA
+    ? { status: 'ok', label: 'NCM', detail: `${NCM_SEMILLA} — semilla, correcto.` }
+    : { status: 'fail', label: 'NCM', detail: `Declarado ${escapeHtml(ncm || '(vacío)')} — corresponde a semilla, no a consumo. Debe ser ${NCM_SEMILLA}. Es el error más caro y más fácil de cometer.` });
+
+  if (!fechaCertStr) {
+    checks.push({ status: 'pending', label: 'Certificado de origen', detail: 'Falta la fecha de emisión — dictá o cargá el dato.' });
+  } else {
+    const dias = diasDesde(new Date(fechaCertStr).toISOString());
+    checks.push(dias <= 60
+      ? { status: 'ok', label: 'Certificado de origen', detail: `Emitido hace ${dias} días — dentro de los 60 días.` }
+      : { status: 'fail', label: 'Certificado de origen', detail: `Emitido hace ${dias} días — supera el margen de 60 días.` });
+  }
+
+  if (isNaN(pesoPacking)) {
+    checks.push({ status: 'pending', label: 'Peso Factura E vs. packing list', detail: 'Falta el peso del packing list — dictá o cargá el dato.' });
+  } else {
+    const delta = Math.abs(pesoPacking - stockDeclarado);
+    const tolerancia = stockDeclarado * 0.01;
+    checks.push(delta <= tolerancia
+      ? { status: 'ok', label: 'Peso Factura E vs. packing list', detail: `${fmtKg(pesoPacking)} — coincide con la trazabilidad (${fmtKg(stockDeclarado)}).` }
+      : { status: 'fail', label: 'Peso Factura E vs. packing list', detail: `${fmtKg(pesoPacking)} declarado vs. ${fmtKg(stockDeclarado)} en trazabilidad — no cuadra.` });
+  }
+
+  if (pais.id !== 'egipto') {
+    checks.push(plagaOk
+      ? { status: 'ok', label: 'Declaración adicional de plaga', detail: `${escapeHtml(pais.plagaAdicional)} — adjunta.` }
+      : { status: 'fail', label: 'Declaración adicional de plaga', detail: `Falta para ${pais.nombre}: ${escapeHtml(pais.plagaAdicional)}.` });
+  }
+
+  checks.push(isNaN(envaseKg)
+    ? { status: 'pending', label: 'Rótulo — tope de kg por envase', detail: 'Cargá el peso del envase rotulado.' }
+    : envaseKg <= tope
+      ? { status: 'ok', label: 'Rótulo — tope de kg por envase', detail: `${envaseKg} kg — dentro del tope (${tope} kg, ${sub.categoria}).` }
+      : { status: 'fail', label: 'Rótulo — tope de kg por envase', detail: `${envaseKg} kg excede el tope de ${tope} kg para ${sub.nombre}.` });
+
+  checks.push(inase.vencido
+    ? { status: 'fail', label: 'Certificado INASE', detail: `Vencido el ${fechaCorta(inase.fecha.toISOString())}.` }
+    : { status: 'ok', label: 'Certificado INASE', detail: `Vigente hasta el ${fechaCorta(inase.fecha.toISOString())}.` });
+
+  const icon = { ok: '🟢', fail: '🔴', pending: '🟡' };
+  document.getElementById('expChecks').innerHTML = checksBannerHtml + checks.map(c => `
+    <div class="check-item ${c.status}">
+      <div class="check-icon">${icon[c.status]}</div>
+      <div class="check-body">
+        <div class="check-label">${c.label}</div>
+        <div class="check-detail">${c.detail}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('expDocResult').innerHTML = '';
+}
+
+function dictarCamposExportacion() {
+  const btn = document.getElementById('expMicBtn');
+  btn.classList.add('listening');
+  setTimeout(() => {
+    btn.classList.remove('listening');
+    document.getElementById('expFactura').value = 'A-0001-00003842';
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() - 45);
+    document.getElementById('expFechaCert').value = fecha.toISOString().slice(0, 10);
+    const lote = LOTE_BY_ID[currentExportLoteId];
+    const ubic = ubicacionActualDeLote(currentExportLoteId);
+    const stockDeclarado = ubic ? stockPorLoteUbic(currentExportLoteId, ubic.id) : stockTotalLote(currentExportLoteId);
+    document.getElementById('expPesoPacking').value = Math.round(stockDeclarado);
+    renderExportacion();
+    // la declaración de plaga y NCM/envase quedan para revisión manual —
+    // el dictado no inventa un check que el operario no confirmó.
+  }, 650);
+}
+
+function generarDocumentoExportacion() {
+  const loteId = currentExportLoteId;
+  const lote = LOTE_BY_ID[loteId];
+  const checksEls = document.querySelectorAll('#expChecks .check-item');
+  const fails = document.querySelectorAll('#expChecks .check-item.fail').length;
+  const pending = document.querySelectorAll('#expChecks .check-item.pending').length;
+  const resultEl = document.getElementById('expDocResult');
+
+  if (fails > 0 || pending > 0) {
+    resultEl.innerHTML = `
+      <div class="alert-box error">
+        <div class="alert-title">🔴 No se puede generar — hay ${fails} inconsistencia${fails === 1 ? '' : 's'}${pending ? ` y ${pending} dato${pending === 1 ? '' : 's'} sin completar` : ''}</div>
+        <div class="alert-body">Resolvé lo marcado en rojo/amarillo arriba antes de generar el documento. Es más barato encontrarlo acá que en la aduana.</div>
+      </div>`;
+    return;
+  }
+
+  resultEl.innerHTML = `
+    <div class="alert-box confirmado">
+      <div class="alert-title">🟢 Documento generado — DEMO, SIN VALOR LEGAL / NO OFICIAL</div>
+      <div class="alert-body">
+        Factura proforma — Lote ${lote.nroLote}<br/>
+        NCM ${escapeHtml(document.getElementById('expNcm').value)} · Factura ${escapeHtml(document.getElementById('expFactura').value)}<br/>
+        Certificado de origen: ${document.getElementById('expFechaCert').value}<br/>
+        Peso: ${document.getElementById('expPesoPacking').value} kg
+      </div>
+    </div>`;
 }
 
 // ============================================================

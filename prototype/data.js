@@ -188,3 +188,30 @@ const LOTE_VOZ_DEMO_ID = '6';
 })();
 
 const CONTEOS = [];
+
+// ============================================================
+// Documentación de exportación — pantalla de cierre (N03).
+// Requisitos por país: mock a partir de docs/papasud-features-y-flows.md
+// (secc. "El set documental de exportación" y "Fricciones de mercado").
+// Los % de tolerancia sanitaria y anexos NO están publicados online:
+// marcados DEMO, nunca presentados con tono de autoridad.
+// ============================================================
+const NCM_SEMILLA = '0701.10.00';
+const NCM_CONSUMO = '0701.90.00';
+
+const PAISES_DESTINO = [
+  { id: 'brasil', nombre: 'Brasil', canal: 'ePhyto', requiereLavado: true, plagaAdicional: 'Nematodos (declaración adicional MERCOSUR/GMC Res. 29/22)' },
+  { id: 'uruguay', nombre: 'Uruguay', canal: 'CERT-POV', requiereLavado: true, plagaAdicional: 'Nematodos' },
+  { id: 'vietnam', nombre: 'Vietnam', canal: 'CERT-POV', requiereLavado: false, plagaAdicional: 'Roya (Phytophthora) — requisito propio de la ONPF de destino' },
+  { id: 'egipto', nombre: 'Egipto', canal: 'CERT-POV', requiereLavado: false, plagaAdicional: 'Mercado aún no abierto por SENASA — DEMO, no operar sobre este destino' },
+];
+
+// Vencimiento del certificado INASE: mock determinístico por lote
+// (no hay dato real de postcontrol en el prototipo).
+function certificadoInaseInfo(loteId) {
+  const vencido = parseInt(loteId) % 3 === 0;
+  const dias = vencido ? -14 : 320;
+  const fecha = new Date();
+  fecha.setDate(fecha.getDate() + dias);
+  return { vencido, fecha };
+}
