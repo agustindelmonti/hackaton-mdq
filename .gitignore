@@ -1,0 +1,46 @@
+# Secretos y credenciales — JAMÁS al repo.
+.env
+*.env
+!.env.example
+backend/credenciales.json
+data-papasud/credenciales.json
+
+# Dependencias y builds
+node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Data dirs de OTROS tenants (si alguien monta uno local, no se versiona).
+data/
+
+# Runtime: los SEEDS generados por data-papasud/generar.py sí se versionan
+# (son el dataset de la demo y tienen que ser reproducibles byte a byte); el
+# estado VIVO que produce usar la app, no.
+data-papasud/versions/
+data-papasud/inventory_actual.json
+data-papasud/audit.json
+data-papasud/memoria.json
+data-papasud/staging.json
+data-papasud/macro_cache.json
+data-papasud/organizacion.json
+data-papasud/recordatorios.json
+data-papasud/perfiles.json
+data-papasud/notificaciones.json
+data-papasud/autonomia.json
+data-papasud/contexto.json
+data-papasud/fotos/
+data-papasud/documentos/
+data-papasud/piso_adjuntos/
+
+# Capturas locales de los scripts de verificación
+frontend/shots/
+frontend/*.png
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

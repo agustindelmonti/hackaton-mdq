@@ -1,0 +1,433 @@
+{
+ "ubicaciones": [
+  {
+   "id": "sierra",
+   "nombre": "Frigorífico Sierra de los Padres",
+   "tipo": "frigorifico",
+   "camaras": [
+    "Cámara 1",
+    "Cámara 2",
+    "Cámara 3",
+    "Cámara 4"
+   ],
+   "capacidad_kg": 2850000,
+   "temp_objetivo": 4.0,
+   "temp_tolerancia": 1.0,
+   "direccion": "Ruta 226 km 14,5 — Sierra de los Padres"
+  },
+  {
+   "id": "ruta226",
+   "nombre": "Frigorífico Ruta 226",
+   "tipo": "frigorifico",
+   "camaras": [
+    "Cámara A",
+    "Cámara B",
+    "Cámara C"
+   ],
+   "capacidad_kg": 2100000,
+   "temp_objetivo": 4.0,
+   "temp_tolerancia": 1.0,
+   "direccion": "Ruta 226 km 31 — Partido de General Pueyrredón"
+  },
+  {
+   "id": "batan",
+   "nombre": "Frigorífico Batán",
+   "tipo": "frigorifico",
+   "camaras": [
+    "Cámara 1",
+    "Cámara 2"
+   ],
+   "capacidad_kg": 1450000,
+   "temp_objetivo": 3.5,
+   "temp_tolerancia": 1.0,
+   "direccion": "Parque Industrial Batán — Mar del Plata"
+  },
+  {
+   "id": "chapadmalal",
+   "nombre": "Galpón Chapadmalal",
+   "tipo": "galpon",
+   "camaras": [
+    "Sector Norte",
+    "Sector Sur"
+   ],
+   "capacidad_kg": 900000,
+   "temp_objetivo": null,
+   "temp_tolerancia": null,
+   "direccion": "Camino Viejo a Chapadmalal km 8"
+  }
+ ],
+ "variedades": [
+  {
+   "id": "spunta",
+   "nombre": "Spunta",
+   "destino": "consumo fresco",
+   "dormancia_dias": 78,
+   "peso_relativo": 0.29
+  },
+  {
+   "id": "innovator",
+   "nombre": "Innovator",
+   "destino": "industria (bastón)",
+   "dormancia_dias": 102,
+   "peso_relativo": 0.24
+  },
+  {
+   "id": "atlantic",
+   "nombre": "Atlantic",
+   "destino": "industria (chip)",
+   "dormancia_dias": 94,
+   "peso_relativo": 0.18
+  },
+  {
+   "id": "daisy",
+   "nombre": "Daisy",
+   "destino": "consumo fresco",
+   "dormancia_dias": 71,
+   "peso_relativo": 0.12
+  },
+  {
+   "id": "asterix",
+   "nombre": "Asterix",
+   "destino": "consumo fresco / industria",
+   "dormancia_dias": 88,
+   "peso_relativo": 0.1
+  },
+  {
+   "id": "kennebec",
+   "nombre": "Kennebec",
+   "destino": "industria (bastón)",
+   "dormancia_dias": 84,
+   "peso_relativo": 0.07
+  }
+ ],
+ "categorias": [
+  {
+   "id": "preinicial_2",
+   "nombre": "Preinicial II",
+   "clase": "Básica",
+   "orden": 1,
+   "ambiente": "condiciones controladas",
+   "costo_kg": 2140.0,
+   "peso_relativo": 0.02,
+   "virus_max_pct": 0.0
+  },
+  {
+   "id": "preinicial_3",
+   "nombre": "Preinicial III",
+   "clase": "Básica",
+   "orden": 2,
+   "ambiente": "condiciones controladas",
+   "costo_kg": 1685.0,
+   "peso_relativo": 0.03,
+   "virus_max_pct": 0.0
+  },
+  {
+   "id": "inicial_1",
+   "nombre": "Inicial I",
+   "clase": "Básica",
+   "orden": 3,
+   "ambiente": "campo",
+   "costo_kg": 1186.0,
+   "peso_relativo": 0.08,
+   "virus_max_pct": 0.2
+  },
+  {
+   "id": "inicial_2",
+   "nombre": "Inicial II",
+   "clase": "Básica",
+   "orden": 4,
+   "ambiente": "campo",
+   "costo_kg": 894.0,
+   "peso_relativo": 0.17,
+   "virus_max_pct": 0.6
+  },
+  {
+   "id": "inicial_3",
+   "nombre": "Inicial III",
+   "clase": "Básica",
+   "orden": 5,
+   "ambiente": "campo",
+   "costo_kg": 713.0,
+   "peso_relativo": 0.21,
+   "virus_max_pct": 1.0
+  },
+  {
+   "id": "prefundacion",
+   "nombre": "Prefundación",
+   "clase": "Básica",
+   "orden": 6,
+   "ambiente": "campo",
+   "costo_kg": 608.0,
+   "peso_relativo": 0.16,
+   "virus_max_pct": 1.6
+  },
+  {
+   "id": "fundacion",
+   "nombre": "Fundación",
+   "clase": "Básica",
+   "orden": 7,
+   "ambiente": "campo",
+   "costo_kg": 521.0,
+   "peso_relativo": 0.14,
+   "virus_max_pct": 2.0
+  },
+  {
+   "id": "registrada",
+   "nombre": "Registrada",
+   "clase": "Certificada",
+   "orden": 8,
+   "ambiente": "campo",
+   "costo_kg": 428.0,
+   "peso_relativo": 0.13,
+   "virus_max_pct": 6.0
+  },
+  {
+   "id": "certificada",
+   "nombre": "Certificada",
+   "clase": "Certificada",
+   "orden": 9,
+   "ambiente": "campo",
+   "costo_kg": 356.0,
+   "peso_relativo": 0.06,
+   "virus_max_pct": 15.0
+  }
+ ],
+ "calibres": {
+  "1": {
+   "min_mm": 45.0,
+   "max_mm": 90.0,
+   "label": "Grado 1 (45–90 mm)"
+  },
+  "2": {
+   "min_mm": 33.0,
+   "max_mm": 45.0,
+   "label": "Grado 2 (33–45 mm)"
+  },
+  "3": {
+   "min_mm": 20.0,
+   "max_mm": 33.0,
+   "label": "Grado 3 (20–33 mm)"
+  },
+  "4": {
+   "min_mm": null,
+   "max_mm": null,
+   "label": "Grado 4 (libre)"
+  }
+ },
+ "campos": [
+  {
+   "id": "calafate",
+   "nombre": "Campo El Calafate — Santa Cruz",
+   "ha": 22.6,
+   "rinde": 26.4,
+   "zona": "Patagonia austral",
+   "categorias_altas": true
+  },
+  {
+   "id": "tres_arroyos",
+   "nombre": "Campo Tres Arroyos",
+   "ha": 68.4,
+   "rinde": 37.2,
+   "zona": "Sudeste bonaerense",
+   "categorias_altas": false
+  },
+  {
+   "id": "san_cayetano",
+   "nombre": "Campo San Cayetano",
+   "ha": 54.7,
+   "rinde": 36.1,
+   "zona": "Sudeste bonaerense",
+   "categorias_altas": false
+  },
+  {
+   "id": "gonzalez_chaves",
+   "nombre": "Campo González Chaves",
+   "ha": 43.9,
+   "rinde": 34.8,
+   "zona": "Sudeste bonaerense",
+   "categorias_altas": false
+  },
+  {
+   "id": "napaleofu",
+   "nombre": "Campo Napaleofú — Balcarce",
+   "ha": 24.7,
+   "rinde": 33.4,
+   "zona": "Sudeste bonaerense",
+   "categorias_altas": false
+  }
+ ],
+ "clientes": [
+  {
+   "id": "vn_ind",
+   "nombre": "Southern Foods Vietnam Co., Ltd.",
+   "tipo": "exportacion",
+   "pais": "Vietnam",
+   "puerto": "Puerto de Mar del Plata",
+   "destino_puerto": "Hai Phong",
+   "incoterm": "FOB",
+   "moneda": "USD",
+   "canal": "industrial",
+   "requisitos_onpf": [
+    "Libre de Ralstonia solanacearum",
+    "Libre de Globodera spp.",
+    "Tratamiento en origen declarado",
+    "Análisis de virus PVY < 0,5%"
+   ]
+  },
+  {
+   "id": "br_sul",
+   "nombre": "Batata Sul Comércio Ltda.",
+   "tipo": "exportacion",
+   "pais": "Brasil",
+   "puerto": "Paso fronterizo Uruguaiana",
+   "destino_puerto": "Curitiba",
+   "incoterm": "CIF",
+   "moneda": "USD",
+   "canal": "distribución",
+   "requisitos_onpf": [
+    "Certificado fitosanitario MERCOSUR",
+    "Libre de Synchytrium endobioticum",
+    "Declaración de origen varietal"
+   ]
+  },
+  {
+   "id": "uy_este",
+   "nombre": "Semillas del Este S.R.L.",
+   "tipo": "exportacion",
+   "pais": "Uruguay",
+   "puerto": "Paso fronterizo Fray Bentos",
+   "destino_puerto": "Montevideo",
+   "incoterm": "CIF",
+   "moneda": "USD",
+   "canal": "distribución",
+   "requisitos_onpf": [
+    "Certificado fitosanitario MERCOSUR",
+    "Análisis de virus PVY < 1%"
+   ]
+  },
+  {
+   "id": "int_tandil",
+   "nombre": "Establecimiento Los Cardales — Tandil",
+   "tipo": "interno",
+   "pais": "Argentina",
+   "canal": "productor"
+  },
+  {
+   "id": "int_balcarce",
+   "nombre": "Agrícola Balcarce S.A.",
+   "tipo": "interno",
+   "pais": "Argentina",
+   "canal": "productor"
+  },
+  {
+   "id": "int_noa",
+   "nombre": "Semillera del Norte — Tafí del Valle",
+   "tipo": "interno",
+   "pais": "Argentina",
+   "canal": "semillero"
+  },
+  {
+   "id": "int_cordoba",
+   "nombre": "Papas Villa Dolores S.R.L.",
+   "tipo": "interno",
+   "pais": "Argentina",
+   "canal": "productor"
+  },
+  {
+   "id": "int_otamendi",
+   "nombre": "Hnos. Etcheverry — Otamendi",
+   "tipo": "interno",
+   "pais": "Argentina",
+   "canal": "productor"
+  }
+ ],
+ "docs_exportacion": [
+  {
+   "id": "factura_proforma",
+   "nombre": "Factura proforma",
+   "organismo": "Papasud S.A.",
+   "emite": "empresa",
+   "requiere": [
+    "cliente",
+    "incoterm",
+    "lotes",
+    "kilos",
+    "precio_unitario",
+    "moneda"
+   ]
+  },
+  {
+   "id": "packing_list",
+   "nombre": "Packing list",
+   "organismo": "Papasud S.A.",
+   "emite": "empresa",
+   "requiere": [
+    "lotes",
+    "bultos",
+    "peso_neto",
+    "peso_bruto",
+    "contenedor"
+   ]
+  },
+  {
+   "id": "certificado_inase",
+   "nombre": "Certificado de exportación de semillas",
+   "organismo": "INASE",
+   "emite": "organismo",
+   "norma": "Res. SAGYP 715/94",
+   "requiere": [
+    "variedad",
+    "categoria",
+    "kilos",
+    "inscripcion_rncfs",
+    "catalogo_nacional",
+    "packing_list"
+   ]
+  },
+  {
+   "id": "certificado_fitosanitario",
+   "nombre": "Certificado Fitosanitario de Exportación",
+   "organismo": "SENASA",
+   "emite": "organismo",
+   "requiere": [
+    "certificado_inase",
+    "analisis_sanitario",
+    "pais_destino",
+    "requisitos_onpf",
+    "permiso_embarque"
+   ]
+  },
+  {
+   "id": "permiso_embarque",
+   "nombre": "Permiso de embarque",
+   "organismo": "Aduana (DGA)",
+   "emite": "despachante",
+   "requiere": [
+    "factura",
+    "posicion_arancelaria",
+    "puerto",
+    "contenedor"
+   ]
+  },
+  {
+   "id": "certificado_origen",
+   "nombre": "Certificado de origen",
+   "organismo": "Cámara de Comercio",
+   "emite": "organismo",
+   "requiere": [
+    "factura",
+    "pais_destino",
+    "posicion_arancelaria"
+   ]
+  }
+ ],
+ "meta": {
+  "empresa": "Papasud S.A.",
+  "hoy": "2026-08-22",
+  "hectareas": 214.3,
+  "produccion_ciclo_kg": 7468490.0,
+  "campania": "2025/26",
+  "posicion_arancelaria": "0701.10.00",
+  "sintetico": true
+ }
+}

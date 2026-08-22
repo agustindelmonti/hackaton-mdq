@@ -1,0 +1,90 @@
+{
+ "piezas": [
+  {
+   "id": "K-001",
+   "nodo": "deposito",
+   "efecto": "suprime_alerta",
+   "titulo": "Un bolsón nunca pesa mil justo",
+   "texto": "Diferencias de menos del 0,5% en un conteo de bolsones son de tara, no de faltante. No me alertes por eso.",
+   "texto_en": "Differences under 0.5% in a big-bag count are tare, not shrinkage. Don't alert me on those.",
+   "params": {
+    "umbral_pct": 0.5
+   },
+   "autor": "ruben",
+   "fecha": "2025-10-08",
+   "activa": true
+  },
+  {
+   "id": "K-002",
+   "nodo": "deposito",
+   "efecto": "genera_alerta",
+   "titulo": "Cámara por encima de 4 °C, la dormancia se rompe",
+   "texto": "Si una cámara pasa de 4 grados más de 48 horas, avisame: los lotes que están adentro empiezan a brotar y pierden categoría.",
+   "texto_en": "If a chamber goes above 4 °C for more than 48 hours, tell me: the lots inside start sprouting and lose their grade.",
+   "params": {
+    "temp_max": 4.0,
+    "horas": 48
+   },
+   "autor": "dalia",
+   "fecha": "2025-12-28",
+   "activa": true
+  },
+  {
+   "id": "K-003",
+   "nodo": "despachos",
+   "efecto": "requiere_aprobacion",
+   "titulo": "Exportación no sale sin análisis vigente",
+   "texto": "Ninguna carga de exportación se emite si el análisis sanitario del lote tiene más de 180 días. Eso lo firmo yo.",
+   "texto_en": "No export load goes out if the lot's sanitary analysis is older than 180 days. I sign off on that myself.",
+   "params": {
+    "dias_analisis": 180
+   },
+   "autor": "dalia",
+   "fecha": "2025-09-23",
+   "activa": true
+  },
+  {
+   "id": "K-004",
+   "nodo": "movimientos",
+   "efecto": "genera_alerta",
+   "titulo": "Un traslado sin confirmar en destino es plata en el aire",
+   "texto": "Si un traslado entre ubicaciones no se confirma en destino dentro de las 72 horas, quiero saberlo. Esos kilos no están en ningún lado.",
+   "texto_en": "If a transfer between locations isn't confirmed at destination within 72 hours, I want to know. Those kilos are nowhere.",
+   "params": {
+    "horas": 72
+   },
+   "autor": "ruben",
+   "fecha": "2025-09-30",
+   "activa": true
+  },
+  {
+   "id": "K-005",
+   "nodo": "lotes",
+   "efecto": "contexto",
+   "titulo": "El galpón es tránsito, no depósito",
+   "texto": "Chapadmalal no tiene frío. Lo que entra ahí sale en menos de tres semanas o se echa a perder. No es una cámara más.",
+   "texto_en": "Chapadmalal has no refrigeration. Whatever goes in there ships within three weeks or it spoils. It's not just another chamber.",
+   "params": {
+    "dias_max": 21
+   },
+   "autor": "ruben",
+   "fecha": "2026-03-15",
+   "activa": true
+  },
+  {
+   "id": "K-006",
+   "nodo": "lotes",
+   "efecto": "ajusta_umbral",
+   "titulo": "La Patagonia da otra sanidad",
+   "texto": "El material de El Calafate viene con carga viral mucho más baja que el del sudeste. Para esos lotes el umbral de virus puede ser más exigente.",
+   "texto_en": "Material from El Calafate comes with a much lower viral load than the southeast's. For those lots the virus threshold can be stricter.",
+   "params": {
+    "zona": "Patagonia austral",
+    "factor": 0.6
+   },
+   "autor": "dalia",
+   "fecha": "2026-07-04",
+   "activa": true
+  }
+ ]
+}
