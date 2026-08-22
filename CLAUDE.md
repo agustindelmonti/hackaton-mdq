@@ -216,6 +216,4 @@ Por valor de demo por minuto. **Cortar desde abajo.**
 | `hackathon-winning-strategy.md` | Psicología del jurado, control de scope, qué fakear |
 | `polfin-reusable-assets.md` / `polpilot-reusable-assets.md` | Qué código levantar y de dónde |
 | `cursor-hackathon-mar-del-plata-2026.md` | Logística del evento, sponsors, créditos |
-| `track-b-handoff.md` | Modelo real Campo→Lote, endpoints `/api/papasud` |
-| `cadena-planta-papasud.md` | **Charla 22/08.** Planta como hub, orden de carga, báscula, frío que vuelve |
 | `papasud.md` | Notas originales del brief (previas a la investigación) |

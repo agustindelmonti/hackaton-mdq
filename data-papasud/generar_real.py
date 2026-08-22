@@ -6,18 +6,10 @@ Este genera el modelo de LINAJE: Campo -> Pivote -> Cuadrante -> Lote, con el
 flujo real de la mercadería:
 
     LOTE (campo)
-       |--> PLANTA (Mar del Plata)
-       |       recepción/báscula → reclasificación → playa
-       |         |--> CLIENTE
+       |--> PLANTA (Mar del Plata, con báscula) --> CLIENTE
        |         |--> FRIGORÍFICO --> vuelve a PLANTA --> CLIENTE
-       |         |--> FRIGORÍFICO --> CLIENTE (poco común)
-       |--> FRIGORÍFICO (directo, poco común)
+       |                          |--> CLIENTE (directo, poco común)
        |--> CLIENTE (directo desde el campo, poco común)
-
-En el medio entre el lote y el frío viven entidades de verdad, no un salto:
-orden de carga (papel, porque en el campo a veces no hay señal), viaje en
-tolva, planilla de recepción con peso de báscula, reclasificación (granel
-con tierra → bolsas).
 
 Todo lo que compone el stock es un LIBRO DE MOVIMIENTOS append-only. El stock
 de hoy es la SUMA de esos movimientos, nunca un número puesto a mano. Si un
@@ -66,15 +58,13 @@ def generar_lotes() -> list[dict]:
         pivote, cuadrante = slots_santa_ana[i % len(slots_santa_ana)]
         lotes.append(_nuevo_lote(rotulo, "santa_ana", pivote, cuadrante))
 
-    # Los 10 códigos sueltos se reparten entre los otros campos, con la
-    # excepción forzada: lote 300 vive en Cayetano Chávez (charla 22/08).
-    otros_campos = ["marisol", "trevelin", "oriente", "san_cayetano"]
+    # Los 10 códigos sueltos se reparten entre los otros tres campos.
+    otros_campos = ["marisol", "trevelin", "oriente"]
     for i, num in enumerate(D.LOTES_SUELTOS):
-        rotulo = str(num)
-        campo_id = D.LOTE_CAMPO_FORZADO.get(rotulo) or otros_campos[i % len(otros_campos)]
+        campo_id = otros_campos[i % len(otros_campos)]
         pivote = D.PIVOTES[i % 2]
         cuadrante = D.CUADRANTES[i % len(D.CUADRANTES)]
-        lotes.append(_nuevo_lote(rotulo, campo_id, pivote, cuadrante))
+        lotes.append(_nuevo_lote(str(num), campo_id, pivote, cuadrante))
 
     return lotes
 
@@ -88,15 +78,12 @@ def _nuevo_lote(rotulo: str, campo_id: str, pivote: str, cuadrante: int) -> dict
     color_bolsa = R.choice(D.COLORES_BOLSA)
     color_hilo = R.choice(D.COLORES_HILO)
     ingreso = dias(R.randint(30, 210))
-    campo = D.CAMPO_POR_ID[campo_id]
     return {
         # REGLA DURA: una sola variedad por lote. No hay campo "variedades".
         "id": rotulo,
         "lote": rotulo,
         "campo_id": campo_id,
-        "campo": campo["nombre"],
-        "partido": campo.get("partido"),
-        "provincia": campo.get("provincia"),
+        "campo": D.CAMPO_POR_ID[campo_id]["nombre"],
         "pivote": pivote,
         "cuadrante": cuadrante,
         "variedad_id": var["id"],
@@ -112,7 +99,6 @@ def _nuevo_lote(rotulo: str, campo_id: str, pivote: str, cuadrante: int) -> dict
         "color_bolsa": color_bolsa,
         "color_hilo": color_hilo,
         "fecha_cosecha": iso(ingreso),
-        "origen_laboratorio": cat["id"] == "inicial_2" and R.random() < 0.35,
     }
 
 
@@ -131,21 +117,6 @@ def _camion() -> str:
     return f"{letras}{numeros}{letras2}"
 
 
-def _chofer_de(transp: dict) -> str | None:
-    return R.choice(transp["choferes"]) if transp["choferes"] else None
-
-
-def _obs_cosecha() -> tuple[float, str]:
-    temp = round(R.uniform(8.0, 18.5), 1)
-    notas = [
-        f"Cosecha a {temp} °C. Papa sucia, viene con tierra.",
-        f"Temperatura de cosecha {temp} °C. Tolva a granel.",
-        f"{temp} °C en lote. Sin señal: orden de carga en papel.",
-        f"Cosecha {temp} °C. Remito se carga al llegar a planta.",
-    ]
-    return temp, R.choice(notas)
-
-
 class Ledger:
     """El libro append-only. El stock es SIEMPRE una vista derivada de esto."""
 
@@ -153,12 +124,6 @@ class Ledger:
         self.movs: list[dict] = []
         self._n = 0
         self._remito = 4800
-        self.ordenes: list[dict] = []
-        self.recepciones: list[dict] = []
-        self.reclasificaciones: list[dict] = []
-        self._oc = 0
-        self._rec = 0
-        self._rcl = 0
 
     def _numero(self) -> str:
         self._n += 1
@@ -168,28 +133,13 @@ class Ledger:
         self._remito += 1
         return f"R-{self._remito}"
 
-    def _num_oc(self) -> str:
-        self._oc += 1
-        return f"OC-{self._oc:04d}"
-
-    def _num_rec(self) -> str:
-        self._rec += 1
-        return f"REC-{self._rec:04d}"
-
-    def _num_rcl(self) -> str:
-        self._rcl += 1
-        return f"RCL-{self._rcl:04d}"
-
     def agregar(self, **kw) -> dict:
-        tipo = kw.get("tipo")
         m = {
             "numero": self._numero(),
             "remito": kw.pop("remito", None) or self._num_remito(),
             "confirmado_en_destino": True,
-            "canal": kw.pop("canal", None) or R.choice(["voz", "texto", "foto"]),
+            "canal": R.choice(["voz", "texto", "foto"]),
             "registrado_por": R.choice(["ruben", "marcos", "nestor", "maxi"]),
-            "tipo_vehiculo": kw.pop("tipo_vehiculo", None) or D.VEHICULO_POR_TIPO.get(tipo),
-            "zona_planta": kw.pop("zona_planta", None) or D.ZONA_PLANTA_POR_TIPO.get(tipo),
         }
         m.update(kw)
         self.movs.append(m)
@@ -223,41 +173,29 @@ def generar_movimientos(lotes: list[dict]) -> Ledger:
         kg_total = lote["kg_cosechado"]
         f0 = datetime.date.fromisoformat(lote["fecha_cosecha"])
 
-        camino = R.choices(
-            ["directo_planta", "via_frigorifico", "vuelta_planta",
-             "campo_a_frio", "campo_a_cliente"],
-            weights=[0.28, 0.26, 0.36, 0.06, 0.04],
-        )[0]
-
-        if camino == "campo_a_cliente":
-            _entregar_a_cliente(lg, lote, campo_ubic, lote["campo"],
-                                 kg_total, f0 + datetime.timedelta(days=R.randint(1, 5)),
-                                 atajo="campo")
-            continue
-
-        if camino == "campo_a_frio":
-            frigo = R.choice(D.FRIGORIFICOS)
-            frigo_ubic = f"frigorifico:{frigo['id']}"
-            kg_neto = _viaje_desde_campo(lg, lote, campo_ubic, frigo_ubic,
-                                         frigo["nombre"], f0, tipo="campo_a_frio",
-                                         kg=kg_total)
-            _entregar_a_cliente(lg, lote, frigo_ubic, frigo["nombre"],
-                                 kg_neto, f0 + datetime.timedelta(days=R.randint(8, 40)))
-            continue
-
         # (a) La cosecha entra a la planta en 1 a 3 camiones (tolva, a granel).
         n_camiones = R.randint(1, 3)
         restos = _repartir(kg_total, n_camiones)
         pesos_netos = []
-        ingresos = []
         for i, kg in enumerate(restos):
-            peso_neto = round(kg * R.uniform(0.985, 1.0), 1)  # báscula: tierra/humedad
+            peso_neto = round(kg * R.uniform(0.985, 1.0), 1)  # la báscula pesa un poco menos (tierra/humedad)
             pesos_netos.append(peso_neto)
-            _viaje_desde_campo(
-                lg, lote, campo_ubic, planta_id, D.PLANTA["nombre"],
-                f0 + datetime.timedelta(days=i), tipo="ingreso_tolva", kg=peso_neto,
+            transp = R.choice(D.TRANSPORTISTAS)
+            lg.agregar(
+                tipo="ingreso_tolva",
+                dtv=_dtv(lg._n + 1),
+                fecha=iso(f0 + datetime.timedelta(days=i)),
+                lote_id=lote["id"], variedad_id=lote["variedad_id"],
+                kg=peso_neto, bolsas=None,
+                origen_id=campo_ubic, origen_nombre=lote["campo"],
+                destino_id=planta_id, destino_nombre=D.PLANTA["nombre"],
+                transportista_id=transp["id"],
+                chofer=R.choice(transp["choferes"]) if transp["choferes"] else None,
+                camion=_camion(),
+                peso_bascula_kg=peso_neto,
+                valor_flete=round(peso_neto / 1000 * R.uniform(3_200, 4_600), -1),
+                observaciones="Ingreso Tolva — a granel, con tierra",
             )
-            ingresos.append(lg.movs[-1])
 
         # Lo que queda disponible en planta es lo que la BÁSCULA acreditó, no
         # el reparto teórico del lote (la báscula pesa un poco menos: tierra,
@@ -265,9 +203,11 @@ def generar_movimientos(lotes: list[dict]) -> Ledger:
         kg_en_planta = round(sum(pesos_netos), 1)
         f_actual = f0 + datetime.timedelta(days=n_camiones)
 
-        # Reclasificación: granel con tierra → bolsas. No mueve stock (sigue
-        # en planta); deja el rastro de la estación del medio.
-        _reclasificar(lg, lote, ingresos, kg_en_planta, f_actual)
+        # (b) De la planta, la mercadería toma distintos caminos.
+        camino = R.choices(
+            ["directo_planta", "via_frigorifico", "vuelta_planta"],
+            weights=[0.30, 0.30, 0.40],
+        )[0]
 
         if camino == "directo_planta":
             _entregar_a_cliente(lg, lote, planta_id, D.PLANTA["nombre"],
@@ -289,7 +229,7 @@ def generar_movimientos(lotes: list[dict]) -> Ledger:
             origen_id=planta_id, origen_nombre=D.PLANTA["nombre"],
             destino_id=frigo_ubic, destino_nombre=frigo["nombre"],
             transportista_id=transp["id"],
-            chofer=_chofer_de(transp),
+            chofer=R.choice(transp["choferes"]) if transp["choferes"] else None,
             camion=_camion(),
             tarjeta_declarada=lote["tarjeta"], color_bolsa=lote["color_bolsa"],
             color_hilo=lote["color_hilo"],
@@ -315,7 +255,7 @@ def generar_movimientos(lotes: list[dict]) -> Ledger:
             origen_id=frigo_ubic, origen_nombre=frigo["nombre"],
             destino_id=planta_id, destino_nombre=D.PLANTA["nombre"],
             transportista_id=transp["id"],
-            chofer=_chofer_de(transp),
+            chofer=R.choice(transp["choferes"]) if transp["choferes"] else None,
             camion=_camion(),
             tarjeta_declarada=lote["tarjeta"], color_bolsa=lote["color_bolsa"],
             color_hilo=lote["color_hilo"],
@@ -328,127 +268,6 @@ def generar_movimientos(lotes: list[dict]) -> Ledger:
     return lg
 
 
-def _viaje_desde_campo(lg: Ledger, lote: dict, origen_id: str, destino_id: str,
-                       destino_nombre: str, fecha: datetime.date, *,
-                       tipo: str, kg: float) -> float:
-    """Orden de carga (papel en el campo) + viaje + planilla de recepción
-    cuando el destino es la planta. El kg que entra al ledger es el de la
-    báscula si hay recepción; si no, el declarado en la orden."""
-    transp = R.choice(D.TRANSPORTISTAS)
-    chofer = _chofer_de(transp)
-    camion = _camion()
-    temp, obs = _obs_cosecha()
-    kg_estimado = round(kg * R.uniform(0.97, 1.04), 1)
-    sin_remito = tipo == "ingreso_tolva" and R.random() < 0.08
-    oc_id = lg._num_oc()
-    oc = {
-        "id": oc_id,
-        "fecha": iso(fecha),
-        "lote_id": lote["id"],
-        "variedad_id": lote["variedad_id"],
-        "variedad": lote["variedad"],
-        "campo_id": lote["campo_id"],
-        "campo": lote["campo"],
-        "kg_estimado": kg_estimado,
-        "kg_estimado_pendiente_pesaje": True,
-        "transportista_id": transp["id"],
-        "chofer": chofer,
-        "camion": camion,
-        "tipo_vehiculo": D.VEHICULO_POR_TIPO[tipo],
-        "canal": "papel",
-        "sin_senal": True,
-        "sin_remito": sin_remito,
-        "temperatura_cosecha_c": temp,
-        "observaciones": obs,
-        "destino_id": destino_id,
-        "destino_nombre": destino_nombre,
-        "estado": "recibida",
-    }
-    lg.ordenes.append(oc)
-
-    peso_bascula = round(kg, 1) if tipo == "ingreso_tolva" else None
-    rec_id = None
-    if tipo == "ingreso_tolva":
-        rec_id = lg._num_rec()
-        lg.recepciones.append({
-            "id": rec_id,
-            "orden_carga_id": oc_id,
-            "fecha": iso(fecha),
-            "lote_id": lote["id"],
-            "variedad_id": lote["variedad_id"],
-            "variedad": lote["variedad"],
-            "campo_id": lote["campo_id"],
-            "campo": lote["campo"],
-            "zona_id": "recepcion",
-            "zona": "Recepción / báscula",
-            "kg_estimado": kg_estimado,
-            "peso_bascula_kg": peso_bascula,
-            "diferencia_kg": round((peso_bascula or 0) - kg_estimado, 1),
-            "transportista_id": transp["id"],
-            "chofer": chofer,
-            "camion": camion,
-            "tipo_vehiculo": "tolva",
-            "temperatura_cosecha_c": temp,
-            "observaciones": "Planilla de recepción — primer ingreso a planta.",
-            "sin_remito_de_origen": sin_remito,
-            "registrado_por": R.choice(["ruben", "marcos", "nestor"]),
-        })
-
-    mov = lg.agregar(
-        tipo=tipo,
-        dtv=_dtv(lg._n + 1),
-        fecha=iso(fecha),
-        lote_id=lote["id"], variedad_id=lote["variedad_id"],
-        kg=round(kg, 1),
-        bolsas=None if tipo == "ingreso_tolva" else round(kg / lote["kg_por_bolsa"]),
-        origen_id=origen_id, origen_nombre=lote["campo"],
-        destino_id=destino_id, destino_nombre=destino_nombre,
-        transportista_id=transp["id"],
-        chofer=chofer,
-        camion=camion,
-        peso_bascula_kg=peso_bascula,
-        valor_flete=round(kg / 1000 * R.uniform(3_200, 4_600), -1),
-        observaciones=("Ingreso Tolva — a granel, con tierra" if tipo == "ingreso_tolva"
-                       else f"Campo a frío — {destino_nombre}"),
-        orden_carga_id=oc_id,
-        recepcion_id=rec_id,
-        temperatura_cosecha_c=temp,
-        canal="papel" if sin_remito else None,
-    )
-    oc["movimiento_id"] = mov["numero"]
-    oc["remito"] = mov["remito"]
-    if rec_id:
-        lg.recepciones[-1]["movimiento_id"] = mov["numero"]
-        lg.recepciones[-1]["remito"] = mov["remito"]
-    return round(kg, 1)
-
-
-def _reclasificar(lg: Ledger, lote: dict, ingresos: list[dict],
-                  kg_en_planta: float, fecha: datetime.date) -> None:
-    bolsas = round(kg_en_planta / lote["kg_por_bolsa"])
-    tierra = round(sum(max(0.0, (m.get("kg") or 0) * 0.008) for m in ingresos), 1)
-    lg.reclasificaciones.append({
-        "id": lg._num_rcl(),
-        "fecha": iso(fecha),
-        "lote_id": lote["id"],
-        "variedad_id": lote["variedad_id"],
-        "variedad": lote["variedad"],
-        "zona_id": "reclasificacion",
-        "zona": "Reclasificación y empaque",
-        "kg_granel": kg_en_planta,
-        "kg_embolsado": kg_en_planta,
-        "bolsas": bolsas,
-        "calibre_id": lote["calibre_id"],
-        "calibre": lote["calibre"],
-        "tierra_kg": tierra,
-        "ingresos": [m["numero"] for m in ingresos],
-        "observaciones": (
-            "Granel con tierra → bolsas. La merma de tierra ya la descontó la "
-            "báscula; acá no se vuelve a restar del stock."
-        ),
-    })
-
-
 def _repartir(total: float, n: int) -> list[float]:
     if n == 1:
         return [round(total, 1)]
@@ -458,7 +277,7 @@ def _repartir(total: float, n: int) -> list[float]:
 
 
 def _entregar_a_cliente(lg: Ledger, lote: dict, origen_id: str, origen_nombre: str,
-                         kg: float, fecha: datetime.date, atajo: str | None = None) -> None:
+                         kg: float, fecha: datetime.date) -> None:
     # No todo lo disponible se vende ya: dejamos un remanente vendible (esto
     # es lo que hace que "disponibilidad" tenga sentido en la demo).
     kg_vender = round(kg * R.uniform(0.35, 0.75), 1)
@@ -467,11 +286,6 @@ def _entregar_a_cliente(lg: Ledger, lote: dict, origen_id: str, origen_nombre: s
     cliente = R.choice(D.CLIENTES)
     bolsas = round(kg_vender / lote["kg_por_bolsa"])
     transp = R.choice(D.TRANSPORTISTAS)
-    nota = f"Entrega a {cliente['nombre']}"
-    if atajo == "campo":
-        nota = f"Atajo campo → cliente (sin pasar por planta) — {cliente['nombre']}"
-    elif origen_id.startswith("frigorifico:"):
-        nota = f"Sale de frío directo a {cliente['nombre']} (poco común)"
     lg.agregar(
         tipo="entrega_cliente",
         dtv=_dtv(lg._n + 1),
@@ -482,13 +296,12 @@ def _entregar_a_cliente(lg: Ledger, lote: dict, origen_id: str, origen_nombre: s
         destino_id=f"cliente:{cliente['id']}", destino_nombre=cliente["nombre"],
         cliente_id=cliente["id"],
         transportista_id=transp["id"],
-        chofer=_chofer_de(transp),
+        chofer=R.choice(transp["choferes"]) if transp["choferes"] else None,
         camion=_camion(),
         tarjeta_declarada=lote["tarjeta"], color_bolsa=lote["color_bolsa"],
         color_hilo=lote["color_hilo"],
         valor_flete=round(kg_vender / 1000 * R.uniform(3_000, 4_200), -1),
-        observaciones=nota,
-        zona_planta="playa" if origen_id == D.PLANTA["id"] else None,
+        observaciones=f"Entrega a {cliente['nombre']}",
     )
 
 
@@ -571,11 +384,8 @@ def plantar_inconsistencias(lg: Ledger, lotes: list[dict]) -> dict:
 
     # 4) FECHA INCOHERENTE — una entrega fechada antes que su propio ingreso.
     m_fecha = R.choice([m for m in lg.movs if m["tipo"] == "entrega_cliente"])
-    ingreso_lote = next((m for m in lg.movs
-                         if m["lote_id"] == m_fecha["lote_id"]
-                         and m["tipo"] in ("ingreso_tolva", "campo_a_frio")), None)
-    if ingreso_lote is None:
-        ingreso_lote = next(m for m in lg.movs if m["lote_id"] == m_fecha["lote_id"])
+    ingreso_lote = next(m for m in lg.movs
+                         if m["lote_id"] == m_fecha["lote_id"] and m["tipo"] == "ingreso_tolva")
     f_ingreso = datetime.date.fromisoformat(ingreso_lote["fecha"])
     m_fecha["fecha"] = iso(f_ingreso - datetime.timedelta(days=5))
     plantadas["fecha_incoherente"] = {
@@ -600,17 +410,6 @@ def plantar_inconsistencias(lg: Ledger, lotes: list[dict]) -> dict:
         "diferencia_kg": round(m_retiro["kg"] - m_envio["kg"], 1),
     }
 
-    # 6) ORDEN DE CARGA SIN REMITO — "che, te lo mandé sin remito". El campo
-    #    cargó el camión y el papel llegó después (o no llegó).
-    ocs_sin = [o for o in lg.ordenes if o.get("sin_remito")]
-    if ocs_sin:
-        oc = ocs_sin[0]
-        plantadas["orden_sin_remito"] = {
-            "orden_carga_id": oc["id"], "lote": oc["lote_id"],
-            "campo": oc["campo"], "camion": oc["camion"],
-            "nota": "Salió del campo sin remito. La recepción en planta lo cargó después.",
-        }
-
     return plantadas
 
 
@@ -622,7 +421,7 @@ def escribir(nombre: str, data) -> None:
     with open(ruta, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
     kb = os.path.getsize(ruta) / 1024
-    print(f"  {nombre:<36} {kb:>8.1f} KB")
+    print(f"  {nombre:<30} {kb:>8.1f} KB")
 
 
 def main() -> None:
@@ -633,8 +432,6 @@ def main() -> None:
     # regla dura: un lote, una sola variedad (por construcción, pero lo verificamos)
     assert all(isinstance(l["variedad_id"], str) for l in lotes)
     assert len({l["id"] for l in lotes}) == len(lotes), "código de lote repetido"
-    lote_300 = next(l for l in lotes if l["id"] == "300")
-    assert lote_300["campo_id"] == "san_cayetano", lote_300["campo_id"]
 
     lg = generar_movimientos(lotes)
     bloqueo = plantar_bloqueo_con_alternativa(lg, lotes)
@@ -651,13 +448,6 @@ def main() -> None:
     assert len(lg.movs) > 100, len(lg.movs)
     assert bloqueo["kg_pedido"] > bloqueo["kg_disponible_en_lote"]
     assert bloqueo["kg_disponible_alternativa"] > 0
-    assert lg.ordenes, "sin órdenes de carga no hay rastro del campo"
-    assert lg.recepciones, "sin planilla de recepción la planta no existe"
-    assert lg.reclasificaciones, "falta la estación del medio (granel → bolsas)"
-    assert any(m["tipo"] == "ingreso_tolva" for m in lg.movs)
-    assert any(m["tipo"] == "campo_a_frio" for m in lg.movs)
-    assert any(m["tipo"] == "entrega_cliente" and m["origen_id"].startswith("campo:")
-               for m in lg.movs)
 
     # Recién ahora plantamos las inconsistencias que el detector de Track B
     # tiene que encontrar (una de ellas ROMPE el cierre en un frigorífico a
@@ -680,54 +470,33 @@ def main() -> None:
     print("Archivos:")
     escribir("lotes_real.json", {"lotes": lotes})
     escribir("movimientos_real.json", {"movimientos": lg.movs})
-    escribir("ordenes_carga_real.json", {"ordenes": lg.ordenes})
-    escribir("recepciones_planta_real.json", {"recepciones": lg.recepciones})
-    escribir("reclasificaciones_real.json", {"reclasificaciones": lg.reclasificaciones})
     escribir("stock_real.json", {"stock": stock_filas})
     escribir("bloqueo_alternativa_real.json", bloqueo)
     escribir("plantadas_real.json", plantadas)
     escribir("catalogos_real.json", {
-        "laboratorio": D.LABORATORIO,
         "campos": D.CAMPOS,
         "variedades": D.VARIEDADES,
         "frigorificos": D.FRIGORIFICOS,
         "planta": D.PLANTA,
-        "zonas_planta": D.ZONAS_PLANTA,
-        "tipos_vehiculo": D.TIPOS_VEHICULO,
         "clientes": D.CLIENTES,
         "transportistas": D.TRANSPORTISTAS,
         "categorias": D.CATEGORIAS,
         "calibres": D.CALIBRES,
-        "roles_operacion": D.ROLES_OPERACION,
-        "sistema_contable": D.SISTEMA_CONTABLE,
-        "tipos_movimiento": D.TIPOS_MOVIMIENTO,
         "meta": {
             "empresa": "Papasud S.A.", "hoy": iso(HOY), "campania": D.CAMPANIA_ACTUAL,
             "sintetico": True,
-            "regla_flujo": (
-                "lote → planta (recepción/báscula → reclasificación → playa) → "
-                "cliente | frío. El frío suele volver a planta. Atajos: campo→frío "
-                "y campo→cliente."
-            ),
             "nota": "Catálogos (variedades, campos, lotes, frigoríficos, clientes, "
                     "transportistas) son datos REALES provistos por Papasud. Los "
-                    "movimientos y kilos son sintéticos pero deterministas. "
-                    "Cayetano Chávez / lote 300 sale de la charla del 22/08.",
+                    "movimientos y kilos son sintéticos pero deterministas.",
         },
     })
 
     kg_total = sum(l["kg_cosechado"] for l in lotes)
-    n_tolva = sum(1 for m in lg.movs if m["tipo"] == "ingreso_tolva")
     print(f"""
 Resumen del dataset real
   Lotes                      {len(lotes)}  (L30-L79 + 10 códigos sueltos)
-  Campos                     {len(D.CAMPOS)}  (incluye Cayetano Chávez)
   Kg cosechados (total)      {kg_total:,.0f} kg
   Movimientos                {len(lg.movs)}
-  Ingresos tolva             {n_tolva}
-  Órdenes de carga           {len(lg.ordenes)}
-  Recepciones de planta      {len(lg.recepciones)}
-  Reclasificaciones          {len(lg.reclasificaciones)}
   Filas de stock (>0)        {len(stock_filas)}
   Bloqueo-con-alternativa    lote {bloqueo['lote_pedido_id']} -> alternativa {bloqueo['lote_alternativa_id']}
   Inconsistencias plantadas  {len(plantadas)}

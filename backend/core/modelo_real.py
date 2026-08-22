@@ -38,9 +38,6 @@ def _cargar() -> dict:
     catalogos = _leer("catalogos_real.json")
     bloqueo_demo = _leer("bloqueo_alternativa_real.json")
     plantadas = _leer("plantadas_real.json")
-    ordenes_carga = _leer("ordenes_carga_real.json")["ordenes"]
-    recepciones = _leer("recepciones_planta_real.json")["recepciones"]
-    reclasificaciones = _leer("reclasificaciones_real.json")["reclasificaciones"]
 
     validar_regla_linaje(lotes)
 
@@ -51,9 +48,6 @@ def _cargar() -> dict:
         "catalogos": catalogos,
         "bloqueo_demo": bloqueo_demo,
         "plantadas": plantadas,
-        "ordenes_carga": ordenes_carga,
-        "recepciones": recepciones,
-        "reclasificaciones": reclasificaciones,
     }
     return _CACHE
 
@@ -107,22 +101,9 @@ def plantadas() -> dict:
     return _cargar()["plantadas"]
 
 
-def ordenes_carga() -> list[dict]:
-    return _cargar()["ordenes_carga"]
-
-
-def recepciones() -> list[dict]:
-    return _cargar()["recepciones"]
-
-
-def reclasificaciones() -> list[dict]:
-    return _cargar()["reclasificaciones"]
-
-
 def nombre_ubicacion(ubicacion_id: str) -> str:
     """'campo:santa_ana' -> 'Santa Ana' · 'planta_mdp' -> 'Planta Mar del Plata'
-    · 'frigorifico:dospanca' -> 'Dospanca' · 'cliente:parmentier' -> 'Parmentier'
-    · 'lab_invitro' -> 'Laboratorio in vitro'"""
+    · 'frigorifico:dospanca' -> 'Dospanca' · 'cliente:parmentier' -> 'Parmentier'"""
     cat = catalogos()
     if ubicacion_id.startswith("campo:"):
         cid = ubicacion_id.split(":", 1)[1]
@@ -135,23 +116,4 @@ def nombre_ubicacion(ubicacion_id: str) -> str:
         return next((c["nombre"] for c in cat["clientes"] if c["id"] == cid), cid)
     if ubicacion_id == cat["planta"]["id"]:
         return cat["planta"]["nombre"]
-    lab = cat.get("laboratorio") or {}
-    if ubicacion_id == lab.get("id"):
-        return lab.get("nombre") or ubicacion_id
     return ubicacion_id
-
-
-def tipo_ubicacion(ubicacion_id: str) -> str:
-    """campo | planta | frigorifico | cliente | laboratorio | desconocido."""
-    if ubicacion_id.startswith("campo:"):
-        return "campo"
-    if ubicacion_id.startswith("frigorifico:"):
-        return "frigorifico"
-    if ubicacion_id.startswith("cliente:"):
-        return "cliente"
-    cat = catalogos()
-    if ubicacion_id == cat["planta"]["id"]:
-        return "planta"
-    if ubicacion_id == (cat.get("laboratorio") or {}).get("id"):
-        return "laboratorio"
-    return "desconocido"
