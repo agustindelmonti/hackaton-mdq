@@ -2419,6 +2419,123 @@ def admin_reset_demo(token: str):
     return {"ok": True, "mensaje": "demo restaurado al estado canónico"}
 
 
+# ---------------------------------------------------------------------------
+# TRACK B · feat/modelo-real — el modelo real de Papasud (Campo -> Lote,
+# libro de movimientos, bloqueo-con-alternativa, inconsistencias, liquidación).
+# Namespace propio (/api/papasud/...) para no pisar el modelo viejo que
+# Track A y Track C ya construyeron encima. Ver PLAN_TRACKS_PAPASUD.md.
+# ---------------------------------------------------------------------------
+from core import (  # noqa: E402
+    modelo_real as _modelo_real,
+    stock_real as _stock_real,
+    inconsistencias_papasud as _inconsistencias_papasud,
+    liquidacion as _liquidacion,
+    importer_papasud as _importer_papasud,
+)
+
+
+@app.get("/api/papasud/catalogos")
+def papasud_catalogos(_u: dict = Depends(usuario_actual)):
+    return _modelo_real.catalogos()
+
+
+@app.get("/api/papasud/lotes")
+def papasud_lotes(_u: dict = Depends(usuario_actual)):
+    return {"lotes": _modelo_real.lotes()}
+
+
+@app.get("/api/papasud/mapa")
+def papasud_mapa(_u: dict = Depends(usuario_actual)):
+    """La foto de dónde está cada kilo: una fila por (lote, ubicación) con
+    stock vivo. Es la vista que el mapa de la operación (Track C) consume
+    directo, sin recalcular nada — el stock ya salió del núcleo."""
+    return {"filas": _stock_real.stock_por_ubicacion()}
+
+
+@app.get("/api/papasud/disponibilidad")
+def papasud_disponibilidad(variedad_id: str, calibre_id: str | None = None,
+                           _u: dict = Depends(usuario_actual)):
+    """'¿Tengo 1.200 bolsas de Spunta?' — la consulta que abre la demo
+    (Track A la narra, esto la calcula)."""
+    return _stock_real.resumen_variedad(variedad_id)
+
+
+class VerificarPedidoRequest(BaseModel):
+    variedad_id: str
+    kg_pedido: float
+    lote_id: str | None = None
+    ubicacion_id: str | None = None
+    calibre_requerido: str | None = None
+
+
+@app.post("/api/papasud/pedido/verificar")
+def papasud_verificar_pedido(req: VerificarPedidoRequest, _u: dict = Depends(usuario_actual)):
+    """El bloqueo-con-alternativa: 'no hay tanto en este lugar, pero se puede
+    vender yendo a este otro lote'. Motor 100% determinista — Ángela sólo
+    narra este resultado, nunca elige un lote por su cuenta."""
+    return _stock_real.verificar_pedido(
+        req.variedad_id, req.kg_pedido, req.lote_id, req.ubicacion_id, req.calibre_requerido)
+
+
+@app.get("/api/papasud/pedido/verificar-demo")
+def papasud_verificar_pedido_demo(_u: dict = Depends(usuario_actual)):
+    """El escenario plantado en el dataset, listo para la demo: pedido que
+    excede un lote puntual con una alternativa real disponible."""
+    caso = _modelo_real.bloqueo_demo()
+    return _stock_real.verificar_pedido(
+        caso["variedad_id"], caso["kg_pedido"], caso["lote_pedido_id"], caso["ubicacion_pedido_id"])
+
+
+@app.get("/api/papasud/inconsistencias")
+def papasud_inconsistencias(_u: dict = Depends(usuario_actual)):
+    """'Arreglar el pasado': lo que está roto en la operación, con el/los
+    movimiento(s) exacto(s) que lo sostienen."""
+    hallazgos = _inconsistencias_papasud.detectar()
+    return {"hallazgos": hallazgos, "total": len(hallazgos)}
+
+
+@app.get("/api/papasud/liquidacion/transportistas")
+def papasud_liquidacion_transportistas(desde: str | None = None, hasta: str | None = None,
+                                       _u: dict = Depends(usuario_actual)):
+    return {"transportistas": _liquidacion.liquidacion_transportistas(desde, hasta)}
+
+
+@app.get("/api/papasud/liquidacion/frigorificos")
+def papasud_liquidacion_frigorificos(desde: str | None = None, hasta: str | None = None,
+                                     _u: dict = Depends(usuario_actual)):
+    return {"frigorificos": _liquidacion.liquidacion_frigorificos(desde, hasta)}
+
+
+@app.post("/api/papasud/importar-planilla")
+async def papasud_importar_planilla(
+    archivo: UploadFile = File(...),
+    _u: dict = Depends(require_feature("cargar")),
+):
+    """La puerta para la planilla real de 12 solapas. Sólo estructura y avisa
+    qué no pudo interpretar — nada se persiste acá (regla de arquitectura #4:
+    nada persiste sin confirmación humana)."""
+    import tempfile
+    nombre = archivo.filename or "planilla.xlsx"
+    ext = os.path.splitext(nombre)[1].lower() or ".xlsx"
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(status_code=400,
+                            detail=i18n.t("api.archivo_vacio", _lang(_u)))
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
+    try:
+        tmp.write(contenido)
+        tmp.close()
+        resultado = _importer_papasud.importar(tmp.name)
+    except Exception as e:  # noqa: BLE001 — un Excel roto es un 400, no un 500
+        raise HTTPException(status_code=400, detail=str(e)[:200])
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+    return resultado
+
+
 _STATIC_DIR = os.environ.get("POLPILOT_STATIC_DIR", "")
 if _STATIC_DIR and os.path.isdir(_STATIC_DIR):
     @app.get("/{spa_path:path}", include_in_schema=False)
