@@ -16,7 +16,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from authz import usuario_actual
-from core import comercial, consulta_nl, disponibilidad as disp, papasud_real as real
+from core import (comercial, consulta_nl, disponibilidad as disp,
+                  mapa_real, papasud_real as real)
 
 router = APIRouter(prefix="/api/cerebro", tags=["cerebro"])
 
@@ -142,6 +143,42 @@ def comprometer(req: Pedido, u: dict = Depends(usuario_actual)):
 def pedidos(_u: dict = Depends(usuario_actual)):
     _exigir_datos()
     return {"pedidos": disp.pedidos_abiertos()}
+
+
+# ===========================================================================
+# 2b · EL MAPA DE LA OPERACIÓN — con la planta en el medio
+# ===========================================================================
+@router.get("/mapa")
+def mapa(_u: dict = Depends(usuario_actual)):
+    """Campos → planta (la báscula) ⇄ frigoríficos → clientes.
+
+    La planta es el nodo que faltaba: es donde se pesa el camión y donde nace
+    el registro, y de ahí sale la venta. Sin ella el mapa dibuja un circuito
+    que en Papasud no existe.
+    """
+    _exigir_datos()
+    return mapa_real.mapa()
+
+
+@router.get("/mapa/nodo/{nid:path}")
+def mapa_nodo(nid: str, _u: dict = Depends(usuario_actual)):
+    """Lo que compone un nodo. El panel cambia; la cámara no se mueve."""
+    _exigir_datos()
+    d = mapa_real.detalle(nid)
+    if d is None:
+        raise HTTPException(status_code=404, detail=f"No conozco el nodo {nid}.")
+    return d
+
+
+@router.get("/lote/{lote}")
+def lote(lote: str, _u: dict = Depends(usuario_actual)):
+    """El recorrido del lote: qué camión lo trajo, cuánto pesó en la báscula, a
+    qué frigorífico fue, si volvió, y a quién se vendió."""
+    _exigir_datos()
+    d = mapa_real.detalle_lote(lote)
+    if d is None:
+        raise HTTPException(status_code=404, detail=f"No hay lote {lote}.")
+    return d
 
 
 # ===========================================================================

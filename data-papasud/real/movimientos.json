@@ -13,6 +13,7 @@
   "granel": true,
   "kg": 40520,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "224"
@@ -48,6 +49,7 @@
   "granel": true,
   "kg": 43220,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "224"
@@ -83,6 +85,7 @@
   "granel": true,
   "kg": 36940,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "223"
@@ -121,6 +124,7 @@
   "granel": true,
   "kg": 9000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "222"
@@ -156,6 +160,7 @@
   "granel": true,
   "kg": 27680,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "224"
@@ -193,6 +198,7 @@
   "granel": true,
   "kg": 12000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "222"
@@ -228,6 +234,7 @@
   "granel": true,
   "kg": 30620,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "221"
@@ -263,6 +270,7 @@
   "granel": true,
   "kg": 38380,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "221"
@@ -298,6 +306,7 @@
   "granel": true,
   "kg": 12000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "221"
@@ -333,6 +342,7 @@
   "granel": true,
   "kg": 10000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "220"
@@ -368,6 +378,7 @@
   "granel": true,
   "kg": 43360,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "820"
@@ -403,6 +414,7 @@
   "granel": true,
   "kg": 29160,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "820"
@@ -438,6 +450,7 @@
   "granel": true,
   "kg": 10000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "821"
@@ -475,6 +488,7 @@
   "granel": true,
   "kg": 32020,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "821"
@@ -510,6 +524,7 @@
   "granel": true,
   "kg": 35520,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "821"
@@ -545,6 +560,7 @@
   "granel": true,
   "kg": 40960,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -580,6 +596,7 @@
   "granel": true,
   "kg": 37500,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "302"
@@ -615,6 +632,7 @@
   "granel": true,
   "kg": 39420,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "302"
@@ -650,6 +668,7 @@
   "granel": true,
   "kg": 41100,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -685,6 +704,7 @@
   "granel": true,
   "kg": 42920,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "500"
@@ -723,6 +743,7 @@
   "granel": true,
   "kg": 39420,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -761,6 +782,7 @@
   "granel": true,
   "kg": 42620,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -799,6 +821,7 @@
   "granel": true,
   "kg": 43000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -834,6 +857,7 @@
   "granel": true,
   "kg": 37040,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -872,6 +896,7 @@
   "granel": true,
   "kg": 43400,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -910,6 +935,7 @@
   "granel": true,
   "kg": 36740,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "602"
@@ -945,6 +971,7 @@
   "granel": true,
   "kg": 41200,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "602"
@@ -980,6 +1007,7 @@
   "granel": true,
   "kg": 38660,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "602"
@@ -1018,6 +1046,7 @@
   "granel": true,
   "kg": 43000,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "500"
@@ -1053,6 +1082,7 @@
   "granel": true,
   "kg": 34500,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "530"
@@ -1088,6 +1118,7 @@
   "granel": true,
   "kg": 46820,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "530"
@@ -1126,6 +1157,7 @@
   "granel": true,
   "kg": 27340,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -1161,6 +1193,7 @@
   "granel": true,
   "kg": 11400,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -1196,6 +1229,7 @@
   "granel": true,
   "kg": 24600,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1231,6 +1265,7 @@
   "granel": true,
   "kg": 21620,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "352"
@@ -1266,6 +1301,7 @@
   "granel": true,
   "kg": 9840,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1301,6 +1337,7 @@
   "granel": true,
   "kg": 40840,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1338,6 +1375,7 @@
   "granel": true,
   "kg": 33180,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1373,6 +1411,7 @@
   "granel": true,
   "kg": 34980,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1411,6 +1450,7 @@
   "granel": true,
   "kg": 11400,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1448,6 +1488,7 @@
   "granel": true,
   "kg": 36360,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1485,6 +1526,7 @@
   "granel": true,
   "kg": 39620,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1520,6 +1562,7 @@
   "granel": true,
   "kg": 38860,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "301"
@@ -1557,6 +1600,7 @@
   "granel": true,
   "kg": 10500,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1595,6 +1639,7 @@
   "granel": true,
   "kg": 25960,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "302"
@@ -1633,6 +1678,7 @@
   "granel": true,
   "kg": 41200,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "50"
@@ -1671,6 +1717,7 @@
   "granel": true,
   "kg": 44720,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1708,6 +1755,7 @@
   "granel": true,
   "kg": 37520,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "600"
@@ -1743,6 +1791,7 @@
   "granel": true,
   "kg": 41260,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "600"
@@ -1778,6 +1827,7 @@
   "granel": true,
   "kg": 45680,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "601"
@@ -1813,6 +1863,7 @@
   "granel": true,
   "kg": 39400,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "600"
@@ -1848,6 +1899,7 @@
   "granel": true,
   "kg": 43420,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "600"
@@ -1886,6 +1938,7 @@
   "granel": true,
   "kg": 48780,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -1921,6 +1974,7 @@
   "granel": true,
   "kg": 9500,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "500"
@@ -1958,6 +2012,7 @@
   "granel": true,
   "kg": 28840,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "243"
@@ -1993,6 +2048,7 @@
   "granel": true,
   "kg": 44860,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "243"
@@ -2030,6 +2086,7 @@
   "granel": true,
   "kg": 39860,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "418"
@@ -2068,6 +2125,7 @@
   "granel": true,
   "kg": 25600,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "320"
@@ -2103,6 +2161,7 @@
   "granel": true,
   "kg": 26180,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "530"
@@ -2138,6 +2197,7 @@
   "granel": true,
   "kg": 25200,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "530"
@@ -2176,6 +2236,7 @@
   "granel": true,
   "kg": 26700,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "410"
@@ -2214,6 +2275,7 @@
   "granel": true,
   "kg": 40860,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "410"
@@ -2252,6 +2314,7 @@
   "granel": true,
   "kg": 36640,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "410"
@@ -2290,6 +2353,7 @@
   "granel": true,
   "kg": 28974,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "414"
@@ -2328,6 +2392,7 @@
   "granel": true,
   "kg": 28280,
   "kg_prom": null,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "lote",
    "id": "414"
@@ -2365,7 +2430,8 @@
   "bolsas": 671,
   "granel": false,
   "kg": 36629,
-  "kg_prom": 54.59,
+  "kg_prom": 54.58867362146051,
+  "kg_prom_declarado": 54.58867362146051,
   "origen": {
    "tipo": "lote",
    "id": "14"
@@ -2401,7 +2467,8 @@
   "bolsas": 669,
   "granel": false,
   "kg": 35380,
-  "kg_prom": 52.88,
+  "kg_prom": 52.88490284005979,
+  "kg_prom_declarado": 52.88490284005979,
   "origen": {
    "tipo": "lote",
    "id": "14"
@@ -2437,7 +2504,8 @@
   "bolsas": 668,
   "granel": false,
   "kg": 35960,
-  "kg_prom": 53.83,
+  "kg_prom": 53.83233532934132,
+  "kg_prom_declarado": 53.83233532934132,
   "origen": {
    "tipo": "lote",
    "id": "14"
@@ -2473,7 +2541,8 @@
   "bolsas": 328,
   "granel": false,
   "kg": 17400,
-  "kg_prom": 53.05,
+  "kg_prom": 53.048780487804876,
+  "kg_prom_declarado": 53.048780487804876,
   "origen": {
    "tipo": "lote",
    "id": "14"
@@ -2509,7 +2578,8 @@
   "bolsas": 342,
   "granel": false,
   "kg": 18143,
-  "kg_prom": 53.05,
+  "kg_prom": 53.04970760233918,
+  "kg_prom_declarado": 53.04970760233918,
   "origen": {
    "tipo": "lote",
    "id": "18"
@@ -2545,7 +2615,8 @@
   "bolsas": 596,
   "granel": false,
   "kg": 32440,
-  "kg_prom": 54.43,
+  "kg_prom": 54.42953020134228,
+  "kg_prom_declarado": 54.42953020134228,
   "origen": {
    "tipo": "lote",
    "id": "11"
@@ -2581,7 +2652,8 @@
   "bolsas": 97,
   "granel": false,
   "kg": 5195,
-  "kg_prom": 53.56,
+  "kg_prom": 53.55670103092783,
+  "kg_prom_declarado": 53.55670103092783,
   "origen": {
    "tipo": "lote",
    "id": "14"
@@ -2617,7 +2689,8 @@
   "bolsas": 92,
   "granel": false,
   "kg": 4927,
-  "kg_prom": 53.55,
+  "kg_prom": 53.55434782608695,
+  "kg_prom_declarado": 53.55434782608695,
   "origen": {
    "tipo": "lote",
    "id": "18"
@@ -2653,7 +2726,8 @@
   "bolsas": 451,
   "granel": false,
   "kg": 24155,
-  "kg_prom": 53.56,
+  "kg_prom": 53.55875831485588,
+  "kg_prom_declarado": 53.55875831485588,
   "origen": {
    "tipo": "lote",
    "id": "11"
@@ -2689,7 +2763,8 @@
   "bolsas": 620,
   "granel": false,
   "kg": 33220,
-  "kg_prom": 53.58,
+  "kg_prom": 53.58064516129032,
+  "kg_prom_declarado": 53.58064516129032,
   "origen": {
    "tipo": "lote",
    "id": "13"
@@ -2725,7 +2800,8 @@
   "bolsas": 620,
   "granel": false,
   "kg": 33500,
-  "kg_prom": 54.03,
+  "kg_prom": 54.03225806451613,
+  "kg_prom_declarado": 54.03225806451613,
   "origen": {
    "tipo": "lote",
    "id": "13"
@@ -2761,7 +2837,8 @@
   "bolsas": 642,
   "granel": false,
   "kg": 34495,
-  "kg_prom": 53.73,
+  "kg_prom": 53.730529595015575,
+  "kg_prom_declarado": 53.730529595015575,
   "origen": {
    "tipo": "lote",
    "id": "13"
@@ -2797,7 +2874,8 @@
   "bolsas": 18,
   "granel": false,
   "kg": 967,
-  "kg_prom": 53.72,
+  "kg_prom": 53.72222222222222,
+  "kg_prom_declarado": 53.72222222222222,
   "origen": {
    "tipo": "lote",
    "id": "11"
@@ -2833,7 +2911,8 @@
   "bolsas": 417,
   "granel": false,
   "kg": 22180,
-  "kg_prom": 53.19,
+  "kg_prom": 53.189448441247,
+  "kg_prom_declarado": 53.189448441247,
   "origen": {
    "tipo": "lote",
    "id": "11"
@@ -2869,7 +2948,8 @@
   "bolsas": 253,
   "granel": false,
   "kg": 13457,
-  "kg_prom": 53.19,
+  "kg_prom": 53.1897233201581,
+  "kg_prom_declarado": 53.1897233201581,
   "origen": {
    "tipo": "lote",
    "id": "15"
@@ -2905,7 +2985,8 @@
   "bolsas": 111,
   "granel": false,
   "kg": 5983,
-  "kg_prom": 53.9,
+  "kg_prom": 53.9009009009009,
+  "kg_prom_declarado": 53.9009009009009,
   "origen": {
    "tipo": "lote",
    "id": "2"
@@ -2942,6 +3023,7 @@
   "granel": false,
   "kg": 12397,
   "kg_prom": 53.9,
+  "kg_prom_declarado": 53.9,
   "origen": {
    "tipo": "lote",
    "id": "3"
@@ -2977,7 +3059,8 @@
   "bolsas": 72,
   "granel": false,
   "kg": 3880,
-  "kg_prom": 53.89,
+  "kg_prom": 53.888888888888886,
+  "kg_prom_declarado": 53.888888888888886,
   "origen": {
    "tipo": "lote",
    "id": "10"
@@ -3013,7 +3096,8 @@
   "bolsas": 21,
   "granel": false,
   "kg": 1132,
-  "kg_prom": 53.9,
+  "kg_prom": 53.904761904761905,
+  "kg_prom_declarado": 53.904761904761905,
   "origen": {
    "tipo": "lote",
    "id": "6"
@@ -3049,7 +3133,8 @@
   "bolsas": 45,
   "granel": false,
   "kg": 2425,
-  "kg_prom": 53.89,
+  "kg_prom": 53.888888888888886,
+  "kg_prom_declarado": 53.888888888888886,
   "origen": {
    "tipo": "lote",
    "id": "42"
@@ -3085,7 +3170,8 @@
   "bolsas": 32,
   "granel": false,
   "kg": 1725,
-  "kg_prom": 53.91,
+  "kg_prom": 53.90625,
+  "kg_prom_declarado": 53.90625,
   "origen": {
    "tipo": "lote",
    "id": "4"
@@ -3121,7 +3207,8 @@
   "bolsas": 57,
   "granel": false,
   "kg": 3072,
-  "kg_prom": 53.89,
+  "kg_prom": 53.89473684210526,
+  "kg_prom_declarado": 53.89473684210526,
   "origen": {
    "tipo": "lote",
    "id": "5"
@@ -3157,7 +3244,8 @@
   "bolsas": 14,
   "granel": false,
   "kg": 754,
-  "kg_prom": 53.86,
+  "kg_prom": 53.857142857142854,
+  "kg_prom_declarado": 53.857142857142854,
   "origen": {
    "tipo": "lote",
    "id": "7"
@@ -3193,7 +3281,8 @@
   "bolsas": 53,
   "granel": false,
   "kg": 2857,
-  "kg_prom": 53.91,
+  "kg_prom": 53.905660377358494,
+  "kg_prom_declarado": 53.905660377358494,
   "origen": {
    "tipo": "lote",
    "id": "51"
@@ -3231,7 +3320,8 @@
   "bolsas": 37,
   "granel": false,
   "kg": 1994,
-  "kg_prom": 53.89,
+  "kg_prom": 53.891891891891895,
+  "kg_prom_declarado": 53.891891891891895,
   "origen": {
    "tipo": "lote",
    "id": "9"
@@ -3267,7 +3357,8 @@
   "bolsas": 1,
   "granel": false,
   "kg": 54,
-  "kg_prom": 54.0,
+  "kg_prom": 53.9,
+  "kg_prom_declarado": 53.9,
   "origen": {
    "tipo": "lote",
    "id": "1 b"
@@ -3303,7 +3394,8 @@
   "bolsas": 127,
   "granel": false,
   "kg": 6980,
-  "kg_prom": 54.96,
+  "kg_prom": 54.960629921259844,
+  "kg_prom_declarado": 54.960629921259844,
   "origen": {
    "tipo": "lote",
    "id": "40"
@@ -3339,7 +3431,8 @@
   "bolsas": 13,
   "granel": false,
   "kg": 714,
-  "kg_prom": 54.92,
+  "kg_prom": 54.92307692307692,
+  "kg_prom_declarado": 54.92307692307692,
   "origen": {
    "tipo": "lote",
    "id": "7"
@@ -3375,7 +3468,8 @@
   "bolsas": 58,
   "granel": false,
   "kg": 3188,
-  "kg_prom": 54.97,
+  "kg_prom": 54.96551724137931,
+  "kg_prom_declarado": 54.96551724137931,
   "origen": {
    "tipo": "lote",
    "id": "6"
@@ -3411,7 +3505,8 @@
   "bolsas": 68,
   "granel": false,
   "kg": 3737,
-  "kg_prom": 54.96,
+  "kg_prom": 54.955882352941174,
+  "kg_prom_declarado": 54.955882352941174,
   "origen": {
    "tipo": "lote",
    "id": "8"
@@ -3447,7 +3542,8 @@
   "bolsas": 39,
   "granel": false,
   "kg": 2143,
-  "kg_prom": 54.95,
+  "kg_prom": 54.94871794871795,
+  "kg_prom_declarado": 54.94871794871795,
   "origen": {
    "tipo": "lote",
    "id": "30"
@@ -3483,7 +3579,8 @@
   "bolsas": 55,
   "granel": false,
   "kg": 3023,
-  "kg_prom": 54.96,
+  "kg_prom": 54.96363636363636,
+  "kg_prom_declarado": 54.96363636363636,
   "origen": {
    "tipo": "lote",
    "id": "48"
@@ -3519,7 +3616,8 @@
   "bolsas": 33,
   "granel": false,
   "kg": 1814,
-  "kg_prom": 54.97,
+  "kg_prom": 54.96969696969697,
+  "kg_prom_declarado": 54.96969696969697,
   "origen": {
    "tipo": "lote",
    "id": "44"
@@ -3555,7 +3653,8 @@
   "bolsas": 23,
   "granel": false,
   "kg": 1264,
-  "kg_prom": 54.96,
+  "kg_prom": 54.95652173913044,
+  "kg_prom_declarado": 54.95652173913044,
   "origen": {
    "tipo": "lote",
    "id": "50"
@@ -3593,7 +3692,8 @@
   "bolsas": 37,
   "granel": false,
   "kg": 2033,
-  "kg_prom": 54.95,
+  "kg_prom": 54.945945945945944,
+  "kg_prom_declarado": 54.945945945945944,
   "origen": {
    "tipo": "lote",
    "id": "45"
@@ -3629,7 +3729,8 @@
   "bolsas": 28,
   "granel": false,
   "kg": 1539,
-  "kg_prom": 54.96,
+  "kg_prom": 54.964285714285715,
+  "kg_prom_declarado": 54.964285714285715,
   "origen": {
    "tipo": "lote",
    "id": "53"
@@ -3666,6 +3767,7 @@
   "granel": false,
   "kg": 440,
   "kg_prom": 55.0,
+  "kg_prom_declarado": 55.0,
   "origen": {
    "tipo": "lote",
    "id": "52"
@@ -3703,7 +3805,8 @@
   "bolsas": 44,
   "granel": false,
   "kg": 2418,
-  "kg_prom": 54.95,
+  "kg_prom": 54.95454545454545,
+  "kg_prom_declarado": 54.95454545454545,
   "origen": {
    "tipo": "lote",
    "id": "54"
@@ -3739,7 +3842,8 @@
   "bolsas": 30,
   "granel": false,
   "kg": 1648,
-  "kg_prom": 54.93,
+  "kg_prom": 54.93333333333333,
+  "kg_prom_declarado": 54.93333333333333,
   "origen": {
    "tipo": "lote",
    "id": "43"
@@ -3775,7 +3879,8 @@
   "bolsas": 32,
   "granel": false,
   "kg": 1758,
-  "kg_prom": 54.94,
+  "kg_prom": 54.9375,
+  "kg_prom_declarado": 54.9375,
   "origen": {
    "tipo": "lote",
    "id": "46"
@@ -3811,7 +3916,8 @@
   "bolsas": 64,
   "granel": false,
   "kg": 3517,
-  "kg_prom": 54.95,
+  "kg_prom": 54.953125,
+  "kg_prom_declarado": 54.953125,
   "origen": {
    "tipo": "lote",
    "id": "41"
@@ -3847,7 +3953,8 @@
   "bolsas": 19,
   "granel": false,
   "kg": 1051,
-  "kg_prom": 55.32,
+  "kg_prom": 55.31578947368421,
+  "kg_prom_declarado": 55.31578947368421,
   "origen": {
    "tipo": "lote",
    "id": "47"
@@ -3883,7 +3990,8 @@
   "bolsas": 267,
   "granel": false,
   "kg": 14776,
-  "kg_prom": 55.34,
+  "kg_prom": 55.340823970037455,
+  "kg_prom_declarado": 55.340823970037455,
   "origen": {
    "tipo": "lote",
    "id": "41"
@@ -3919,7 +4027,8 @@
   "bolsas": 15,
   "granel": false,
   "kg": 830,
-  "kg_prom": 55.33,
+  "kg_prom": 55.333333333333336,
+  "kg_prom_declarado": 55.333333333333336,
   "origen": {
    "tipo": "lote",
    "id": "49"
@@ -3955,7 +4064,8 @@
   "bolsas": 22,
   "granel": false,
   "kg": 1245,
-  "kg_prom": 56.59,
+  "kg_prom": 55.333333333333336,
+  "kg_prom_declarado": 55.333333333333336,
   "origen": {
    "tipo": "lote",
    "id": "31"
@@ -3993,7 +4103,8 @@
   "bolsas": 18,
   "granel": false,
   "kg": 1024,
-  "kg_prom": 56.89,
+  "kg_prom": 55.351351351351354,
+  "kg_prom_declarado": 55.351351351351354,
   "origen": {
    "tipo": "lote",
    "id": "32"
@@ -4031,7 +4142,8 @@
   "bolsas": 16,
   "granel": false,
   "kg": 913,
-  "kg_prom": 57.06,
+  "kg_prom": 55.333333333333336,
+  "kg_prom_declarado": 55.333333333333336,
   "origen": {
    "tipo": "lote",
    "id": "33"
@@ -4069,7 +4181,8 @@
   "bolsas": 20,
   "granel": false,
   "kg": 1134,
-  "kg_prom": 56.7,
+  "kg_prom": 55.31707317073171,
+  "kg_prom_declarado": 55.31707317073171,
   "origen": {
    "tipo": "lote",
    "id": "34"
@@ -4107,7 +4220,8 @@
   "bolsas": 297,
   "granel": false,
   "kg": 16436,
-  "kg_prom": 55.34,
+  "kg_prom": 55.34006734006734,
+  "kg_prom_declarado": 55.34006734006734,
   "origen": {
    "tipo": "lote",
    "id": "17"
@@ -4143,7 +4257,8 @@
   "bolsas": 27,
   "granel": false,
   "kg": 1413,
-  "kg_prom": 52.33,
+  "kg_prom": 52.333333333333336,
+  "kg_prom_declarado": 52.333333333333336,
   "origen": {
    "tipo": "lote",
    "id": "11"
@@ -4180,6 +4295,7 @@
   "granel": false,
   "kg": 20940,
   "kg_prom": 52.35,
+  "kg_prom_declarado": 52.35,
   "origen": {
    "tipo": "lote",
    "id": "13"
@@ -4215,7 +4331,8 @@
   "bolsas": 243,
   "granel": false,
   "kg": 12721,
-  "kg_prom": 52.35,
+  "kg_prom": 52.349794238683124,
+  "kg_prom_declarado": 52.349794238683124,
   "origen": {
    "tipo": "lote",
    "id": "15"
@@ -4251,7 +4368,8 @@
   "bolsas": 88,
   "granel": false,
   "kg": 4515,
-  "kg_prom": 51.31,
+  "kg_prom": 51.30681818181818,
+  "kg_prom_declarado": 51.30681818181818,
   "origen": {
    "tipo": "lote",
    "id": "15"
@@ -4287,7 +4405,8 @@
   "bolsas": 450,
   "granel": false,
   "kg": 23090,
-  "kg_prom": 51.31,
+  "kg_prom": 51.31111111111111,
+  "kg_prom_declarado": 51.31111111111111,
   "origen": {
    "tipo": "lote",
    "id": "10 b"
@@ -4323,7 +4442,8 @@
   "bolsas": 119,
   "granel": false,
   "kg": 6105,
-  "kg_prom": 51.3,
+  "kg_prom": 51.30252100840336,
+  "kg_prom_declarado": 51.30252100840336,
   "origen": {
    "tipo": "lote",
    "id": "1"
@@ -4359,7 +4479,8 @@
   "bolsas": 13,
   "granel": false,
   "kg": 667,
-  "kg_prom": 51.31,
+  "kg_prom": 51.30769230769231,
+  "kg_prom_declarado": 51.30769230769231,
   "origen": {
    "tipo": "lote",
    "id": "6"
@@ -4395,7 +4516,8 @@
   "bolsas": 117,
   "granel": false,
   "kg": 6324,
-  "kg_prom": 54.05,
+  "kg_prom": 54.05128205128205,
+  "kg_prom_declarado": 54.05128205128205,
   "origen": {
    "tipo": "lote",
    "id": "16 b"
@@ -4431,7 +4553,8 @@
   "bolsas": 553,
   "granel": false,
   "kg": 29890,
-  "kg_prom": 54.05,
+  "kg_prom": 54.050632911392405,
+  "kg_prom_declarado": 54.050632911392405,
   "origen": {
    "tipo": "lote",
    "id": "22"
@@ -4467,7 +4590,8 @@
   "bolsas": 330,
   "granel": false,
   "kg": 17718,
-  "kg_prom": 53.69,
+  "kg_prom": 53.69090909090909,
+  "kg_prom_declarado": 53.69090909090909,
   "origen": {
    "tipo": "lote",
    "id": "9 b"
@@ -4503,7 +4627,8 @@
   "bolsas": 314,
   "granel": false,
   "kg": 16858,
-  "kg_prom": 53.69,
+  "kg_prom": 53.68789808917197,
+  "kg_prom_declarado": 53.68789808917197,
   "origen": {
    "tipo": "lote",
    "id": "16 b"
@@ -4539,7 +4664,8 @@
   "bolsas": 8,
   "granel": false,
   "kg": 429,
-  "kg_prom": 53.62,
+  "kg_prom": 53.625,
+  "kg_prom_declarado": 53.625,
   "origen": {
    "tipo": "lote",
    "id": "16 a"
@@ -4576,6 +4702,7 @@
   "granel": false,
   "kg": 1074,
   "kg_prom": 53.7,
+  "kg_prom_declarado": 53.7,
   "origen": {
    "tipo": "lote",
    "id": "17"
@@ -4611,7 +4738,8 @@
   "bolsas": 549,
   "granel": false,
   "kg": 29185,
-  "kg_prom": 53.16,
+  "kg_prom": 53.16029143897996,
+  "kg_prom_declarado": 53.16029143897996,
   "origen": {
    "tipo": "lote",
    "id": "22"
@@ -4647,7 +4775,8 @@
   "bolsas": 101,
   "granel": false,
   "kg": 5369,
-  "kg_prom": 53.16,
+  "kg_prom": 53.15841584158416,
+  "kg_prom_declarado": 53.15841584158416,
   "origen": {
    "tipo": "lote",
    "id": "47 b"
@@ -4683,7 +4812,8 @@
   "bolsas": 490,
   "granel": false,
   "kg": 26415,
-  "kg_prom": 53.91,
+  "kg_prom": 53.90816326530612,
+  "kg_prom_declarado": 53.90816326530612,
   "origen": {
    "tipo": "lote",
    "id": "40 b"
@@ -4719,7 +4849,8 @@
   "bolsas": 75,
   "granel": false,
   "kg": 4043,
-  "kg_prom": 53.91,
+  "kg_prom": 53.906666666666666,
+  "kg_prom_declarado": 53.906666666666666,
   "origen": {
    "tipo": "lote",
    "id": "47 b"
@@ -4755,7 +4886,8 @@
   "bolsas": 102,
   "granel": false,
   "kg": 5499,
-  "kg_prom": 53.91,
+  "kg_prom": 53.911764705882355,
+  "kg_prom_declarado": 53.911764705882355,
   "origen": {
    "tipo": "lote",
    "id": "22"
@@ -4791,7 +4923,8 @@
   "bolsas": 609,
   "granel": false,
   "kg": 32130,
-  "kg_prom": 52.76,
+  "kg_prom": 52.758620689655174,
+  "kg_prom_declarado": 52.758620689655174,
   "origen": {
    "tipo": "lote",
    "id": "22"
@@ -4827,7 +4960,8 @@
   "bolsas": 73,
   "granel": false,
   "kg": 3851,
-  "kg_prom": 52.75,
+  "kg_prom": 52.75342465753425,
+  "kg_prom_declarado": 52.75342465753425,
   "origen": {
    "tipo": "lote",
    "id": "31 b"
@@ -4863,7 +4997,8 @@
   "bolsas": 123,
   "granel": false,
   "kg": 6457,
-  "kg_prom": 52.5,
+  "kg_prom": 52.49593495934959,
+  "kg_prom_declarado": 52.49593495934959,
   "origen": {
    "tipo": "lote",
    "id": "55 b"
@@ -4899,7 +5034,8 @@
   "bolsas": 21,
   "granel": false,
   "kg": 1102,
-  "kg_prom": 52.48,
+  "kg_prom": 52.476190476190474,
+  "kg_prom_declarado": 52.476190476190474,
   "origen": {
    "tipo": "lote",
    "id": "37 b"
@@ -4935,7 +5071,8 @@
   "bolsas": 49,
   "granel": false,
   "kg": 2572,
-  "kg_prom": 52.49,
+  "kg_prom": 52.48979591836735,
+  "kg_prom_declarado": 52.48979591836735,
   "origen": {
    "tipo": "lote",
    "id": "45 b"
@@ -4972,6 +5109,7 @@
   "granel": false,
   "kg": 840,
   "kg_prom": 52.5,
+  "kg_prom_declarado": 52.5,
   "origen": {
    "tipo": "lote",
    "id": "39 b"
@@ -5007,7 +5145,8 @@
   "bolsas": 63,
   "granel": false,
   "kg": 3307,
-  "kg_prom": 52.49,
+  "kg_prom": 52.492063492063494,
+  "kg_prom_declarado": 52.492063492063494,
   "origen": {
    "tipo": "lote",
    "id": "46 b"
@@ -5044,6 +5183,7 @@
   "granel": false,
   "kg": 1680,
   "kg_prom": 52.5,
+  "kg_prom_declarado": 52.5,
   "origen": {
    "tipo": "lote",
    "id": "32 b"
@@ -5079,7 +5219,8 @@
   "bolsas": 16,
   "granel": false,
   "kg": 866,
-  "kg_prom": 54.12,
+  "kg_prom": 52.484848484848484,
+  "kg_prom_declarado": 52.484848484848484,
   "origen": {
    "tipo": "lote",
    "id": "30 b"
@@ -5116,6 +5257,7 @@
   "granel": false,
   "kg": 1312,
   "kg_prom": 52.48,
+  "kg_prom_declarado": 52.48,
   "origen": {
    "tipo": "lote",
    "id": "34 b"
@@ -5151,7 +5293,8 @@
   "bolsas": 59,
   "granel": false,
   "kg": 3097,
-  "kg_prom": 52.49,
+  "kg_prom": 52.49152542372882,
+  "kg_prom_declarado": 52.49152542372882,
   "origen": {
    "tipo": "lote",
    "id": "22"
@@ -5187,7 +5330,8 @@
   "bolsas": 17,
   "granel": false,
   "kg": 892,
-  "kg_prom": 52.47,
+  "kg_prom": 52.470588235294116,
+  "kg_prom_declarado": 52.470588235294116,
   "origen": {
    "tipo": "lote",
    "id": "33 b"
@@ -5223,7 +5367,8 @@
   "bolsas": 1,
   "granel": false,
   "kg": 78,
-  "kg_prom": 78.0,
+  "kg_prom": 52.0,
+  "kg_prom_declarado": 52.0,
   "origen": {
    "tipo": "lote",
    "id": "49"
@@ -5244,7 +5389,9 @@
    "fila_excel": 81
   },
   "anomalias": [
-   "kg_prom_imposible"
+   "kg_prom_imposible",
+   "kg_prom_contradice",
+   "kg_bolsa_fuera_del_historico"
   ],
   "campo_origen": "trevelin"
  },
@@ -5261,7 +5408,8 @@
   "bolsas": 556,
   "granel": false,
   "kg": 30068,
-  "kg_prom": 54.08,
+  "kg_prom": 54.07913669064748,
+  "kg_prom_declarado": 54.07913669064748,
   "origen": {
    "tipo": "lote",
    "id": "16 a"
@@ -5297,7 +5445,8 @@
   "bolsas": 13,
   "granel": false,
   "kg": 703,
-  "kg_prom": 54.08,
+  "kg_prom": 54.07692307692308,
+  "kg_prom_declarado": 54.07692307692308,
   "origen": {
    "tipo": "lote",
    "id": "39"
@@ -5333,7 +5482,8 @@
   "bolsas": 13,
   "granel": false,
   "kg": 703,
-  "kg_prom": 54.08,
+  "kg_prom": 54.07692307692308,
+  "kg_prom_declarado": 54.07692307692308,
   "origen": {
    "tipo": "lote",
    "id": "38"
@@ -5369,7 +5519,8 @@
   "bolsas": 14,
   "granel": false,
   "kg": 757,
-  "kg_prom": 54.07,
+  "kg_prom": 54.07142857142857,
+  "kg_prom_declarado": 54.07142857142857,
   "origen": {
    "tipo": "lote",
    "id": "37"
@@ -5405,7 +5556,8 @@
   "bolsas": 12,
   "granel": false,
   "kg": 649,
-  "kg_prom": 54.08,
+  "kg_prom": 54.083333333333336,
+  "kg_prom_declarado": 54.083333333333336,
   "origen": {
    "tipo": "lote",
    "id": "36"
@@ -5441,7 +5593,8 @@
   "bolsas": 11,
   "granel": false,
   "kg": 595,
-  "kg_prom": 54.09,
+  "kg_prom": 54.09090909090909,
+  "kg_prom_declarado": 54.09090909090909,
   "origen": {
    "tipo": "lote",
    "id": "35"
@@ -5477,7 +5630,8 @@
   "bolsas": 14,
   "granel": false,
   "kg": 757,
-  "kg_prom": 54.07,
+  "kg_prom": 54.07142857142857,
+  "kg_prom_declarado": 54.07142857142857,
   "origen": {
    "tipo": "lote",
    "id": "55"
@@ -5513,7 +5667,8 @@
   "bolsas": 37,
   "granel": false,
   "kg": 2000,
-  "kg_prom": 54.05,
+  "kg_prom": 54.054054054054056,
+  "kg_prom_declarado": 54.054054054054056,
   "origen": {
    "tipo": "lote",
    "id": "17"
@@ -5550,6 +5705,7 @@
   "granel": false,
   "kg": 35160,
   "kg_prom": 49.87,
+  "kg_prom_declarado": 49.87,
   "origen": {
    "tipo": "lote",
    "id": "241"
@@ -5587,6 +5743,7 @@
   "granel": false,
   "kg": 34500,
   "kg_prom": 49.28,
+  "kg_prom_declarado": 49.28,
   "origen": {
    "tipo": "lote",
    "id": "241"
@@ -5624,6 +5781,7 @@
   "granel": false,
   "kg": 3008,
   "kg_prom": 47.0,
+  "kg_prom_declarado": 47.0,
   "origen": {
    "tipo": "lote",
    "id": "910"
@@ -5662,6 +5820,7 @@
   "granel": false,
   "kg": 35980,
   "kg_prom": 51.4,
+  "kg_prom_declarado": 51.4,
   "origen": {
    "tipo": "lote",
    "id": "300"
@@ -5699,6 +5858,7 @@
   "granel": false,
   "kg": 35920,
   "kg_prom": 51.31,
+  "kg_prom_declarado": 51.31,
   "origen": {
    "tipo": "lote",
    "id": "300"
@@ -5737,6 +5897,7 @@
   "granel": false,
   "kg": 27132,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "lote",
    "id": "225"
@@ -5774,6 +5935,7 @@
   "granel": false,
   "kg": 10200,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "lote",
    "id": "230"
@@ -5811,6 +5973,7 @@
   "granel": false,
   "kg": 10200,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "lote",
    "id": "300"
@@ -5849,6 +6012,7 @@
   "granel": false,
   "kg": 25000,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "lote",
    "id": "811"
@@ -5887,6 +6051,7 @@
   "granel": false,
   "kg": 10703,
   "kg_prom": 47.57,
+  "kg_prom_declarado": 47.57,
   "origen": {
    "tipo": "lote",
    "id": "511"
@@ -5925,6 +6090,7 @@
   "granel": false,
   "kg": 14651,
   "kg_prom": 47.7,
+  "kg_prom_declarado": 47.7,
   "origen": {
    "tipo": "lote",
    "id": "510"
@@ -5963,6 +6129,7 @@
   "granel": false,
   "kg": 11560,
   "kg_prom": 47.57,
+  "kg_prom_declarado": 47.57,
   "origen": {
    "tipo": "lote",
    "id": "520"
@@ -6001,6 +6168,7 @@
   "granel": false,
   "kg": 36540,
   "kg_prom": 52.2,
+  "kg_prom_declarado": 52.2,
   "origen": {
    "tipo": "lote",
    "id": "230"
@@ -6039,6 +6207,7 @@
   "granel": false,
   "kg": 10050,
   "kg_prom": 50.25,
+  "kg_prom_declarado": 50.25,
   "origen": {
    "tipo": "lote",
    "id": "230"
@@ -6077,6 +6246,7 @@
   "granel": false,
   "kg": 26688,
   "kg_prom": 50.25,
+  "kg_prom_declarado": 50.25,
   "origen": {
    "tipo": "lote",
    "id": "561"
@@ -6115,6 +6285,7 @@
   "granel": false,
   "kg": 4347,
   "kg_prom": 49.4,
+  "kg_prom_declarado": 49.4,
   "origen": {
    "tipo": "lote",
    "id": "230"
@@ -6152,6 +6323,7 @@
   "granel": false,
   "kg": 5532,
   "kg_prom": 49.4,
+  "kg_prom_declarado": 49.4,
   "origen": {
    "tipo": "lote",
    "id": "310"
@@ -6190,6 +6362,7 @@
   "granel": false,
   "kg": 24700,
   "kg_prom": 49.4,
+  "kg_prom_declarado": 49.4,
   "origen": {
    "tipo": "lote",
    "id": "310"
@@ -6228,6 +6401,7 @@
   "granel": false,
   "kg": 33620,
   "kg_prom": 48.02,
+  "kg_prom_declarado": 48.02,
   "origen": {
    "tipo": "lote",
    "id": "310"
@@ -6265,6 +6439,7 @@
   "granel": false,
   "kg": 33420,
   "kg_prom": 47.74,
+  "kg_prom_declarado": 47.74,
   "origen": {
    "tipo": "lote",
    "id": "310"
@@ -6302,6 +6477,7 @@
   "granel": false,
   "kg": 29120,
   "kg_prom": 51.26,
+  "kg_prom_declarado": 51.26,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6337,6 +6513,7 @@
   "granel": false,
   "kg": 27640,
   "kg_prom": 51.66,
+  "kg_prom_declarado": 51.66,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6372,6 +6549,7 @@
   "granel": false,
   "kg": 4543,
   "kg_prom": 51.63,
+  "kg_prom_declarado": 51.63,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6407,6 +6585,7 @@
   "granel": false,
   "kg": 26434,
   "kg_prom": 51.63,
+  "kg_prom_declarado": 51.63,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6442,6 +6621,7 @@
   "granel": false,
   "kg": 13970,
   "kg_prom": 52.71,
+  "kg_prom_declarado": 52.71,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6477,6 +6657,7 @@
   "granel": false,
   "kg": 7590,
   "kg_prom": 52.71,
+  "kg_prom_declarado": 52.71,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6512,6 +6693,7 @@
   "granel": false,
   "kg": 4554,
   "kg_prom": 48.45,
+  "kg_prom_declarado": 48.45,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6549,6 +6731,7 @@
   "granel": false,
   "kg": 5184,
   "kg_prom": 48.45,
+  "kg_prom_declarado": 48.45,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6584,6 +6767,7 @@
   "granel": false,
   "kg": 20702,
   "kg_prom": 51.37,
+  "kg_prom_declarado": 51.37,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6619,6 +6803,7 @@
   "granel": false,
   "kg": 10633,
   "kg_prom": 51.37,
+  "kg_prom_declarado": 51.37,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6654,6 +6839,7 @@
   "granel": false,
   "kg": 27970,
   "kg_prom": 50.94,
+  "kg_prom_declarado": 50.94,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6689,6 +6875,7 @@
   "granel": false,
   "kg": 2470,
   "kg_prom": 48.45,
+  "kg_prom_declarado": 48.45,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6724,6 +6911,7 @@
   "granel": false,
   "kg": 7605,
   "kg_prom": 50.7,
+  "kg_prom_declarado": 50.7,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6761,6 +6949,7 @@
   "granel": false,
   "kg": 30460,
   "kg_prom": 50.76,
+  "kg_prom_declarado": 50.76,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6796,6 +6985,7 @@
   "granel": false,
   "kg": 28700,
   "kg_prom": 47.59,
+  "kg_prom_declarado": 47.59,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6831,6 +7021,7 @@
   "granel": false,
   "kg": 8700,
   "kg_prom": 51.49,
+  "kg_prom_declarado": 51.49,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6866,6 +7057,7 @@
   "granel": false,
   "kg": 7878,
   "kg_prom": 51.49,
+  "kg_prom_declarado": 51.49,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6901,6 +7093,7 @@
   "granel": false,
   "kg": 7070,
   "kg_prom": 50.5,
+  "kg_prom_declarado": 50.5,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6936,6 +7129,7 @@
   "granel": false,
   "kg": 6822,
   "kg_prom": 47.71,
+  "kg_prom_declarado": 47.71,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -6971,6 +7165,7 @@
   "granel": false,
   "kg": 19751,
   "kg_prom": 47.71,
+  "kg_prom_declarado": 47.71,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7006,6 +7201,7 @@
   "granel": false,
   "kg": 925,
   "kg_prom": 25.0,
+  "kg_prom_declarado": 25.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7025,7 +7221,9 @@
    "solapa": "Env a Frio",
    "fila_excel": 22
   },
-  "anomalias": [],
+  "anomalias": [
+   "kg_bolsa_fuera_del_historico"
+  ],
   "kg_prom_explicado": "x 25kg"
  },
  {
@@ -7042,6 +7240,7 @@
   "granel": false,
   "kg": 31540,
   "kg_prom": 52.56,
+  "kg_prom_declarado": 52.56,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7077,6 +7276,7 @@
   "granel": false,
   "kg": 27700,
   "kg_prom": 51.2,
+  "kg_prom_declarado": 51.2,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7114,6 +7314,7 @@
   "granel": false,
   "kg": 6854,
   "kg_prom": 53.13,
+  "kg_prom_declarado": 53.13,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7149,6 +7350,7 @@
   "granel": false,
   "kg": 19857,
   "kg_prom": 48.67,
+  "kg_prom_declarado": 48.67,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7186,6 +7388,7 @@
   "granel": false,
   "kg": 5500,
   "kg_prom": 48.67,
+  "kg_prom_declarado": 48.67,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7221,6 +7424,7 @@
   "granel": false,
   "kg": 24310,
   "kg_prom": 53.43,
+  "kg_prom_declarado": 53.43,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7256,6 +7460,7 @@
   "granel": false,
   "kg": 7747,
   "kg_prom": 53.43,
+  "kg_prom_declarado": 53.43,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7291,6 +7496,7 @@
   "granel": false,
   "kg": 18745,
   "kg_prom": 50.8,
+  "kg_prom_declarado": 50.8,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7326,6 +7532,7 @@
   "granel": false,
   "kg": 11277,
   "kg_prom": 50.8,
+  "kg_prom_declarado": 50.8,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7361,6 +7568,7 @@
   "granel": false,
   "kg": 14934,
   "kg_prom": 51.32,
+  "kg_prom_declarado": 51.32,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7396,6 +7604,7 @@
   "granel": false,
   "kg": 12676,
   "kg_prom": 51.32,
+  "kg_prom_declarado": 51.32,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7431,6 +7640,7 @@
   "granel": false,
   "kg": 3541,
   "kg_prom": 51.32,
+  "kg_prom_declarado": 51.32,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7466,6 +7676,7 @@
   "granel": false,
   "kg": 32060,
   "kg_prom": 52.55,
+  "kg_prom_declarado": 52.55,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7501,6 +7712,7 @@
   "granel": false,
   "kg": 31920,
   "kg_prom": 53.2,
+  "kg_prom_declarado": 53.2,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7536,6 +7748,7 @@
   "granel": false,
   "kg": 31460,
   "kg_prom": 52.43,
+  "kg_prom_declarado": 52.43,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7573,6 +7786,7 @@
   "granel": false,
   "kg": 30400,
   "kg_prom": 50.66,
+  "kg_prom_declarado": 50.66,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7610,6 +7824,7 @@
   "granel": false,
   "kg": 30720,
   "kg_prom": 51.2,
+  "kg_prom_declarado": 51.2,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7647,6 +7862,7 @@
   "granel": false,
   "kg": 31180,
   "kg_prom": 51.96,
+  "kg_prom_declarado": 51.96,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7684,6 +7900,7 @@
   "granel": false,
   "kg": 9439,
   "kg_prom": 51.3,
+  "kg_prom_declarado": 51.3,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7721,6 +7938,7 @@
   "granel": false,
   "kg": 2917,
   "kg_prom": 48.61,
+  "kg_prom_declarado": 48.61,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7756,6 +7974,7 @@
   "granel": false,
   "kg": 5444,
   "kg_prom": 48.61,
+  "kg_prom_declarado": 48.61,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7793,6 +8012,7 @@
   "granel": false,
   "kg": 4278,
   "kg_prom": 48.61,
+  "kg_prom_declarado": 48.61,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7830,6 +8050,7 @@
   "granel": false,
   "kg": 30920,
   "kg_prom": 51.53,
+  "kg_prom_declarado": 51.53,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7865,6 +8086,7 @@
   "granel": false,
   "kg": 32060,
   "kg_prom": 53.43,
+  "kg_prom_declarado": 53.43,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7900,6 +8122,7 @@
   "granel": false,
   "kg": 40860,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7920,7 +8143,9 @@
    "fila_excel": 47
   },
   "anomalias": [
-   "kg_prom_imposible"
+   "kg_prom_imposible",
+   "kg_prom_contradice",
+   "kg_bolsa_fuera_del_historico"
   ]
  },
  {
@@ -7937,6 +8162,7 @@
   "granel": false,
   "kg": 36140,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -7972,6 +8198,7 @@
   "granel": false,
   "kg": 8065,
   "kg_prom": 50.09,
+  "kg_prom_declarado": 50.09,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8009,6 +8236,7 @@
   "granel": false,
   "kg": 18934,
   "kg_prom": 50.09,
+  "kg_prom_declarado": 50.09,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8046,6 +8274,7 @@
   "granel": false,
   "kg": 30480,
   "kg_prom": 50.08,
+  "kg_prom_declarado": 50.08,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8066,7 +8295,8 @@
    "fila_excel": 51
   },
   "anomalias": [
-   "dtv_en_columna_ajena"
+   "dtv_en_columna_ajena",
+   "tarjeta_cruzada"
   ]
  },
  {
@@ -8083,6 +8313,7 @@
   "granel": false,
   "kg": 40800,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8118,6 +8349,7 @@
   "granel": false,
   "kg": 24544,
   "kg_prom": 52.0,
+  "kg_prom_declarado": 52.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8155,6 +8387,7 @@
   "granel": false,
   "kg": 31620,
   "kg_prom": 51.66,
+  "kg_prom_declarado": 51.66,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8193,6 +8426,7 @@
   "granel": false,
   "kg": 29600,
   "kg_prom": 50.94,
+  "kg_prom_declarado": 50.94,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8230,6 +8464,7 @@
   "granel": false,
   "kg": 30720,
   "kg_prom": 51.2,
+  "kg_prom_declarado": 51.2,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8268,6 +8503,7 @@
   "granel": false,
   "kg": 13656,
   "kg_prom": 51.73,
+  "kg_prom_declarado": 51.73,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8306,6 +8542,7 @@
   "granel": false,
   "kg": 17380,
   "kg_prom": 51.73,
+  "kg_prom_declarado": 51.73,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8344,6 +8581,7 @@
   "granel": false,
   "kg": 29720,
   "kg_prom": 49.04,
+  "kg_prom_declarado": 49.04,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8379,6 +8617,7 @@
   "granel": false,
   "kg": 25092,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8416,6 +8655,7 @@
   "granel": false,
   "kg": 9820,
   "kg_prom": 51.96,
+  "kg_prom_declarado": 51.96,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8453,6 +8693,7 @@
   "granel": false,
   "kg": 21350,
   "kg_prom": 51.96,
+  "kg_prom_declarado": 51.96,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8490,6 +8731,7 @@
   "granel": false,
   "kg": 614,
   "kg_prom": 51.16,
+  "kg_prom_declarado": 51.16,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8525,6 +8767,7 @@
   "granel": false,
   "kg": 32640,
   "kg_prom": 51.16,
+  "kg_prom_declarado": 51.16,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8562,6 +8805,7 @@
   "granel": false,
   "kg": 7068,
   "kg_prom": 52.36,
+  "kg_prom_declarado": 52.36,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8599,6 +8843,7 @@
   "granel": false,
   "kg": 24340,
   "kg_prom": 52.36,
+  "kg_prom_declarado": 52.36,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8636,6 +8881,7 @@
   "granel": false,
   "kg": 21670,
   "kg_prom": 52.73,
+  "kg_prom_declarado": 52.73,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8673,6 +8919,7 @@
   "granel": false,
   "kg": 9966,
   "kg_prom": 52.73,
+  "kg_prom_declarado": 52.73,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8711,6 +8958,7 @@
   "granel": false,
   "kg": 30640,
   "kg_prom": 52.19,
+  "kg_prom_declarado": 52.19,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8748,6 +8996,7 @@
   "granel": false,
   "kg": 7735,
   "kg_prom": 52.98,
+  "kg_prom_declarado": 52.98,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8783,6 +9032,7 @@
   "granel": false,
   "kg": 12186,
   "kg_prom": 51.2,
+  "kg_prom_declarado": 51.2,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8821,6 +9071,7 @@
   "granel": false,
   "kg": 12240,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -8859,6 +9110,7 @@
   "granel": false,
   "kg": 29080,
   "kg_prom": 48.47,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -8894,6 +9146,7 @@
   "granel": false,
   "kg": 29000,
   "kg_prom": 48.17,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -8930,6 +9183,7 @@
   "granel": false,
   "kg": 19520,
   "kg_prom": 48.8,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -8965,6 +9219,7 @@
   "granel": false,
   "kg": 2934,
   "kg_prom": 48.9,
+  "kg_prom_declarado": null,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -8999,6 +9254,7 @@
   "granel": false,
   "kg": 7369,
   "kg_prom": 50.13,
+  "kg_prom_declarado": 50.13,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9033,6 +9289,7 @@
   "granel": false,
   "kg": 15040,
   "kg_prom": 50.13,
+  "kg_prom_declarado": 50.13,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9067,6 +9324,7 @@
   "granel": false,
   "kg": 28780,
   "kg_prom": 47.33,
+  "kg_prom_declarado": 47.33,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9102,6 +9360,7 @@
   "granel": false,
   "kg": 4757,
   "kg_prom": 49.56,
+  "kg_prom_declarado": 49.56,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9136,6 +9395,7 @@
   "granel": false,
   "kg": 3866,
   "kg_prom": 49.56,
+  "kg_prom_declarado": 49.56,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9170,6 +9430,7 @@
   "granel": false,
   "kg": 1984,
   "kg_prom": 49.56,
+  "kg_prom_declarado": 49.56,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9204,6 +9465,7 @@
   "granel": false,
   "kg": 19130,
   "kg_prom": 49.56,
+  "kg_prom_declarado": 49.56,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9238,6 +9500,7 @@
   "granel": false,
   "kg": 4725,
   "kg_prom": 47.25,
+  "kg_prom_declarado": 47.25,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9272,6 +9535,7 @@
   "granel": false,
   "kg": 29700,
   "kg_prom": 47.75,
+  "kg_prom_declarado": 47.75,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9306,6 +9570,7 @@
   "granel": false,
   "kg": 10158,
   "kg_prom": 49.31,
+  "kg_prom_declarado": 49.31,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9340,6 +9605,7 @@
   "granel": false,
   "kg": 20118,
   "kg_prom": 49.31,
+  "kg_prom_declarado": 49.31,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9374,6 +9640,7 @@
   "granel": false,
   "kg": 30800,
   "kg_prom": 50.74,
+  "kg_prom_declarado": 50.74,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9408,6 +9675,7 @@
   "granel": false,
   "kg": 5544,
   "kg_prom": 49.5,
+  "kg_prom_declarado": 49.5,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9442,6 +9710,7 @@
   "granel": false,
   "kg": 38200,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "belmonte"
@@ -9479,6 +9748,7 @@
   "granel": false,
   "kg": 28740,
   "kg_prom": 47.9,
+  "kg_prom_declarado": 47.9,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9513,6 +9783,7 @@
   "granel": false,
   "kg": 39840,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "belmonte"
@@ -9550,6 +9821,7 @@
   "granel": false,
   "kg": 34800,
   "kg_prom": 49.6,
+  "kg_prom_declarado": 49.6,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -9585,6 +9857,7 @@
   "granel": false,
   "kg": 34860,
   "kg_prom": 49.8,
+  "kg_prom_declarado": 49.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -9620,6 +9893,7 @@
   "granel": false,
   "kg": 26720,
   "kg_prom": 50.22,
+  "kg_prom_declarado": 50.22,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9654,6 +9928,7 @@
   "granel": false,
   "kg": 34860,
   "kg_prom": 49.8,
+  "kg_prom_declarado": 49.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -9689,6 +9964,7 @@
   "granel": false,
   "kg": 28140,
   "kg_prom": 46.9,
+  "kg_prom_declarado": 46.9,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9723,6 +9999,7 @@
   "granel": false,
   "kg": 28000,
   "kg_prom": 46.66,
+  "kg_prom_declarado": 46.66,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9757,6 +10034,7 @@
   "granel": false,
   "kg": 33920,
   "kg_prom": 48.45,
+  "kg_prom_declarado": 48.45,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -9792,6 +10070,7 @@
   "granel": false,
   "kg": 10780,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -9829,6 +10108,7 @@
   "granel": false,
   "kg": 6244,
   "kg_prom": 47.3,
+  "kg_prom_declarado": 47.3,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9863,6 +10143,7 @@
   "granel": false,
   "kg": 3216,
   "kg_prom": 47.3,
+  "kg_prom_declarado": 47.3,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9897,6 +10178,7 @@
   "granel": false,
   "kg": 33040,
   "kg_prom": 47.2,
+  "kg_prom_declarado": 47.2,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -9932,6 +10214,7 @@
   "granel": false,
   "kg": 15200,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -9967,6 +10250,7 @@
   "granel": false,
   "kg": 19400,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10002,6 +10286,7 @@
   "granel": false,
   "kg": 30780,
   "kg_prom": 48.39,
+  "kg_prom_declarado": 48.39,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10039,6 +10324,7 @@
   "granel": false,
   "kg": 29800,
   "kg_prom": 49.25,
+  "kg_prom_declarado": 49.25,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10074,6 +10360,7 @@
   "granel": false,
   "kg": 30700,
   "kg_prom": 51.16,
+  "kg_prom_declarado": 51.16,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10109,6 +10396,7 @@
   "granel": false,
   "kg": 16200,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10144,6 +10432,7 @@
   "granel": false,
   "kg": 19500,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10179,6 +10468,7 @@
   "granel": false,
   "kg": 36080,
   "kg_prom": 50.53,
+  "kg_prom_declarado": 50.53,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10214,6 +10504,7 @@
   "granel": false,
   "kg": 28469,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10252,6 +10543,7 @@
   "granel": false,
   "kg": 2940,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10290,6 +10582,7 @@
   "granel": false,
   "kg": 8526,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10325,6 +10618,7 @@
   "granel": false,
   "kg": 16800,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10360,6 +10654,7 @@
   "granel": false,
   "kg": 14640,
   "kg_prom": 48.8,
+  "kg_prom_declarado": 48.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10395,6 +10690,7 @@
   "granel": false,
   "kg": 16930,
   "kg_prom": 49.79,
+  "kg_prom_declarado": 49.79,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10430,6 +10726,7 @@
   "granel": false,
   "kg": 17560,
   "kg_prom": 49.79,
+  "kg_prom_declarado": 49.79,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10465,6 +10762,7 @@
   "granel": false,
   "kg": 22540,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10500,6 +10798,7 @@
   "granel": false,
   "kg": 22540,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10535,6 +10834,7 @@
   "granel": false,
   "kg": 16926,
   "kg_prom": 49.93,
+  "kg_prom_declarado": 49.93,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10570,6 +10870,7 @@
   "granel": false,
   "kg": 31680,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10605,6 +10906,7 @@
   "granel": false,
   "kg": 30120,
   "kg_prom": 50.2,
+  "kg_prom_declarado": 50.2,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10639,6 +10941,7 @@
   "granel": false,
   "kg": 6664,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10674,6 +10977,7 @@
   "granel": false,
   "kg": 24206,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10709,6 +11013,7 @@
   "granel": false,
   "kg": 34790,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10744,6 +11049,7 @@
   "granel": false,
   "kg": 37480,
   "kg_prom": 49.18,
+  "kg_prom_declarado": 49.18,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10779,6 +11085,7 @@
   "granel": false,
   "kg": 19670,
   "kg_prom": 49.18,
+  "kg_prom_declarado": 49.18,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10814,6 +11121,7 @@
   "granel": false,
   "kg": 69970,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10849,6 +11157,7 @@
   "granel": false,
   "kg": 8460,
   "kg_prom": 49.2,
+  "kg_prom_declarado": 49.2,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10884,6 +11193,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10919,6 +11229,7 @@
   "granel": false,
   "kg": 34848,
   "kg_prom": 49.5,
+  "kg_prom_declarado": 49.5,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -10954,6 +11265,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -10989,6 +11301,7 @@
   "granel": false,
   "kg": 5978,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11024,6 +11337,7 @@
   "granel": false,
   "kg": 19790,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11059,6 +11373,7 @@
   "granel": false,
   "kg": 6810,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11094,6 +11409,7 @@
   "granel": false,
   "kg": 28752,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11129,6 +11445,7 @@
   "granel": false,
   "kg": 1296,
   "kg_prom": 48.0,
+  "kg_prom_declarado": 48.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11164,6 +11481,7 @@
   "granel": false,
   "kg": 3920,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11199,6 +11517,7 @@
   "granel": false,
   "kg": 1568,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11234,6 +11553,7 @@
   "granel": false,
   "kg": 15090,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11269,6 +11589,7 @@
   "granel": false,
   "kg": 23500,
   "kg_prom": 47.0,
+  "kg_prom_declarado": 47.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -11304,6 +11625,7 @@
   "granel": false,
   "kg": 29596,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11339,6 +11661,7 @@
   "granel": false,
   "kg": 49,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11374,6 +11697,7 @@
   "granel": false,
   "kg": 49,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "dospanca"
@@ -11409,6 +11733,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -11444,6 +11769,7 @@
   "granel": false,
   "kg": 25000,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -11481,6 +11807,7 @@
   "granel": false,
   "kg": 28380,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11516,6 +11843,7 @@
   "granel": false,
   "kg": 32040,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11551,6 +11879,7 @@
   "granel": false,
   "kg": 33780,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11586,6 +11915,7 @@
   "granel": false,
   "kg": 28640,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11621,6 +11951,7 @@
   "granel": false,
   "kg": 15600,
   "kg_prom": 50.16,
+  "kg_prom_declarado": 50.16,
   "origen": {
    "tipo": "galpon",
    "id": "galpon_mdp"
@@ -11658,6 +11989,7 @@
   "granel": false,
   "kg": 27480,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11693,6 +12025,7 @@
   "granel": false,
   "kg": 26760,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11728,6 +12061,7 @@
   "granel": false,
   "kg": 17200,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "galpon",
    "id": "galpon_mdp"
@@ -11765,6 +12099,7 @@
   "granel": false,
   "kg": 27780,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11800,6 +12135,7 @@
   "granel": false,
   "kg": 32500,
   "kg_prom": 51.58,
+  "kg_prom_declarado": 51.58,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -11837,6 +12173,7 @@
   "granel": false,
   "kg": 31900,
   "kg_prom": 50.63,
+  "kg_prom_declarado": 50.63,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -11874,6 +12211,7 @@
   "granel": false,
   "kg": 32300,
   "kg_prom": 51.27,
+  "kg_prom_declarado": 51.27,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -11911,6 +12249,7 @@
   "granel": false,
   "kg": 34260,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11948,6 +12287,7 @@
   "granel": false,
   "kg": 33780,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -11985,6 +12325,7 @@
   "granel": false,
   "kg": 31740,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "campo",
    "id": "santa_ana"
@@ -12022,6 +12363,7 @@
   "granel": false,
   "kg": 35580,
   "kg_prom": 48.21,
+  "kg_prom_declarado": 48.21,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12059,6 +12401,7 @@
   "granel": false,
   "kg": 16800,
   "kg_prom": 56.0,
+  "kg_prom_declarado": 56.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12094,6 +12437,7 @@
   "granel": false,
   "kg": 4438,
   "kg_prom": 47.22,
+  "kg_prom_declarado": 47.22,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12131,6 +12475,7 @@
   "granel": false,
   "kg": 5100,
   "kg_prom": 47.22,
+  "kg_prom_declarado": 47.22,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12168,6 +12513,7 @@
   "granel": false,
   "kg": 10000,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12205,6 +12551,7 @@
   "granel": false,
   "kg": 32760,
   "kg_prom": 49.63,
+  "kg_prom_declarado": 49.63,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12242,6 +12589,7 @@
   "granel": false,
   "kg": 7580,
   "kg_prom": 50.53,
+  "kg_prom_declarado": 50.53,
   "origen": {
    "tipo": "frigorifico",
    "id": "pancani"
@@ -12277,6 +12625,7 @@
   "granel": false,
   "kg": 29800,
   "kg_prom": 49.25,
+  "kg_prom_declarado": 49.25,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12312,6 +12661,7 @@
   "granel": false,
   "kg": 14620,
   "kg_prom": 48.73,
+  "kg_prom_declarado": 48.73,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12347,6 +12697,7 @@
   "granel": false,
   "kg": 14640,
   "kg_prom": 48.8,
+  "kg_prom_declarado": 48.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12384,6 +12735,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 49.83,
+  "kg_prom_declarado": 49.83,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12422,6 +12774,7 @@
   "granel": false,
   "kg": 29440,
   "kg_prom": 53.52,
+  "kg_prom_declarado": 53.52,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12457,6 +12810,7 @@
   "granel": false,
   "kg": 32080,
   "kg_prom": 54.37,
+  "kg_prom_declarado": 54.37,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12492,6 +12846,7 @@
   "granel": false,
   "kg": 28600,
   "kg_prom": 48.47,
+  "kg_prom_declarado": 48.47,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12529,6 +12884,7 @@
   "granel": false,
   "kg": 30200,
   "kg_prom": 48.7,
+  "kg_prom_declarado": 48.7,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12566,6 +12922,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 53.26,
+  "kg_prom_declarado": 53.26,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12601,6 +12958,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 52.5,
+  "kg_prom_declarado": 52.5,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12636,6 +12994,7 @@
   "granel": false,
   "kg": 9972,
   "kg_prom": 49.86,
+  "kg_prom_declarado": 49.86,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12673,6 +13032,7 @@
   "granel": false,
   "kg": 22438,
   "kg_prom": 49.86,
+  "kg_prom_declarado": 49.86,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12710,6 +13070,7 @@
   "granel": false,
   "kg": 5086,
   "kg_prom": 49.86,
+  "kg_prom_declarado": 49.86,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12747,6 +13108,7 @@
   "granel": false,
   "kg": 15150,
   "kg_prom": 50.5,
+  "kg_prom_declarado": 50.5,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12782,6 +13144,7 @@
   "granel": false,
   "kg": 15150,
   "kg_prom": 50.5,
+  "kg_prom_declarado": 50.5,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12819,6 +13182,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 52.12,
+  "kg_prom_declarado": 52.12,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12854,6 +13218,7 @@
   "granel": false,
   "kg": 24036,
   "kg_prom": 48.07,
+  "kg_prom_declarado": 48.07,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12889,6 +13254,7 @@
   "granel": false,
   "kg": 2404,
   "kg_prom": 48.07,
+  "kg_prom_declarado": 48.07,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12926,6 +13292,7 @@
   "granel": false,
   "kg": 2500,
   "kg_prom": 48.07,
+  "kg_prom_declarado": 48.07,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -12963,6 +13330,7 @@
   "granel": false,
   "kg": 29820,
   "kg_prom": 49.61,
+  "kg_prom_declarado": 49.61,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -12998,6 +13366,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 50.86,
+  "kg_prom_declarado": 50.86,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13033,6 +13402,7 @@
   "granel": false,
   "kg": 5040,
   "kg_prom": 50.4,
+  "kg_prom_declarado": 50.4,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13071,6 +13441,7 @@
   "granel": false,
   "kg": 19600,
   "kg_prom": 52.15,
+  "kg_prom_declarado": 52.15,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13106,6 +13477,7 @@
   "granel": false,
   "kg": 11080,
   "kg_prom": 49.46,
+  "kg_prom_declarado": 49.46,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13143,6 +13515,7 @@
   "granel": false,
   "kg": 27220,
   "kg_prom": 49.49,
+  "kg_prom_declarado": 49.49,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13178,6 +13551,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 50.68,
+  "kg_prom_declarado": 50.68,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13215,6 +13589,7 @@
   "granel": false,
   "kg": 7350,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13250,6 +13625,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13287,6 +13663,7 @@
   "granel": false,
   "kg": 9800,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13322,6 +13699,7 @@
   "granel": false,
   "kg": 2450,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13360,6 +13738,7 @@
   "granel": false,
   "kg": 1078,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13397,6 +13776,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 48.27,
+  "kg_prom_declarado": 48.27,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13432,6 +13812,7 @@
   "granel": false,
   "kg": 30120,
   "kg_prom": 51.22,
+  "kg_prom_declarado": 51.22,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13469,6 +13850,7 @@
   "granel": false,
   "kg": 5140,
   "kg_prom": 51.4,
+  "kg_prom_declarado": 51.4,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13507,6 +13889,7 @@
   "granel": false,
   "kg": 31220,
   "kg_prom": 52.03,
+  "kg_prom_declarado": 52.03,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13542,6 +13925,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 49.8,
+  "kg_prom_declarado": 49.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13577,6 +13961,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 49.8,
+  "kg_prom_declarado": 49.8,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13612,6 +13997,7 @@
   "granel": false,
   "kg": 3430,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13649,6 +14035,7 @@
   "granel": false,
   "kg": 1470,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13686,6 +14073,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13721,6 +14109,7 @@
   "granel": false,
   "kg": 6370,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13758,6 +14147,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 49.59,
+  "kg_prom_declarado": 49.59,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13795,6 +14185,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13830,6 +14221,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 49.59,
+  "kg_prom_declarado": 49.59,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -13865,6 +14257,7 @@
   "granel": false,
   "kg": 12540,
   "kg_prom": 51.18,
+  "kg_prom_declarado": 51.18,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -13900,6 +14293,7 @@
   "granel": false,
   "kg": 30860,
   "kg_prom": 51.43,
+  "kg_prom_declarado": 51.43,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -13937,6 +14331,7 @@
   "granel": false,
   "kg": 30120,
   "kg_prom": 50.2,
+  "kg_prom_declarado": 50.2,
   "origen": {
    "tipo": "frigorifico",
    "id": "pancani"
@@ -13972,6 +14367,7 @@
   "granel": false,
   "kg": 14700,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14007,6 +14403,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14042,6 +14439,7 @@
   "granel": false,
   "kg": 9800,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14077,6 +14475,7 @@
   "granel": false,
   "kg": 1220,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14114,6 +14513,7 @@
   "granel": false,
   "kg": 29320,
   "kg_prom": 48.86,
+  "kg_prom_declarado": 48.86,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14151,6 +14551,7 @@
   "granel": false,
   "kg": 29900,
   "kg_prom": 52.45,
+  "kg_prom_declarado": 52.45,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14186,6 +14587,7 @@
   "granel": false,
   "kg": 31580,
   "kg_prom": 52.19,
+  "kg_prom_declarado": 52.19,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14221,6 +14623,7 @@
   "granel": false,
   "kg": 28900,
   "kg_prom": 49.15,
+  "kg_prom_declarado": 49.15,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14256,6 +14659,7 @@
   "granel": false,
   "kg": 28420,
   "kg_prom": 51.67,
+  "kg_prom_declarado": 51.67,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14293,6 +14697,7 @@
   "granel": false,
   "kg": 24500,
   "kg_prom": 49.79,
+  "kg_prom_declarado": 49.79,
   "origen": {
    "tipo": "frigorifico",
    "id": "sasula"
@@ -14328,6 +14733,7 @@
   "granel": false,
   "kg": 7124,
   "kg_prom": 52.4,
+  "kg_prom_declarado": 52.4,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14365,6 +14771,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 51.44,
+  "kg_prom_declarado": 51.44,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14400,6 +14807,7 @@
   "granel": false,
   "kg": 5880,
   "kg_prom": 51.44,
+  "kg_prom_declarado": 51.44,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14435,6 +14843,7 @@
   "granel": false,
   "kg": 7350,
   "kg_prom": 51.44,
+  "kg_prom_declarado": 51.44,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14472,6 +14881,7 @@
   "granel": false,
   "kg": 3920,
   "kg_prom": 51.44,
+  "kg_prom_declarado": 51.44,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14509,6 +14919,7 @@
   "granel": false,
   "kg": 36760,
   "kg_prom": 54.05,
+  "kg_prom_declarado": 54.05,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14544,6 +14955,7 @@
   "granel": false,
   "kg": 19584,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14581,6 +14993,7 @@
   "granel": false,
   "kg": 9100,
   "kg_prom": 51.12,
+  "kg_prom_declarado": 51.12,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14618,6 +15031,7 @@
   "granel": false,
   "kg": 15096,
   "kg_prom": 51.0,
+  "kg_prom_declarado": 51.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14655,6 +15069,7 @@
   "granel": false,
   "kg": 29400,
   "kg_prom": 50.69,
+  "kg_prom_declarado": 50.69,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14692,6 +15107,7 @@
   "granel": false,
   "kg": 15200,
   "kg_prom": 50.66,
+  "kg_prom_declarado": 50.66,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14727,6 +15143,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14762,6 +15179,7 @@
   "granel": false,
   "kg": 19600,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14797,6 +15215,7 @@
   "granel": false,
   "kg": 4900,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14832,6 +15251,7 @@
   "granel": false,
   "kg": 2240,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14869,6 +15289,7 @@
   "granel": false,
   "kg": 7854,
   "kg_prom": 51.04,
+  "kg_prom_declarado": 51.04,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -14904,6 +15325,7 @@
   "granel": false,
   "kg": 29700,
   "kg_prom": 49.5,
+  "kg_prom_declarado": 49.5,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14939,6 +15361,7 @@
   "granel": false,
   "kg": 30720,
   "kg_prom": 52.06,
+  "kg_prom_declarado": 52.06,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -14976,6 +15399,7 @@
   "granel": false,
   "kg": 200,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15014,6 +15438,7 @@
   "granel": false,
   "kg": 200,
   "kg_prom": 25.0,
+  "kg_prom_declarado": 25.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15036,7 +15461,8 @@
   "anomalias": [
    "columna_con_otro_dato",
    "sin_dtv",
-   "kg_prom_imposible"
+   "kg_prom_imposible",
+   "kg_bolsa_fuera_del_historico"
   ]
  },
  {
@@ -15053,6 +15479,7 @@
   "granel": false,
   "kg": 12880,
   "kg_prom": 57.75,
+  "kg_prom_declarado": 57.75,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15091,6 +15518,7 @@
   "granel": false,
   "kg": 21127,
   "kg_prom": 50.18,
+  "kg_prom_declarado": 50.18,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15126,6 +15554,7 @@
   "granel": false,
   "kg": 6072,
   "kg_prom": 50.18,
+  "kg_prom_declarado": 50.18,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15163,6 +15592,7 @@
   "granel": false,
   "kg": 3800,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15200,6 +15630,7 @@
   "granel": false,
   "kg": 1300,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15237,6 +15668,7 @@
   "granel": false,
   "kg": 300,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15274,6 +15706,7 @@
   "granel": false,
   "kg": 1250,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15311,6 +15744,7 @@
   "granel": false,
   "kg": 9800,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15346,6 +15780,7 @@
   "granel": false,
   "kg": 7350,
   "kg_prom": 50.55,
+  "kg_prom_declarado": 50.55,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15381,6 +15816,7 @@
   "granel": false,
   "kg": 7350,
   "kg_prom": 50.68,
+  "kg_prom_declarado": 50.68,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15416,6 +15852,7 @@
   "granel": false,
   "kg": 7350,
   "kg_prom": 50.68,
+  "kg_prom_declarado": 50.68,
   "origen": {
    "tipo": "planta",
    "id": "planta_mdp"
@@ -15453,6 +15890,7 @@
   "granel": false,
   "kg": 19600,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15488,6 +15926,7 @@
   "granel": false,
   "kg": 9800,
   "kg_prom": 49.0,
+  "kg_prom_declarado": 49.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15523,6 +15962,7 @@
   "granel": false,
   "kg": 24500,
   "kg_prom": 50.0,
+  "kg_prom_declarado": 50.0,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15558,6 +15998,7 @@
   "granel": false,
   "kg": 12250,
   "kg_prom": 50.41,
+  "kg_prom_declarado": 50.41,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15593,6 +16034,7 @@
   "granel": false,
   "kg": 9800,
   "kg_prom": 50.36,
+  "kg_prom_declarado": 50.36,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15630,6 +16072,7 @@
   "granel": false,
   "kg": 1715,
   "kg_prom": 50.44,
+  "kg_prom_declarado": 50.44,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"
@@ -15667,6 +16110,7 @@
   "granel": false,
   "kg": 3900,
   "kg_prom": 50.36,
+  "kg_prom_declarado": 50.36,
   "origen": {
    "tipo": "frigorifico",
    "id": "cecive"

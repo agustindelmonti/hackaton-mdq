@@ -338,6 +338,7 @@ class Importacion:
             "remito": None, "remito_id": None, "fecha": None,
             "lote": None, "variedad": None, "categoria": None, "calibre": None,
             "bolsas": None, "granel": False, "kg": None, "kg_prom": None,
+            "kg_prom_declarado": None,
             "origen": None, "destino": None,
             "transporte": None, "chofer": None, "dtv": None,
             "observaciones": None, "bolsa_color": None, "hilo_color": None,
@@ -363,6 +364,7 @@ class Importacion:
             getattr(self, f"_leer_{tipo}")(df, real)
             print(f"  · {real:<26} → {len(self.movimientos) - antes:>3} movimientos ({tipo})")
 
+        self.leer_notas_al_margen(xl)
         self._cruces()
 
     # -- lectores por solapa ----------------------------------------------
@@ -448,6 +450,7 @@ class Importacion:
                               col_kg="Kgs", col_obs=None, col_cat="categoria")
             mov["origen"] = {"tipo": "lote", "id": mov["lote"]}
             mov["destino"] = dict(PLANTA)
+            mov["kg_prom"] = mov["kg_prom_declarado"] = _numero(r.get("Prom"))
             mov["bolsa_color"] = _sn(r.get("Color bolsa")) or None
             mov["hilo_color"] = _sn(r.get("Color hilo")) or None
             mov["campo_origen"] = "trevelin"
@@ -466,7 +469,7 @@ class Importacion:
             # Es el kilo por bolsa. Lo usamos, y lo marcamos.
             cli = _texto(r.get("Cliente"))
             if cli and re.search(r"kg", _sn(cli)):
-                mov["kg_prom"] = _numero(cli)
+                mov["kg_prom"] = mov["kg_prom_declarado"] = _numero(cli)
                 self._marcar(mov, "columna_con_otro_dato",
                              "la columna Cliente trae el kilo por bolsa", valor=cli)
             self._push(mov)
@@ -479,7 +482,7 @@ class Importacion:
             mov = self._comun(r, solapa, int(i) + 2, "envio_a_frio",
                               col_kg="Kgs.", col_obs="Observaciones",
                               col_cat="Categoría", col_calibre="Calibre")
-            mov["kg_prom"] = _numero(r.get("Kg.Prom"))
+            mov["kg_prom"] = mov["kg_prom_declarado"] = _numero(r.get("Kg.Prom"))
             mov["destino"] = _ubic_columna(r.get("Destino"))
             # Casi siempre sale de la planta, pero no siempre: hay filas que
             # salen de Pampa Chica y una que va de galpón a galpón.
@@ -495,7 +498,7 @@ class Importacion:
                 continue
             mov = self._comun(r, solapa, int(i) + 2, "retiro_de_frio",
                               col_kg="Kg", col_obs="Observaciones / Destino")
-            mov["kg_prom"] = _numero(r.get("Promedio"))
+            mov["kg_prom"] = mov["kg_prom_declarado"] = _numero(r.get("Promedio"))
             mov["origen"] = _ubic_columna(r.get("Origen"))
             # El destino de un retiro no tiene columna: vive en el texto libre.
             # 'a planta para trabajar', 'A SASULA PARA REPASAR', 'paraguay'.
@@ -522,7 +525,7 @@ class Importacion:
                               col_kg="Kgs.", col_obs="Observaciones",
                               col_dtv="Numero DTVs", col_cat="Categoría",
                               col_calibre="Calibre")
-            mov["kg_prom"] = _numero(r.get("Kg.Prom"))
+            mov["kg_prom"] = mov["kg_prom_declarado"] = _numero(r.get("Kg.Prom"))
             cliente = _sn(r.get("Destino"))
             mov["destino"] = {"tipo": "cliente", "id": cliente} if cliente else None
             mov["origen"] = _lugar(mov["observaciones"]) or dict(PLANTA)
@@ -568,7 +571,115 @@ class Importacion:
                      valor=round(prom, 2))
 
     # -- controles que necesitan ver todo junto ----------------------------
+    # -- la identificación física: tarjeta, color de bolsa, color de hilo ----
+    # Un bulto en el piso de una cámara no dice «lote 50»: dice una TARJETA y
+    # dos colores. Cuando la tarjeta no coincide con el lote declarado, lo que
+    # se movió no es lo que dice la planilla — y el que lo descubre es el que
+    # abre la cámara para cargar el camión.
+    _RE_TARJETA = re.compile(
+        r"tarj\w*\.?\s*(?:del?\s*)?(?:lote\s*)?([a-z]*\s*\d{1,4})", re.I)
+
+    def _tarjetas(self) -> None:
+        # Un DTV escrito al lado de la palabra «tarjeta» no es un lote: es el
+        # documento. Sólo cuenta si el número es un lote que existe.
+        lotes = {m["lote"] for m in self.movimientos if m.get("lote")}
+        for m in self.movimientos:
+            obs = _sn(m.get("observaciones"))
+            if "tarj" not in obs:
+                continue
+            sin_dtv = _RE_DTV.sub(" ", obs)
+            for mm in self._RE_TARJETA.finditer(sin_dtv):
+                declarada = re.sub(r"[^0-9]", "", mm.group(1))
+                if (not declarada or declarada == (m.get("lote") or "")
+                        or declarada not in lotes):
+                    continue
+                self._marcar(
+                    m, "tarjeta_cruzada",
+                    f"la fila declara el lote {m['lote']} pero la observación dice "
+                    f"que hay tarjetas del lote {declarada}: «{m['observaciones']}»",
+                    valor=declarada)
+
+    def leer_notas_al_margen(self, xl) -> None:
+        """Las anotaciones a mano que nadie cruza con nada.
+
+        En la solapa P.Chica, al costado del cuadro, alguien escribió:
+
+            «Del 1001/11 tienen tarjetas del lote 52 pero corresponden al lote 50.»
+            «Los de Sasula fueron con tarjetas del 50 pero son del 51»
+
+        Alguien detectó el error, lo anotó al margen, y ahí quedó. Es el
+        problema entero en dos renglones: el dato existe, está escrito, y no
+        llega a nadie. Acá se levanta y se convierte en un hallazgo con los
+        movimientos de los lotes que nombra colgados.
+        """
+        lotes_vistos = {m["lote"] for m in self.movimientos if m["lote"]}
+        for solapa in xl.sheet_names:
+            df = xl.parse(solapa, header=None)
+            for i in range(len(df)):
+                for j in range(df.shape[1]):
+                    v = df.iat[i, j]
+                    if not isinstance(v, str):
+                        continue
+                    texto = v.strip()
+                    if len(texto) < 25 or "tarjeta" not in _sn(texto):
+                        continue
+                    mencionados = [n for n in re.findall(r"\b(\d{1,4})\b", texto)
+                                   if n in lotes_vistos]
+                    self.anomalias.append({
+                        "id": "nota_al_margen",
+                        "detalle": f"anotación a mano que nadie cruzó con los "
+                                   f"movimientos: «{texto}»",
+                        "valor": texto,
+                        "movimiento": None,
+                        "lotes": sorted(set(mencionados)),
+                        "fuente": {"archivo": ARCHIVO_MOV, "solapa": solapa,
+                                   "fila_excel": i + 1},
+                    })
+
     def _cruces(self) -> None:
+        self._tarjetas()
+
+        # 0 · EL KILO POR BOLSA CONTRA EL LOTE. Dos controles distintos:
+        #     (a) la fila se contradice a sí misma — declara un kilo promedio y
+        #         a la vez unos kilos y unas bolsas que dan otro. Los dos datos
+        #         están uno al lado del otro y nadie los cruzó.
+        #     (b) la fila se aparta del histórico DE ESE LOTE. Una bolsa de ese
+        #         lote pesa lo que pesa; si una fila dice la mitad, o es otra
+        #         bolsa (y la observación lo dice) o alguien se equivocó.
+        historico: dict[str, list[tuple[float, float]]] = defaultdict(list)
+        for m in self.movimientos:
+            if m.get("bolsas") and m.get("kg"):
+                prom = m["kg"] / m["bolsas"]
+                if KG_BOLSA_MIN <= prom <= KG_BOLSA_MAX:
+                    historico[m["lote"]].append((m["kg"], prom))
+        medias = {l: sum(k * p for k, p in v) / sum(k for k, p in v)
+                  for l, v in historico.items() if sum(k for k, _ in v)}
+
+        for m in self.movimientos:
+            b, k = m.get("bolsas"), m.get("kg")
+            if not b or not k:
+                continue
+            calculado = k / b
+            declarado = m.get("kg_prom_declarado")
+            if declarado and abs(calculado - declarado) / declarado > 0.10:
+                self._marcar(
+                    m, "kg_prom_contradice",
+                    f"la fila declara {declarado:,.2f} kg por bolsa y a la vez "
+                    f"{b:,.0f} bolsas para {k:,.0f} kg, que dan {calculado:,.0f}"
+                    .replace(",", "."),
+                    valor=round(calculado, 2))
+            media = medias.get(m["lote"])
+            if media and abs(calculado - media) / media > 0.15:
+                explica = m.get("kg_prom_explicado")
+                self._marcar(
+                    m, "kg_bolsa_fuera_del_historico",
+                    f"{calculado:,.1f} kg por bolsa contra {media:,.1f} que es el "
+                    f"promedio del lote {m['lote']}"
+                    .replace(",", ".")
+                    + (f" — la observación lo explica: «{explica}»" if explica
+                       else " — nada en la fila lo explica"),
+                    valor=round(calculado, 2))
+
         # 1 · LA REGLA DURA: un lote, una variedad.
         por_lote: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(list))
         for m in self.movimientos:

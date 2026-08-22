@@ -2431,6 +2431,114 @@
   }
  },
  {
+  "id": "nota_al_margen",
+  "detalle": "anotación a mano que nadie cruzó con los movimientos: «Del 1001/11 tienen tarjetas del lote 52 pero corresponden al lote 50.»",
+  "valor": "Del 1001/11 tienen tarjetas del lote 52 pero corresponden al lote 50.",
+  "movimiento": null,
+  "lotes": [
+   "11",
+   "50",
+   "52"
+  ],
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "P.Chica",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "nota_al_margen",
+  "detalle": "anotación a mano que nadie cruzó con los movimientos: «Los de Sasula fueron con tarjetas del 50 pero son del 51»",
+  "valor": "Los de Sasula fueron con tarjetas del 50 pero son del 51",
+  "movimiento": null,
+  "lotes": [
+   "50",
+   "51"
+  ],
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "P.Chica",
+   "fila_excel": 5
+  }
+ },
+ {
+  "id": "tarjeta_cruzada",
+  "detalle": "la fila declara el lote 320 pero la observación dice que hay tarjetas del lote 352: «b.b nueva-h.b.-alguna tarj.daifla 352 x error»",
+  "valor": "352",
+  "movimiento": "MOV-2026-000223",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 51
+  }
+ },
+ {
+  "id": "kg_prom_contradice",
+  "detalle": "la fila declara 52.00 kg por bolsa y a la vez 1 bolsas para 78 kg. que dan 78",
+  "valor": "78.0",
+  "movimiento": "MOV-2026-000145",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 81
+  }
+ },
+ {
+  "id": "kg_bolsa_fuera_del_historico",
+  "detalle": "78.0 kg por bolsa contra 55.3 que es el promedio del lote 49 — nada en la fila lo explica",
+  "valor": "78.0",
+  "movimiento": "MOV-2026-000145",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 81
+  }
+ },
+ {
+  "id": "kg_bolsa_fuera_del_historico",
+  "detalle": "25.0 kg por bolsa contra 49.2 que es el promedio del lote 821 — la observación lo explica: «x 25kg»",
+  "valor": "25.0",
+  "movimiento": "MOV-2026-000194",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 22
+  }
+ },
+ {
+  "id": "kg_prom_contradice",
+  "detalle": "la fila declara 50.00 kg por bolsa y a la vez 9 bolsas para 40.860 kg. que dan 4.540",
+  "valor": "4540.0",
+  "movimiento": "MOV-2026-000219",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "kg_bolsa_fuera_del_historico",
+  "detalle": "4.540.0 kg por bolsa contra 51.3 que es el promedio del lote 301 — nada en la fila lo explica",
+  "valor": "4540.0",
+  "movimiento": "MOV-2026-000219",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "kg_bolsa_fuera_del_historico",
+  "detalle": "25.0 kg por bolsa contra 49.0 que es el promedio del lote 241 — nada en la fila lo explica",
+  "valor": "25.0",
+  "movimiento": "MOV-2026-000418",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 100
+  }
+ },
+ {
   "id": "lote_multivariedad",
   "detalle": "el lote 50 declara 2 variedades (spunta en 20 filas · beo en 1 fila); por kilos manda spunta",
   "valor": "beo",
