@@ -2661,6 +2661,11 @@ CATALOGO: dict[str, dict[str, str]] = {
     "core.esquema.activa_logistica_0": {"es": "estado de envío por cliente", "en": "shipment status per customer"},
     "core.esquema.activa_logistica_1": {"es": "alertas de entregas atrasadas", "en": "late delivery alerts"},
     "core.esquema.activa_logistica_2": {"es": "resumen del día de reparto", "en": "delivery day summary"},
+    "core.esquema.remitos": {"es": "Remitos", "en": "Waybills"},
+    "core.esquema.transportes": {"es": "Transportes", "en": "Carriers"},
+    "core.esquema.activa_remitos_0": {"es": "un viaje con varios lotes", "en": "one trip with several lots"},
+    "core.esquema.activa_remitos_1": {"es": "DTV colgado del documento", "en": "DTV hanging off the document"},
+    "core.esquema.activa_transportes_0": {"es": "empresa y chofer de cada viaje", "en": "company and driver of each trip"},
     # --- core/fase.py · la etapa del negocio --------------------------------------
     "core.fase.titulo_puesta": {"es": "Puesta a punto", "en": "Getting set up"},
     "core.fase.titulo_operacion": {"es": "En operación", "en": "Up and running"},
