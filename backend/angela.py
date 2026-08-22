@@ -2317,9 +2317,10 @@ def _fallback(mensaje: str) -> dict:
     res = ds.resumen()["resumen"]
     cat = _categoria_en(m)
 
-    def resp(texto, acciones=None, opciones=None, tools=None):
+    def resp(texto, acciones=None, opciones=None, tools=None, tool_events=None):
         return {"respuesta": texto, "modo": "simulado", "tools_usadas": tools or [],
-                "acciones": acciones or [], "opciones": opciones or []}
+                "acciones": acciones or [], "opciones": opciones or [],
+                "tool_events": tool_events or []}
 
     def bloqueado(feature):
         """Corta un cluster de intents si el usuario no tiene ese módulo (capa 2 del
@@ -2492,6 +2493,76 @@ def _fallback(mensaje: str) -> dict:
         if rr["atrasados"]:
             base += " " + T("fb.log_arrastre", n=rr["atrasados"])
         return resp(base + " " + T("fb.log_fuente"), tools=["consultar_envios"])
+
+    # --- Stock unificado (Vertical 3): panorama de ubicaciones y disponibilidad ---
+    def _kg_pedido_en(texto: str) -> float | None:
+        import re
+        compacto = texto.replace(" ", "")
+        if re.search(r"\b3\s*t\b", texto) or "3t" in compacto or "tres tonelada" in texto:
+            return 3000.0
+        mt = re.search(r"(\d+(?:[.,]\d+)?)\s*(?:t\b|tonelada)", texto)
+        if mt:
+            return float(mt.group(1).replace(",", ".")) * 1000
+        mk = re.search(r"(\d+(?:[.,]\d+)?)\s*kg", texto)
+        if mk:
+            return float(mk.group(1).replace(",", "."))
+        return None
+
+    def _tool_event(name, inp, result):
+        import uuid
+        return {"id": f"sim-{uuid.uuid4().hex[:8]}", "name": name,
+                "input": inp, "result": result}
+
+    _es_panorama_stock = any(k in m for k in (
+        "cuanto hay", "cuánto hay", "cuanto stock", "cuánto stock", "stock hay",
+        "cada ubicacion", "cada ubicación", "how much stock", "each location",
+        "stock at each",
+    ))
+    _kg_pedido = _kg_pedido_en(m)
+    _es_disponibilidad = _kg_pedido is not None and any(k in m for k in (
+        "saco", "conseguir", "de donde", "de dónde", "semana", "week", "papa",
+        "semilla", "cliente", "confirmar", "pedido", "produccion", "producción",
+        "order", "next week",
+    ))
+    if _es_panorama_stock or _es_disponibilidad:
+        b = bloqueado("deposito")
+        if b:
+            return b
+        result, accion = _run_tool("stock_ubicaciones", {})
+        ubis = result.get("ubicaciones") or []
+        res = result.get("resumen") or {}
+        ev = _tool_event("stock_ubicaciones", {}, result)
+        acc = [accion] if accion else []
+        if _es_disponibilidad and _kg_pedido:
+            total_kg = float(res.get("kg_total") or sum(u.get("kg", 0) for u in ubis))
+            ton_ped = round(_kg_pedido / 1000, 1)
+            plan, rest = [], _kg_pedido
+            for u in sorted(ubis, key=lambda x: -(x.get("kg") or 0)):
+                if rest <= 0:
+                    break
+                disp = float(u.get("kg") or 0)
+                if disp <= 0:
+                    continue
+                tomar = min(disp, rest)
+                plan.append(T("fb.stock_tomar_de", nombre=u["nombre"],
+                              tomar_t=round(tomar / 1000, 1), disp_t=u["toneladas"]))
+                rest -= tomar
+            plan_txt = "\n".join(f"• {p}" for p in plan)
+            if total_kg >= _kg_pedido:
+                texto = T("fb.stock_3t_si", pedido=ton_ped,
+                          total=res.get("toneladas_total"), plan=plan_txt)
+            else:
+                texto = T("fb.stock_3t_no", pedido=ton_ped,
+                          total=res.get("toneladas_total"),
+                          faltante=round(max(0.0, rest) / 1000, 1), plan=plan_txt)
+            return resp(texto, acc, tools=["stock_ubicaciones"], tool_events=[ev])
+        lineas = "\n".join(
+            T("fb.stock_fila_ubi", nombre=u["nombre"], ton=u["toneladas"],
+              lotes=u["lotes"], pct=u.get("ocupacion_pct") if u.get("ocupacion_pct") is not None else "—")
+            for u in ubis
+        )
+        return resp(T("fb.stock_panorama", total=res.get("toneladas_total"), lineas=lineas),
+                    acc, tools=["stock_ubicaciones"], tool_events=[ev])
 
     # --- Depósito (capa sobre el WMS) ---
     _kw_deposito = ("venc", "lote", "ubicacion", "stock fisico", "fisico", "discrepancia",
@@ -3256,3 +3327,172 @@ def responder(
         fb = _fallback(mensaje)
         fb["error_tecnico"] = str(e)
         return fb
+
+
+def stream_responder(
+    mensaje: str,
+    historial: list[dict] | None = None,
+    rol: str | None = None,
+    nombre: str | None = None,
+    features: list[str] | None = None,
+    idioma: str | None = None,
+):
+    """Generador SSE para assistant-ui: tool → text → done."""
+    if idioma not in paths.IDIOMAS:
+        from core import perfiles
+        idioma = perfiles.idioma_de(nombre) if nombre else paths.DEFAULT_LANG
+    _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
+
+    client, modelo = config.cliente_llm("chat")
+    if client is None:
+        fb = _fallback(mensaje)
+        for te in fb.get("tool_events") or []:
+            yield {"type": "tool", **te}
+        if fb.get("respuesta"):
+            yield {"type": "text", "text": fb["respuesta"]}
+        yield {"type": "done", "result": {**fb, "ok": True}}
+        return
+
+    quien = ""
+    if nombre or rol:
+        quien = (
+            f"\n\nESTÁS HABLANDO CON: {nombre or 'un usuario'} ({rol or 'rol no especificado'}). "
+            f"Adaptá lo que mostrás a lo que esta persona necesita en su rol; no le ofrezcas "
+            f"cosas que no le corresponden."
+        )
+    try:
+        import auth as _auth
+        _ant = _auth.antiguedad(nombre) if nombre else None
+        if _ant and _ant["nuevo"]:
+            quien += (
+                f"\n\nESTA PERSONA ES NUEVA: entró hace {_ant['dias']} días. Todavía no "
+                f"sabe dónde está cada cosa ni cómo se hace cada trámite acá. Explicá "
+                f"con paciencia y sin jerga, un paso por vez, y cuando la pregunta sea "
+                f"de cómo se trabaja en este negocio usá 'consultar_manual' antes de "
+                f"contestar. No le pidas que sepa nombres de proveedores, códigos ni "
+                f"secciones: guiala."
+            )
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        _m = memoria.get(nombre) if nombre else {}
+        _prefs = {k: v for k, v in (_m.get("vista") or {}).items() if k != "widgets"}
+        _notas = _m.get("preferencias") or {}
+        if _prefs or _notas:
+            quien += "\n\nLO QUE RECORDÁS DE ESTA PERSONA (aplicalo sin que te lo repita):"
+            if _prefs.get("sin_torta"):
+                quien += "\n- No quiere gráficos de torta/donut NUNCA. Elegí siempre otra forma."
+            if _prefs.get("margen_pin_umbral") is not None:
+                quien += (f"\n- Quiere los productos con margen teórico menor a "
+                          f"{_prefs['margen_pin_umbral']:g}% fijados arriba donde se listan márgenes "
+                          "(la interfaz ya lo hace sola).")
+            if _prefs.get("orden_home"):
+                quien += f"\n- Ordenó los bloques de su Inicio así: {', '.join(_prefs['orden_home'])}."
+            for k, v in list(_notas.items())[:6]:
+                quien += f"\n- Nota: {k} = {v}"
+    except Exception:  # noqa: BLE001
+        pass
+
+    contexto = _resumen_para_prompt() if _tiene_feature("inventario") else (
+        "El resumen general del inventario no corresponde al rol de esta persona. "
+        "No cites cifras globales del negocio (plata inmovilizada, catálogo) ni datos "
+        "de módulos que no maneja; contestá sólo lo de su área."
+    )
+    if idioma == "en":
+        directiva_idioma = (
+            "\n\nLANGUAGE: Reply ALWAYS in English — plain-spoken business English, "
+            "warm and direct, same personality as ever (never stiff corporate). "
+            "Product, customer and supplier names stay in Spanish exactly as they "
+            "appear in the data (quote them naturally). Format money with en-US "
+            "grouping: $1,234,567 (they are Argentine pesos, ARS)."
+        )
+    else:
+        directiva_idioma = (
+            "\n\nIDIOMA: Respondé SIEMPRE en castellano rioplatense, como siempre. "
+            "La plata en formato argentino: $1.234.567."
+        )
+    system_texto = (SYSTEM_PROMPT.format(contexto=contexto) + _contexto_externo()
+                    + quien + directiva_idioma)
+    system = (
+        [{"type": "text", "text": system_texto, "cache_control": {"type": "ephemeral"}}]
+        if config.PROMPT_CACHE else system_texto
+    )
+    tools_disponibles = tools_para(_features_actuales())
+
+    messages: list[dict] = []
+    for turn in (historial or [])[-6:]:
+        if turn.get("role") in ("user", "assistant") and turn.get("content"):
+            messages.append({"role": turn["role"], "content": turn["content"]})
+    messages.append({"role": "user", "content": mensaje})
+
+    tools_usadas: list[str] = []
+    acciones: list[dict] = []
+    try:
+        for _ in range(MAX_TOOL_TURNS):
+            resp = client.messages.create(
+                model=modelo,
+                max_tokens=MAX_TOKENS,
+                system=system,
+                tools=tools_disponibles,
+                messages=messages,
+            )
+
+            if resp.stop_reason == "tool_use":
+                messages.append({"role": "assistant", "content": resp.content})
+                tool_results = []
+                for block in resp.content:
+                    if block.type != "tool_use":
+                        continue
+                    tools_usadas.append(block.name)
+                    result, accion = _run_tool(block.name, block.input or {})
+                    if accion:
+                        acciones.append(accion)
+                    yield {
+                        "type": "tool",
+                        "id": block.id,
+                        "name": block.name,
+                        "input": block.input or {},
+                        "result": result,
+                    }
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": json.dumps(_con_pesos(result), ensure_ascii=False),
+                    })
+                messages.append({"role": "user", "content": tool_results})
+                continue
+
+            texto = "".join(b.text for b in resp.content if b.type == "text").strip()
+            yield {"type": "text", "text": texto}
+            yield {
+                "type": "done",
+                "result": {
+                    "ok": True,
+                    "respuesta": texto,
+                    "modo": "claude",
+                    "tools_usadas": tools_usadas,
+                    "acciones": acciones,
+                },
+            }
+            return
+
+        msg = "Estoy dando muchas vueltas con esa consulta. ¿Me la reformulás más simple?"
+        yield {"type": "text", "text": msg}
+        yield {
+            "type": "done",
+            "result": {
+                "ok": True,
+                "respuesta": msg,
+                "modo": "claude",
+                "tools_usadas": tools_usadas,
+                "acciones": acciones,
+            },
+        }
+    except Exception as e:  # noqa: BLE001
+        fb = _fallback(mensaje)
+        fb["error_tecnico"] = str(e)
+        fb["ok"] = False
+        fb["error_code"] = "provider"
+        if fb.get("respuesta"):
+            yield {"type": "text", "text": fb["respuesta"]}
+        yield {"type": "done", "result": fb}

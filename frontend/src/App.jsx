@@ -3,6 +3,7 @@ import AngelaMark from "./components/AngelaMark";
 import Login from "./components/Login";
 import MobileApp from "./mobile/MobileApp";
 import DesktopApp from "./desktop/DesktopApp";
+import { AngelaRuntimeProvider } from "./lib/assistant/runtime-provider";
 import { useIsDesktop } from "./lib/useViewport";
 import { authStore, useSession } from "./lib/auth";
 import { api } from "./lib/api";
@@ -38,6 +39,9 @@ export default function App() {
   // B8: null = todavía averiguando si el tenant tiene autologin; true = ya se
   // resolvió (entró solo o corresponde mostrar el login).
   const [autologinResuelto, setAutologinResuelto] = useState(false);
+  const [angelaDockOpen, setAngelaDockOpen] = useState(
+    () => typeof window !== "undefined" && window.innerWidth >= 1280,
+  );
 
   // B8 — Entrada directa del demo (link de YC): sin sesión y con el flag del
   // tenant activo, la URL entra sola como el DUEÑO. Un logout MANUAL deja la
@@ -145,10 +149,28 @@ export default function App() {
   // key por usuario: al cambiar de identidad ("View as" del demo, P9·E) el
   // árbol entero se rearma — features, secciones, chat de Ángela — CERO
   // arrastre del usuario anterior.
-  return isDesktop ? (
-    <DesktopApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
-  ) : (
-    <MobileApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
+  return (
+    <AngelaRuntimeProvider
+      key={user.username}
+      dockOpen={angelaDockOpen}
+      setDockOpen={setAngelaDockOpen}
+      storageKey={user.username}
+    >
+      {isDesktop ? (
+        <DesktopApp
+          key={user.username}
+          data={data}
+          oportunidades={oportunidades}
+          fase={fase}
+          user={user}
+          onRecargar={recargar}
+          angelaOpen={angelaDockOpen}
+          setAngelaOpen={setAngelaDockOpen}
+        />
+      ) : (
+        <MobileApp key={user.username} data={data} oportunidades={oportunidades} fase={fase} user={user} onRecargar={recargar} />
+      )}
+    </AngelaRuntimeProvider>
   );
 }
 
