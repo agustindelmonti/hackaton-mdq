@@ -117,7 +117,7 @@ export const EN = {
   "mapa.corte_e_act": "activity",
   "mapa.corte_x_ipc": "CPI",
   "mapa.corte_x_dolar": "exchange rate",
-  "mapa.subtitulo": "Where every kilo comes from, where it is and where it's going. The centre is the four locations.",
+  "mapa.subtitulo": "Where every kilo comes from, where it is and where it's going. The plant is the hub; cold storage is a detour.",
   "mapa.cargando": "Crossing your sources…",
   // P29·C — the map that produces: paths, conclusions, crosses
   "mapa.angela_cruces": "These crosses produced today's {n} findings — tap any one and I'll show you where it came from.",
@@ -2572,6 +2572,8 @@ export const EN = {
   "mapa.pregunta": "Tell me about {que}",
   "mapa.tipo_ubicacion": "Location",
   "mapa.tipo_campo": "Production field",
+  "mapa.tipo_planta": "Plant",
+  "mapa.tipo_frigorifico": "Cold storage",
   "mapa.tipo_laboratorio": "Laboratory",
   "mapa.tipo_campania": "Campaign",
   "mapa.tipo_variedad": "Variety",
