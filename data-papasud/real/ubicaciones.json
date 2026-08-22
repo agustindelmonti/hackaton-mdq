@@ -1,0 +1,56 @@
+[
+ {
+  "id": "planta_mdp",
+  "nombre": "Planta Mar del Plata",
+  "tipo": "planta",
+  "bascula": true,
+  "propia": true
+ },
+ {
+  "id": "galpon_mdp",
+  "nombre": "Galpón Mar del Plata",
+  "tipo": "galpon",
+  "bascula": false,
+  "propia": true
+ },
+ {
+  "id": "dospanca",
+  "nombre": "Dospanca",
+  "tipo": "frigorifico",
+  "bascula": false,
+  "propia": false,
+  "nota": "subcontratado — se le paga por kilo movido"
+ },
+ {
+  "id": "pancani",
+  "nombre": "Pancani",
+  "tipo": "frigorifico",
+  "bascula": false,
+  "propia": false,
+  "nota": "subcontratado — se le paga por kilo movido"
+ },
+ {
+  "id": "sasula",
+  "nombre": "Sasula (Balcarce)",
+  "tipo": "frigorifico",
+  "bascula": false,
+  "propia": false,
+  "nota": "subcontratado — se le paga por kilo movido"
+ },
+ {
+  "id": "belmonte",
+  "nombre": "Belmonte",
+  "tipo": "frigorifico",
+  "bascula": false,
+  "propia": false,
+  "nota": "subcontratado — se le paga por kilo movido"
+ },
+ {
+  "id": "cecive",
+  "nombre": "Cecive",
+  "tipo": "frigorifico",
+  "bascula": false,
+  "propia": false,
+  "nota": "subcontratado — se le paga por kilo movido"
+ }
+]

@@ -1,0 +1,28 @@
+[
+ {"id": "PED-2026-0041", "estado": "abierto",
+  "cliente": "la union del sur", "variedad": "spunta", "calibre": "exportacion",
+  "ubicacion": "dospanca", "kg": 10240, "bolsas": 200, "entrega": "2026-09-03",
+  "creado": "2026-08-14", "creado_por": "comercial",
+  "nota": "confirmado por telefono, falta el remito"},
+
+ {"id": "PED-2026-0042", "estado": "abierto",
+  "cliente": "parmentier", "variedad": "asterix", "calibre": "sin chicas",
+  "ubicacion": "dospanca", "kg": 8000, "bolsas": null, "entrega": "2026-09-05",
+  "creado": "2026-08-17", "creado_por": "comercial"},
+
+ {"id": "PED-2026-0043", "estado": "abierto",
+  "cliente": "wemar-mc cain", "variedad": "king russet", "calibre": "granel",
+  "ubicacion": "planta_mdp", "kg": 32000, "bolsas": null, "entrega": "2026-08-27",
+  "creado": "2026-08-11", "creado_por": "comercial",
+  "nota": "cargan ellos en planta"},
+
+ {"id": "PED-2026-0044", "estado": "abierto",
+  "cliente": "frigopap", "variedad": "ludmilla", "calibre": "recibo",
+  "ubicacion": "planta_mdp", "kg": 96000, "bolsas": null, "entrega": "2026-09-10",
+  "creado": "2026-08-18", "creado_por": "comercial"},
+
+ {"id": "PED-2026-0045", "estado": "abierto",
+  "cliente": "delcasagro", "variedad": "daifla", "calibre": "recibo",
+  "ubicacion": "planta_mdp", "kg": 58800, "bolsas": null, "entrega": "2026-08-28",
+  "creado": "2026-08-19", "creado_por": "comercial"}
+]

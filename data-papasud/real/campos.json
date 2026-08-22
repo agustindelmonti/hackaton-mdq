@@ -1,0 +1,30 @@
+[
+ {
+  "id": "santa_ana",
+  "nombre": "Santa Ana",
+  "pivotes": [
+   "A",
+   "B"
+  ]
+ },
+ {
+  "id": "marisol",
+  "nombre": "Marisol",
+  "pivotes": []
+ },
+ {
+  "id": "trevelin",
+  "nombre": "Trevelin",
+  "pivotes": []
+ },
+ {
+  "id": "oriente",
+  "nombre": "Oriente",
+  "pivotes": []
+ },
+ {
+  "id": "pampa_chica",
+  "nombre": "Pampa Chica",
+  "pivotes": []
+ }
+]

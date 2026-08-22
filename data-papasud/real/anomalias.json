@@ -1,0 +1,2994 @@
+[
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000003",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000003",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000005",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 6
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000013",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000020",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 21
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000020",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 21
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000021",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 22
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000021",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 22
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000022",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 23
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000022",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 23
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000024",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 25
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000024",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 25
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000025",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 26
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000025",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 26
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000028",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 29
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000028",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 29
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000031",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 32
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000031",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 32
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000039",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 40
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000039",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 40
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000044",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000044",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000045",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 46
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000045",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 46
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "paraguay",
+  "movimiento": "MOV-2026-000046",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000046",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000052",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 53
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000052",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 53
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000057",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000057",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000060",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 61
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000060",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 61
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000061",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000061",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000062",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 63
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000062",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 63
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000063",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 64
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000063",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 64
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000064",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 65
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000064",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 65
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna del DTV no trae un DTV",
+  "valor": "nan",
+  "movimiento": "MOV-2026-000065",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 66
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000065",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 66
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "22 bolsas para 1.245 kg da 57 kg por bolsa",
+  "valor": "56.59",
+  "movimiento": "MOV-2026-000110",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 46
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "18 bolsas para 1.024 kg da 57 kg por bolsa",
+  "valor": "56.89",
+  "movimiento": "MOV-2026-000111",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "16 bolsas para 913 kg da 57 kg por bolsa",
+  "valor": "57.06",
+  "movimiento": "MOV-2026-000112",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 48
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "20 bolsas para 1.134 kg da 57 kg por bolsa",
+  "valor": "56.7",
+  "movimiento": "MOV-2026-000113",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 49
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "1 bolsas para 78 kg da 78 kg por bolsa",
+  "valor": "78.0",
+  "movimiento": "MOV-2026-000145",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 81
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "49,87 kg",
+  "movimiento": "MOV-2026-000154",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 2
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "49,28 kg",
+  "movimiento": "MOV-2026-000155",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 3
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "47 kg",
+  "movimiento": "MOV-2026-000156",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000156",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "51,40 kg",
+  "movimiento": "MOV-2026-000157",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 5
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "51,31 kg",
+  "movimiento": "MOV-2026-000158",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 6
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000158",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 6
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "51 kg",
+  "movimiento": "MOV-2026-000159",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 7
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "51 kg",
+  "movimiento": "MOV-2026-000160",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 8
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "50 kg",
+  "movimiento": "MOV-2026-000161",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 9
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000161",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 9
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "50 kg",
+  "movimiento": "MOV-2026-000162",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 10
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000162",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 10
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "47,57 kg",
+  "movimiento": "MOV-2026-000163",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 11
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000163",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 11
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "47.7 kg",
+  "movimiento": "MOV-2026-000164",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 12
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000164",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 12
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "47,57 kg",
+  "movimiento": "MOV-2026-000165",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 13
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000165",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 13
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "52,20 kg",
+  "movimiento": "MOV-2026-000166",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000166",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "50,25 kg",
+  "movimiento": "MOV-2026-000167",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 15
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000167",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 15
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "50.25 kg",
+  "movimiento": "MOV-2026-000168",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 16
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000168",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 16
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "49,40 kg",
+  "movimiento": "MOV-2026-000169",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 17
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "49,40 kg",
+  "movimiento": "MOV-2026-000170",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 18
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000170",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 18
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "49,40 kg",
+  "movimiento": "MOV-2026-000171",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 19
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000171",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 19
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "48,02 kg",
+  "movimiento": "MOV-2026-000172",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 20
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Cliente trae el kilo por bolsa",
+  "valor": "47,74 kg",
+  "movimiento": "MOV-2026-000173",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "De campo a Frío",
+   "fila_excel": 21
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "solo chasis",
+  "movimiento": "MOV-2026-000180",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 8
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "solo chasis",
+  "movimiento": "MOV-2026-000186",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000196",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 24
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "(del campo)",
+  "movimiento": "MOV-2026-000215",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 43
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "(del campo)",
+  "movimiento": "MOV-2026-000216",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 44
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "9 bolsas para 40.860 kg da 4.540 kg por bolsa",
+  "valor": "4540.0",
+  "movimiento": "MOV-2026-000219",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "sucia (paraguay)",
+  "movimiento": "MOV-2026-000221",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 49
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "sucia (paraguay)",
+  "movimiento": "MOV-2026-000222",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 50
+  }
+ },
+ {
+  "id": "dtv_en_columna_ajena",
+  "detalle": "un DTV cargado en la columna Categoría",
+  "valor": "dtv 13796860-6",
+  "movimiento": "MOV-2026-000223",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 51
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000226",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 54
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 3",
+  "movimiento": "MOV-2026-000227",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 55
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000228",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 56
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000229",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 57
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000230",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000232",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 60
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000233",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 61
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000234",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "dtv_en_columna_ajena",
+  "detalle": "un DTV cargado en la columna Categoría",
+  "valor": "dtv 13959806-7",
+  "movimiento": "MOV-2026-000236",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 64
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 2",
+  "movimiento": "MOV-2026-000237",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 65
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 3",
+  "movimiento": "MOV-2026-000238",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 66
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 3",
+  "movimiento": "MOV-2026-000239",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 67
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 3",
+  "movimiento": "MOV-2026-000240",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 68
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "camara 3",
+  "movimiento": "MOV-2026-000241",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 69
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "vuelve al frio",
+  "movimiento": "MOV-2026-000243",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 71
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "vuelve al frio",
+  "movimiento": "MOV-2026-000244",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 72
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa roja-hilo blanco sin tamañar 48,46 kg",
+  "movimiento": "MOV-2026-000245",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 2
+  }
+ },
+ {
+  "id": "kg_como_texto",
+  "detalle": "los kilos vienen escritos como texto",
+  "valor": "29080 kg",
+  "movimiento": "MOV-2026-000245",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 2
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa roja-hilo blanco sin tamañar 48,17 kg",
+  "movimiento": "MOV-2026-000246",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 3
+  }
+ },
+ {
+  "id": "kg_como_texto",
+  "detalle": "los kilos vienen escritos como texto",
+  "valor": "29000 kg",
+  "movimiento": "MOV-2026-000246",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 3
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa roja-hilo blanco sin tamañar 48,81 kg",
+  "movimiento": "MOV-2026-000247",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 4
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa roja-hilo blanco sin tamañar 48,90 kg",
+  "movimiento": "MOV-2026-000248",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 5
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa verde-hilo amarillo",
+  "movimiento": "MOV-2026-000249",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 6
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa verde-hilo verde",
+  "movimiento": "MOV-2026-000250",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 7
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa blanca y roja hilo amarillo",
+  "movimiento": "MOV-2026-000251",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 8
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "hilo amarillo",
+  "movimiento": "MOV-2026-000252",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 9
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa verde-hilo verde",
+  "movimiento": "MOV-2026-000253",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 10
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa verde-hilo blanco",
+  "movimiento": "MOV-2026-000254",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 11
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsa blanca y roja hilo negro",
+  "movimiento": "MOV-2026-000255",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 12
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "bolsas varias -hilo amarillo",
+  "movimiento": "MOV-2026-000256",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 13
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.blanco",
+  "movimiento": "MOV-2026-000257",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b,blanca-hilo negro",
+  "movimiento": "MOV-2026-000258",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 15
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-hilo celeste",
+  "movimiento": "MOV-2026-000259",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 16
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-hilo celeste",
+  "movimiento": "MOV-2026-000260",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 17
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-hilo celeste- SOLO CHASIS !!!!",
+  "movimiento": "MOV-2026-000261",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 18
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000262",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 19
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.verde-h.blanco",
+  "movimiento": "MOV-2026-000263",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 20
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000264",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 21
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.celeste",
+  "movimiento": "MOV-2026-000267",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 24
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.blanco",
+  "movimiento": "MOV-2026-000269",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 26
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.blanco",
+  "movimiento": "MOV-2026-000270",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 27
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000272",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 29
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.blanco",
+  "movimiento": "MOV-2026-000273",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 30
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "b.blanca-h.amarillo",
+  "movimiento": "MOV-2026-000274",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 31
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000278",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 35
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo directo de camara a Mazzeo",
+  "movimiento": "MOV-2026-000279",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 36
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000279",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 36
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000284",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 41
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000285",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 42
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "saco p/trabajar",
+  "movimiento": "MOV-2026-000286",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 43
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000286",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 43
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo directo de camara",
+  "movimiento": "MOV-2026-000288",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000288",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "saco p/trabajar",
+  "movimiento": "MOV-2026-000291",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 48
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000291",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 48
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "saco p/trabajar b.verde",
+  "movimiento": "MOV-2026-000292",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 49
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000292",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 49
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "saco para trabajar",
+  "movimiento": "MOV-2026-000294",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 51
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000294",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 51
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo agricolo directo de camara",
+  "movimiento": "MOV-2026-000295",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 52
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "saco para trabajar",
+  "movimiento": "MOV-2026-000301",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000301",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo delcaso directo.",
+  "movimiento": "MOV-2026-000303",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 60
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000303",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 60
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo directo de camara",
+  "movimiento": "MOV-2026-000305",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000305",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "destino_no_declarado",
+  "detalle": "el retiro no dice a dónde fue la mercadería",
+  "valor": "cargo del caso directo .",
+  "movimiento": "MOV-2026-000318",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 75
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000318",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 75
+  }
+ },
+ {
+  "id": "sin_remito",
+  "detalle": "movimiento sin número de remito",
+  "valor": null,
+  "movimiento": "MOV-2026-000319",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ret Frio",
+   "fila_excel": 76
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "(lamb weston)",
+  "movimiento": "MOV-2026-000329",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 11
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "(lamb weston)",
+  "movimiento": "MOV-2026-000330",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 12
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "(lamb weston)",
+  "movimiento": "MOV-2026-000331",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 13
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "56 BOLSONES",
+  "movimiento": "MOV-2026-000332",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 14
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "60 BOLSONES",
+  "movimiento": "MOV-2026-000333",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 15
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "50 BOLSONES",
+  "movimiento": "MOV-2026-000334",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 16
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000335",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 17
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000337",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 19
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000338",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 20
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000339",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 21
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000340",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 22
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000344",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 26
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "540 sasu+50 ceci",
+  "movimiento": "MOV-2026-000345",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 27
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000345",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 27
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000348",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 30
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000349",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 31
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000352",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 34
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000353",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 35
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000354",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 36
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000356",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 38
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000359",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 41
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000360",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 42
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "papasud-hzpc",
+  "movimiento": "MOV-2026-000363",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000363",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 45
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000365",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 47
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000367",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 49
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "daghero damian",
+  "movimiento": "MOV-2026-000369",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 51
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "daghero edgardo",
+  "movimiento": "MOV-2026-000371",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 53
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000371",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 53
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000372",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 54
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000374",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 56
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "papasud-hzpc",
+  "movimiento": "MOV-2026-000375",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 57
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000375",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 57
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000379",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 61
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000380",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 62
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000382",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 64
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000387",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 69
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000392",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 74
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000393",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 75
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000397",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 79
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000399",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 81
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000402",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 84
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000403",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 85
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "repasada",
+  "movimiento": "MOV-2026-000405",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 87
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "repasada",
+  "movimiento": "MOV-2026-000406",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 88
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "repasada",
+  "movimiento": "MOV-2026-000407",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 89
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "repasada",
+  "movimiento": "MOV-2026-000408",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 90
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000413",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 95
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "elias agüero",
+  "movimiento": "MOV-2026-000416",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 98
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "elias agüero",
+  "movimiento": "MOV-2026-000417",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 99
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000417",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 99
+  }
+ },
+ {
+  "id": "columna_con_otro_dato",
+  "detalle": "la columna Categoría no trae una categoría",
+  "valor": "elias agüero",
+  "movimiento": "MOV-2026-000418",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 100
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000418",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 100
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "8 bolsas para 200 kg da 25 kg por bolsa",
+  "valor": "25.0",
+  "movimiento": "MOV-2026-000418",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 100
+  }
+ },
+ {
+  "id": "kg_prom_imposible",
+  "detalle": "223 bolsas para 12.880 kg da 58 kg por bolsa",
+  "valor": "57.76",
+  "movimiento": "MOV-2026-000419",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 101
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000421",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 103
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000422",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 104
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000423",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 105
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000424",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 106
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000425",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 107
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000429",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 111
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000434",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 116
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000435",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 117
+  }
+ },
+ {
+  "id": "sin_dtv",
+  "detalle": "movimiento sin DTV registrado",
+  "valor": null,
+  "movimiento": "MOV-2026-000436",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 118
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 50 declara 2 variedades (spunta en 20 filas · beo en 1 fila); por kilos manda spunta",
+  "valor": "beo",
+  "movimiento": "MOV-2026-000099",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 35
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 500 declara 3 variedades (sagitta en 19 filas · atlantic en 4 filas · spunta en 1 fila); por kilos manda sagitta",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000209",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 37
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 500 declara 3 variedades (sagitta en 19 filas · atlantic en 4 filas · spunta en 1 fila); por kilos manda sagitta",
+  "valor": "atlantic",
+  "movimiento": "MOV-2026-000210",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 38
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 500 declara 3 variedades (sagitta en 19 filas · atlantic en 4 filas · spunta en 1 fila); por kilos manda sagitta",
+  "valor": "atlantic",
+  "movimiento": "MOV-2026-000211",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 39
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 500 declara 3 variedades (sagitta en 19 filas · atlantic en 4 filas · spunta en 1 fila); por kilos manda sagitta",
+  "valor": "atlantic",
+  "movimiento": "MOV-2026-000212",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 40
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 500 declara 3 variedades (sagitta en 19 filas · atlantic en 4 filas · spunta en 1 fila); por kilos manda sagitta",
+  "valor": "atlantic",
+  "movimiento": "MOV-2026-000213",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 41
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 51 declara 2 variedades (spunta en 3 filas · ikarus en 1 fila); por kilos manda spunta",
+  "valor": "ikarus",
+  "movimiento": "MOV-2026-000089",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 25
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 52 declara 2 variedades (spunta en 1 fila · linus en 1 fila); por kilos manda spunta",
+  "valor": "linus",
+  "movimiento": "MOV-2026-000102",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso  Trevelin",
+   "fila_excel": 38
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 530 declara 2 variedades (sababa en 6 filas · spunta en 3 filas); por kilos manda sababa",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000225",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 53
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 530 declara 2 variedades (sababa en 6 filas · spunta en 3 filas); por kilos manda sababa",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000243",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 71
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 530 declara 2 variedades (sababa en 6 filas · spunta en 3 filas); por kilos manda sababa",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000244",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 72
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 600 declara 3 variedades (ludmilla en 4 filas · spunta en 2 filas · atlantic en 1 fila); por kilos manda ludmilla",
+  "valor": "atlantic",
+  "movimiento": "MOV-2026-000226",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 54
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 600 declara 3 variedades (ludmilla en 4 filas · spunta en 2 filas · atlantic en 1 fila); por kilos manda ludmilla",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000228",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 56
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 600 declara 3 variedades (ludmilla en 4 filas · spunta en 2 filas · atlantic en 1 fila); por kilos manda ludmilla",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000229",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 57
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 601 declara 2 variedades (ludmilla en 1 fila · spunta en 2 filas); por kilos manda ludmilla",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000230",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 58
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 601 declara 2 variedades (ludmilla en 1 fila · spunta en 2 filas); por kilos manda ludmilla",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000240",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 68
+  }
+ },
+ {
+  "id": "lote_multivariedad",
+  "detalle": "el lote 700 declara 2 variedades (7 four 7 en 3 filas · spunta en 1 fila); por kilos manda 7 four 7",
+  "valor": "spunta",
+  "movimiento": "MOV-2026-000198",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Env a Frio",
+   "fila_excel": 26
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13750306-9 ampara 2 remitos distintos",
+  "valor": "13750306-9",
+  "movimiento": "MOV-2026-000037",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 38
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13750306-9 ampara 2 remitos distintos",
+  "valor": "13750306-9",
+  "movimiento": "MOV-2026-000040",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 41
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13750306-9 ampara 2 remitos distintos",
+  "valor": "13750306-9",
+  "movimiento": "MOV-2026-000041",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 42
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13786496-7 ampara 2 remitos distintos",
+  "valor": "13786496-7",
+  "movimiento": "MOV-2026-000043",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 44
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13786496-7 ampara 2 remitos distintos",
+  "valor": "13786496-7",
+  "movimiento": "MOV-2026-000047",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 48
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13868990-5 ampara 2 remitos distintos",
+  "valor": "13868990-5",
+  "movimiento": "MOV-2026-000054",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 55
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13868990-5 ampara 2 remitos distintos",
+  "valor": "13868990-5",
+  "movimiento": "MOV-2026-000056",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Ingreso Tolvas Santa Ana",
+   "fila_excel": 57
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13587702-6 ampara 2 remitos distintos",
+  "valor": "13587702-6",
+  "movimiento": "MOV-2026-000324",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 6
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 13587702-6 ampara 2 remitos distintos",
+  "valor": "13587702-6",
+  "movimiento": "MOV-2026-000327",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 9
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 14151509-8 ampara 2 remitos distintos",
+  "valor": "14151509-8",
+  "movimiento": "MOV-2026-000383",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 65
+  }
+ },
+ {
+  "id": "dtv_repetido",
+  "detalle": "el DTV 14151509-8 ampara 2 remitos distintos",
+  "valor": "14151509-8",
+  "movimiento": "MOV-2026-000419",
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "Entregas a clientes 2026",
+   "fila_excel": 101
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 241 no declara de qué campo sale",
+  "valor": "241",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 300 no declara de qué campo sale",
+  "valor": "300",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 225 no declara de qué campo sale",
+  "valor": "225",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 230 no declara de qué campo sale",
+  "valor": "230",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 811 no declara de qué campo sale",
+  "valor": "811",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 511 no declara de qué campo sale",
+  "valor": "511",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 510 no declara de qué campo sale",
+  "valor": "510",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 520 no declara de qué campo sale",
+  "valor": "520",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 561 no declara de qué campo sale",
+  "valor": "561",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 240 no declara de qué campo sale",
+  "valor": "240",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 417 no declara de qué campo sale",
+  "valor": "417",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 810 no declara de qué campo sale",
+  "valor": "810",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 700 no declara de qué campo sale",
+  "valor": "700",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 419 no declara de qué campo sale",
+  "valor": "419",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 416 no declara de qué campo sale",
+  "valor": "416",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 411 no declara de qué campo sale",
+  "valor": "411",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 412 no declara de qué campo sale",
+  "valor": "412",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 242 no declara de qué campo sale",
+  "valor": "242",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 311 no declara de qué campo sale",
+  "valor": "311",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 902 no declara de qué campo sale",
+  "valor": "902",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote 900 no declara de qué campo sale",
+  "valor": "900",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote g1 no declara de qué campo sale",
+  "valor": "g1",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ },
+ {
+  "id": "lote_sin_campo",
+  "detalle": "el lote no no declara de qué campo sale",
+  "valor": "no",
+  "movimiento": null,
+  "fuente": {
+   "archivo": "Planilla de movimientos 2026.xls",
+   "solapa": "(varias)",
+   "fila_excel": null
+  }
+ }
+]

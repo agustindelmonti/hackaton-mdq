@@ -1,0 +1,70 @@
+{
+ "archivo": "Planilla de movimientos 2026.xls",
+ "solapas_importadas": {
+  "Ingreso Tolvas Santa Ana": "ingreso_tolva",
+  "Ingreso  Trevelin": "ingreso_multiplicacion",
+  "De campo a Frío": "campo_a_frio",
+  "Env a Frio": "envio_a_frio",
+  "Ret Frio": "retiro_de_frio",
+  "Entregas a clientes 2026": "entrega_cliente"
+ },
+ "solapas_pendientes": {
+  "P.Chica": "cuadro cruzado por destino (Frigopap/Sasula/Belmonte/Paraguay), no filas de movimiento",
+  "Stocks": "resumen de producción por lote, no movimientos — alimenta superficie y rinde",
+  "SP": "tablero de stock y ventas de Spunta por lote, armado a mano",
+  "DJ Panc": "declaración jurada a Pancani — planilla vacía en esta copia",
+  "Transportes": "solapa vacía",
+  "Frigoríficos": "solapa vacía"
+ },
+ "plano": {
+  "santa_ana": {
+   "A": {
+    "cuadrantes": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "lotes": [
+     "L30",
+     "L35",
+     "L37",
+     "L38",
+     "L41",
+     "L42",
+     "L43",
+     "L44",
+     "L45",
+     "L55"
+    ]
+   },
+   "B": {
+    "cuadrantes": [
+     5,
+     6,
+     7,
+     8
+    ],
+    "lotes": [
+     "L31",
+     "L32",
+     "L33",
+     "L34",
+     "L34B",
+     "L36",
+     "L37B",
+     "L54",
+     "L71",
+     "L72B",
+     "L75",
+     "L77",
+     "L79"
+    ]
+   }
+  }
+ },
+ "kg_bolsa_banda": [
+  45.0,
+  56.0
+ ]
+}

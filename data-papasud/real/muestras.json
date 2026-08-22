@@ -1,0 +1,95 @@
+[
+ {
+  "lote": "37",
+  "variedad": "agata",
+  "campana": "2020",
+  "campo": "oriente",
+  "superficie_ha": 12.0,
+  "produccion_bolsas": 11873,
+  "reparto": {
+   "exportacion": 0.9055,
+   "sin_chicas": 0.0853,
+   "semillon": 0.0092
+  },
+  "rinde_bolsas_ha": 989.4,
+  "fuente": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "Ag+At Root",
+   "fila_excel": 14
+  },
+  "nota": "muestreo de pre-cosecha, campaña 2020 — es una referencia de qué da el lote, no el stock de hoy",
+  "distribucion_mm": {
+   "55-60": 0.0552,
+   "50-55": 0.294,
+   "45-50": 0.3771,
+   "40-45": 0.1691,
+   "25-40": 0.05,
+   "<25": 0.0547
+  },
+  "fuente_distribucion": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "Ag 22-12"
+  }
+ },
+ {
+  "lote": "41",
+  "variedad": "atlantic",
+  "campana": "2020",
+  "campo": "oriente",
+  "superficie_ha": 7.55,
+  "produccion_bolsas": 7088,
+  "reparto": {
+   "exportacion": 0.8121,
+   "sin_chicas": 0.1807,
+   "semillon": 0.0072
+  },
+  "rinde_bolsas_ha": 938.8,
+  "fuente": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "Ag+At Root",
+   "fila_excel": 18
+  },
+  "nota": "muestreo de pre-cosecha, campaña 2020 — es una referencia de qué da el lote, no el stock de hoy",
+  "distribucion_mm": {
+   ">60": 0.0,
+   "55-60": 0.2285,
+   "40-55": 0.6543,
+   "30-40": 0.0977,
+   "<30": 0.0195
+  },
+  "fuente_distribucion": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "At 22-12"
+  }
+ },
+ {
+  "lote": "38",
+  "variedad": "asterix",
+  "campana": "2020",
+  "campo": "oriente",
+  "superficie_ha": 7.96,
+  "produccion_bolsas": 8515,
+  "reparto": {
+   "exportacion": 0.8665,
+   "sin_chicas": 0.1237,
+   "semillon": 0.0099
+  },
+  "rinde_bolsas_ha": 1069.7,
+  "fuente": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "Ag+At Root",
+   "fila_excel": 18
+  },
+  "nota": "muestreo de pre-cosecha, campaña 2020 — es una referencia de qué da el lote, no el stock de hoy",
+  "distribucion_mm": {
+   ">55": 0.1273,
+   "45-55": 0.7141,
+   "25-45": 0.1397,
+   "<25": 0.0189
+  },
+  "fuente_distribucion": {
+   "archivo": "Muestras pre-cosecha Oriente 2020.xlsx",
+   "solapa": "Ax 22-12"
+  }
+ }
+]
