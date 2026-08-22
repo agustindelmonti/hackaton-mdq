@@ -102,6 +102,48 @@ es trivial de verificar cuando los tres salen de la misma fuente.
 
 ## Más allá del brief
 
+**El trabajo repartido.** Ángela PROPONE la tarea con la persona ya calculada:
+cruza los traslados sin confirmar, las diferencias abiertas, las órdenes
+frenadas y los análisis por vencer, y resuelve a quién le toca **por rol y por
+ubicación** — «confirmá lo que llegó a Chapadmalal» le cae a Néstor, que está
+parado ahí, y no al encargado. El botón dice el nombre. Nada se manda solo, y
+una sugerencia ya asignada no vuelve a ofrecerse. El destinatario la ve en su
+pantalla y en su celular, la marca hecha, y quien la asignó lo ve. Ese ida y
+vuelta es la diferencia entre un tablero y una herramienta.
+
+`core/tareas.py` · `sections/TareasEquipo.jsx` · `mobile/MiDia.jsx`
+
+**Siete objetivos que Ángela mide sola.** Traslados sin confirmar (Rubén),
+diferencias cerradas (Rubén), órdenes sin bloqueo (Cecilia), análisis vigentes
+(Dalia), la ventana de brotación (Rubén), el galpón en tránsito (Néstor) y los
+datos a corregir. El `actual` de cada uno sale del **mismo cálculo** que ya
+muestra su pantalla: si el tablero dice 4 diferencias abiertas, el objetivo
+dice 4. El baseline y el historial son sintéticos —sin pasado la barra no dice
+si avanza o está estancada— y así está declarado.
+
+**El mapa de la operación.** Las cuatro cámaras en cuadro con el logo de la
+empresa en el medio, porque los traslados son ENTRE ellas: en columna, doce
+flechas de ida y vuelta se cruzan y no se lee ninguna. Los doce traslados se
+agrupan en seis corredores y las dos flechas punteadas de los kilos que
+salieron y nadie confirmó se ven desde la otra punta de la sala.
+
+**El cerebro.** La capa de abajo del mapa: 183 entidades —cada lote, cada
+variedad, cada categoría del INASE, cada campo, cada cámara, cada cliente— y
+753 relaciones. Se busca cualquier cosa, se toca un punto y se encienden SUS
+relaciones. **Ninguna arista es inferida**: la trazabilidad de semilla
+fiscalizada obliga a que cada lote declare variedad, categoría, campaña, campo
+de origen y ubicación. Si alguien pregunta si eso lo inventamos, se abre el
+JSON del lote y se lee el campo.
+
+**Arreglar el pasado.** Papasud viene de años de planilla compartida y los
+errores están adentro. Cinco detectores del rubro: lotes brotados que siguen
+con su categoría, pedigrí incompleto, sin análisis aprobado, traslados a mitad
+de camino y conteos que nunca cerraron. Y cuando se suelta el `.xlsx` de
+siempre, el sistema lo estructura **y dice qué está roto adentro** —el mismo
+lote cargado dos veces por dos personas, una fila sin categoría, una celda que
+dice «aprox 9000» donde van los kilos— con el número de fila del Excel. Nada se
+corrige solo: entra a la zona de revisión y lo aprueba una persona.
+
 **El freno del remito.** Cinco controles antes de emitir: stock verificado,
 conteos en discusión, análisis sanitario vigente, calibre consistente con el
 grado del rótulo, y brotación. Con un bloqueo abierto **no hay botón de emitir**:
@@ -231,5 +273,39 @@ data-papasud/      el dataset sintético y su generador determinista
 cd backend && python -m pytest
 ```
 
-> La suite escribe en el data dir del tenant. Después de correrla, restaurá los
-> seeds con `git checkout -- data-papasud/`.
+**115 pasan · 320 se saltean con motivo · 0 fallan.**
+
+`tests/test_papasud_v3.py` (38 tests) es la suite que defiende la demo: los tres
+niveles del brief punta a punta, más el reparto de tareas, los objetivos, los
+detectores de lo que quedó mal de antes, el Excel, el mapa y el cerebro. Ningún
+test hardcodea un número que la app calcula: verifica la RELACIÓN —que el
+objetivo diga lo mismo que su pantalla, que el cerebro cuente los mismos lotes
+que el mapa—, así el dataset se puede regenerar sin dejar la suite en rojo por
+una diferencia de un kilo.
+
+El resto de `tests/` viene de otra instancia (Supermercados Horizonte, un
+almacén). Los que necesitan usuarios que acá no existen se saltean **diciendo
+por qué**, y los que prueban semántica de almacén —productos por balanza, días
+de cobro, «más de 10.000 unidades»— están fuera de la colecta con su motivo
+escrito en `conftest.py`. Forzarlos a pasar sería falsificar la cobertura.
+
+> La suite corre contra un data dir TEMPORAL sembrado desde `data-papasud/`:
+> no toca el seed versionado.
+
+## El backup grabado de la demo
+
+```bash
+cd frontend && node demo-grabada.mjs        # todo
+cd frontend && TRAMO=5 node demo-grabada.mjs  # re-grabar un tramo
+```
+
+Deja un `.webm` por tramo en `docs/demo/`. No es un video de marketing: es la
+MISMA app contra el MISMO backend, manejada por un guion, para que lo que se ve
+grabado sea exactamente lo que pasa en vivo. Si el sábado se cae el wifi o el
+proyector no toma la notebook, esto es lo que se muestra.
+
+Después de grabar, el estado vuelve a cero borrando lo que la app escribió:
+
+```bash
+rm -f data-papasud/inventory_actual.json data-papasud/recordatorios.json data-papasud/notificaciones.json data-papasud/audit.json data-papasud/.semilla_equipo
+```
