@@ -38,11 +38,21 @@ from __future__ import annotations
 
 from . import (conciliacion, esquema, movimientos, notas, ordenes_carga,
                semilla, store)
+from . import paths
 from .fechas import hoy, parse_fecha
 
 # Cuánto falta para que la brotación sea urgente (mismo umbral que las
 # oportunidades: un solo número para todo el sistema).
 VENTANA_BROTACION_DIAS = 45
+
+
+def _empresa() -> str:
+    """El nombre del tenant, de la misma fuente que /api/health."""
+    try:
+        import data_store
+        return data_store.meta().get("empresa") or "Papasud S.A."
+    except Exception:
+        return "Papasud S.A."
 
 
 def _sid(x: str) -> str:
@@ -111,6 +121,21 @@ def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
                     for v, g in sorted(por_var.items(), key=lambda kv: -kv[1]["kg"])],
         ))
 
+    # EL CENTRO DEL CENTRO: la empresa. No es decoración — es la respuesta a
+    # "¿de quién es todo esto?" dibujada en el único lugar donde no se discute:
+    # el medio de las cuatro ubicaciones. La pantalla le pone el logo.
+    nodos.append(_nodo(
+        "marca:papasud", "marca", "centro", _empresa(),
+        subtitulo="Cuatro ubicaciones · una sola verdad",
+        # El logo viaja EN EL NODO, del mismo lugar que lo saca /api/health: el
+        # tenant. Que la pantalla lo resolviera por su cuenta era una carrera —
+        # el mapa se dibujaba antes de que el logo llegara y quedaba el texto.
+        logo=paths.LOGO,
+        metricas={"toneladas": round(sum(u["toneladas"] for u in ubis), 1),
+                  "lotes": sum(u["lotes"] for u in ubis),
+                  "ubicaciones": len(ubis)},
+    ))
+
     # --- las aristas del centro: LOS MOVIMIENTOS ---------------------------
     # Es la parte que más importa. Un traslado sin confirmar en destino son
     # kilos que no están en ningún lado, y acá se ven como lo que son: una
@@ -171,11 +196,12 @@ def _origen(arts: list[dict]) -> tuple[list[dict], list[dict]]:
     for a in arts:
         c = a.get("campo_origen") or "—"
         g = por_campo.setdefault(c, {"kg": 0.0, "lotes": 0, "zona": a.get("zona_origen"),
-                                     "ubis": set()})
+                                     "ubis": {}})
         g["kg"] += float(a.get("stock") or 0)
         g["lotes"] += 1
         if a.get("ubicacion_id"):
-            g["ubis"].add(a["ubicacion_id"])
+            g["ubis"][a["ubicacion_id"]] = (g["ubis"].get(a["ubicacion_id"], 0.0)
+                                            + float(a.get("stock") or 0))
 
     catalogo = {c["nombre"]: c for c in semilla.campos()}
     for nombre, g in sorted(por_campo.items(), key=lambda kv: -kv[1]["kg"]):
@@ -191,40 +217,26 @@ def _origen(arts: list[dict]) -> tuple[list[dict], list[dict]]:
                      "vectores. Por eso el material de categoría alta se multiplica acá."
                      if patagonia else None),
         ))
-        # el campo alimenta a las ubicaciones donde hoy están sus lotes
-        for uid in g["ubis"]:
-            aristas.append(_arista(nid, f"ubi:{uid}", "ingreso"))
+        # El campo alimenta a las ubicaciones donde hoy están sus lotes. Cinco
+        # campos por cuatro cámaras son casi el bipartito completo: veinte
+        # líneas que no dicen nada. Se marca cuál es la PRINCIPAL de cada campo
+        # (donde está la mayoría de sus kilos) y la pantalla dibuja esa; el
+        # resto queda detrás de un "ver todos los ingresos" — nada se esconde,
+        # pero la lectura por defecto es la verdadera.
+        principal = max(g["ubis"].items(), key=lambda kv: kv[1])[0] if g["ubis"] else None
+        for uid, kg in sorted(g["ubis"].items(), key=lambda kv: -kv[1]):
+            aristas.append(_arista(nid, f"ubi:{uid}", "ingreso",
+                                   kg=round(kg, 1), principal=(uid == principal)))
         if patagonia:
             aristas.append(_arista("lab:invitro", nid, "multiplicacion"))
 
-    # Las campañas: el eje temporal del negocio.
-    por_camp: dict[str, dict] = {}
-    for a in arts:
-        k = a.get("campania") or "—"
-        g = por_camp.setdefault(k, {"kg": 0.0, "lotes": 0})
-        g["kg"] += float(a.get("stock") or 0)
-        g["lotes"] += 1
-    for k, g in sorted(por_camp.items(), reverse=True):
-        nodos.append(_nodo(
-            f"campania:{k}", "campania", "origen", f"Campaña {k}",
-            metricas={"lotes": g["lotes"], "toneladas": round(g["kg"] / 1000, 1)},
-        ))
+    # POR QUÉ NO ESTÁN LAS CAMPAÑAS NI LAS VARIEDADES.
+    # Estaban, y eran catorce cajas en la columna izquierda SIN UNA SOLA LÍNEA:
+    # una campaña no "alimenta" una cámara, y una variedad tampoco. Nodos
+    # huérfanos en un mapa de flujo se leen como un error de dibujo, no como
+    # información. La campaña y la variedad de cada lote viven donde sirven —
+    # en el panel de la ubicación (agrupado por variedad) y en la trazabilidad.
 
-    # Las variedades, con su dormancia (que es lo que fija el reloj).
-    por_var: dict[str, dict] = {}
-    for a in arts:
-        v = a.get("variedad") or "—"
-        g = por_var.setdefault(v, {"kg": 0.0, "lotes": 0})
-        g["kg"] += float(a.get("stock") or 0)
-        g["lotes"] += 1
-    dorm = {v["nombre"]: v for v in semilla.variedades()}
-    for v, g in sorted(por_var.items(), key=lambda kv: -kv[1]["kg"]):
-        nodos.append(_nodo(
-            f"variedad:{v}", "variedad", "origen", v,
-            subtitulo=(dorm.get(v) or {}).get("destino"),
-            metricas={"lotes": g["lotes"], "toneladas": round(g["kg"] / 1000, 1),
-                      "dormancia_dias": (dorm.get(v) or {}).get("dormancia_dias")},
-        ))
     return nodos, aristas
 
 

@@ -2433,4 +2433,12 @@ export const ES = {
   "mapa.m_hectareas": "Hectáreas",
   "mapa.m_rinde": "Rinde t/ha",
   "mapa.m_dormancia_dias": "Dormancia (días)",
+  "mapa.e_sin_confirmar": "{kg} kg sin confirmar",
+  "mapa.leyenda_transito": "kilos que salieron y nadie confirmó",
+  "mapa.leyenda_traslado": "traslados entre ubicaciones",
+  "mapa.ver_ingresos": "ver todos los ingresos de campo",
+  "mapa.solo_principal": "ver solo el ingreso principal",
+  "mapa.cerrar": "Cerrar",
+  "mapa.tipo_marca": "La empresa",
+  "mapa.m_ubicaciones": "Ubicaciones",
 };

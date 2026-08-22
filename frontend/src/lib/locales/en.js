@@ -2460,4 +2460,12 @@ export const EN = {
   "mapa.m_hectareas": "Hectares",
   "mapa.m_rinde": "Yield t/ha",
   "mapa.m_dormancia_dias": "Dormancy (days)",
+  "mapa.e_sin_confirmar": "{kg} kg unconfirmed",
+  "mapa.leyenda_transito": "kilos that left and nobody confirmed",
+  "mapa.leyenda_traslado": "transfers between locations",
+  "mapa.ver_ingresos": "show every field intake",
+  "mapa.solo_principal": "show only the main intake",
+  "mapa.cerrar": "Close",
+  "mapa.tipo_marca": "The company",
+  "mapa.m_ubicaciones": "Locations",
 };
