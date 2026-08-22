@@ -39,7 +39,8 @@ from core import (store, saneamiento, fase, memoria, importer, staging, anomalia
                   trazabilidad, exportacion, mapa as mapa_op,
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
-                  evolucion, ventas, paths, conocimiento, piso, onboarding, tareas)
+                  evolucion, ventas, paths, conocimiento, piso, onboarding, tareas,
+                  cerebro as cerebro_mod)
 
 
 def _lang(u: dict | None = None) -> str:
@@ -1103,6 +1104,17 @@ def mapa_operacion(_u: dict = Depends(require_feature("mapa"))):
     """Tres capas fijas: de dónde viene, dónde está, adónde va. El centro son
     las cuatro ubicaciones — el ojo pasa obligatoriamente por el stock."""
     return mapa_op.mapa()
+
+
+@app.get("/api/cerebro")
+def cerebro_get(_u: dict = Depends(require_feature("mapa"))):
+    """EL CEREBRO — cada entidad del negocio y cómo se cruzan.
+
+    Es la capa de abajo del mapa: los lotes, variedades, categorías del INASE,
+    campos, cámaras, órdenes, clientes y países, con TODAS las relaciones que la
+    trazabilidad de semilla fiscalizada ya obliga a declarar. Acá no se infiere
+    ninguna arista — se lee el campo del lote."""
+    return cerebro_mod.completo()
 
 
 @app.get("/api/genealogia/{lote}")

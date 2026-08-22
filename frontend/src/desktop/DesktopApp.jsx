@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  LayoutDashboard, Boxes, Wallet, Banknote, Bell, Users, Upload, TrendingUp, HandCoins, ClipboardList, PackageX, UserCircle, Search, X, PanelRightOpen, LogOut, Sparkles, Globe, Inbox, FileText, ChevronDown, Waypoints, ShieldCheck, Snowflake, ArrowLeftRight, Scale, Ship, Route,
+  LayoutDashboard, Boxes, Wallet, Banknote, Bell, Users, Upload, TrendingUp, HandCoins, ClipboardList, PackageX, UserCircle, Search, X, PanelRightOpen, LogOut, Sparkles, Globe, Inbox, FileText, ChevronDown, Waypoints, Network, ShieldCheck, Snowflake, ArrowLeftRight, Scale, Ship, Route,
 } from "lucide-react";
 import { api } from "../lib/api";
 import { contarACorregir } from "../lib/alertas";
@@ -21,6 +21,7 @@ import AdminContexto from "../sections/AdminContexto";
 import Administracion from "../sections/Administracion";
 import Exportacion from "../sections/Exportacion";
 import MapaOperacion from "../sections/MapaOperacion";
+import CerebroSemilla from "../sections/CerebroSemilla";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
 import Conciliacion from "../sections/Conciliacion";
@@ -50,6 +51,7 @@ import Toasts from "../components/Toasts";
 const CATALOGO = {
   panel: { lk: "nav.panel", icon: LayoutDashboard },
   mapa: { lk: "nav.mapa", icon: Waypoints },
+  cerebro: { lk: "nav.cerebro", icon: Network },
   inventario: { lk: "nav.inventario", icon: Boxes },
   saneamiento: { lk: "nav.saneamiento", icon: ClipboardList },
   evolucion: { lk: "nav.evolucion", icon: TrendingUp },
@@ -76,7 +78,7 @@ const CATALOGO = {
 // ARRIBA (Alertas/Oportunidades/Evolución), sin label de grupo.
 const BLOQUES_NAV = [
   // P28 — "El mapa de tu negocio" vive entre Home y Alertas (el pedido literal).
-  { lk: null, ids: ["panel", "mapa", "alertas", "oportunidades", "evolucion"] },
+  { lk: null, ids: ["panel", "mapa", "cerebro", "alertas", "oportunidades", "evolucion"] },
   { lk: "nav.grupo_stock",
     ids: ["deposito", "inventario", "movimientos", "conciliacion", "trazabilidad"] },
   { lk: "nav.grupo_salida", ids: ["logistica", "exportacion"] },
@@ -390,6 +392,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                       onCerrada={onRecargar} onNavegar={navegar} /></div>
                   : <Inicio data={data} oportunidades={oportunidades} onNavegar={navegar} onPreguntar={preguntar} />)}
                 {section === "mapa" && <MapaOperacion onPreguntar={preguntar} />}
+                {section === "cerebro" && <CerebroSemilla onPreguntar={preguntar} />}
                 {section === "inventario" && <Inventario data={data} highlight={highlight} onPreguntar={preguntar} onNavegar={navegar} />}
                 {section === "saneamiento" && <Saneamiento user={user} highlight={highlight} onNavegar={navegar} onPreguntar={preguntar} onRecargar={onRecargar} onStagingCambio={setStagingCount} />}
                 {section === "alertas" && <AlertasNegocio onPreguntar={preguntar} onNavegar={navegar} datos={fase?.datos} />}

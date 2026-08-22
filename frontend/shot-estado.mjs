@@ -25,7 +25,7 @@ const nav = await p.evaluate(()=>[...document.querySelectorAll("nav button,nav a
 console.log("NAV:", JSON.stringify(nav));
 if (SEC) {
   const btn = p.getByRole("button", { name: new RegExp(SEC,"i") }).first();
-  if (await btn.count()) { await btn.click(); await p.waitForTimeout(4000); }
+  if (await btn.count()) { await btn.click(); await p.waitForTimeout(+(process.env.ESPERA||4000)); }
   else console.log("NO ENCONTRE seccion", SEC);
 }
 await p.screenshot({ path:`../docs/shots/${U}-${TAG}.png` });

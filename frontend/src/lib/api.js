@@ -199,6 +199,8 @@ export const api = {
     post(`/api/ordenes-carga/${numero}/emitir`, { aceptar_advertencias: aceptarAdvertencias }),
   // El mapa de la operación (stock en el centro) y la genealogía de un lote
   mapa: () => get("/api/mapa-operacion"),
+  // EL CEREBRO: cada entidad y cómo se cruza (la capa de abajo del mapa)
+  cerebro: () => get("/api/cerebro"),
   genealogia: (lote) => get(`/api/genealogia/${encodeURIComponent(lote)}`),
   // N03 · la carpeta de exportación, pre-completada desde la trazabilidad
   exportacion: () => get("/api/exportacion"),

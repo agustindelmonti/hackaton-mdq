@@ -28,7 +28,7 @@ cual — son SUS palabras.
 
 # Todo lo que el dueño ve. El resto de los roles son un subconjunto.
 _TODO = [
-    "panel", "mapa", "inventario", "deposito", "movimientos", "conciliacion",
+    "panel", "mapa", "cerebro", "inventario", "deposito", "movimientos", "conciliacion",
     "logistica", "exportacion", "trazabilidad", "saneamiento", "evolucion",
     "alertas", "oportunidades", "equipo", "gestion_equipo", "cargar",
     "documentos", "auditoria", "perfil", "angela",
@@ -173,7 +173,7 @@ USUARIOS = {
             "I decide on: whether a lot can ship under the category printed on its label."
         ),
         "features": ["inventario", "trazabilidad", "deposito", "conciliacion",
-                     "alertas", "documentos", "perfil", "angela"],
+                     "alertas", "documentos", "perfil", "angela", "cerebro"],
     },
     "nestor": {
         "username": "nestor", "nombre": "Néstor", "apellido": "Painé",
