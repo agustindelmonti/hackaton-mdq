@@ -51,7 +51,8 @@ class TestN01Movimientos:
         # escribe "18", lo dice
         assert i["cantidad"] == 18 and i["unidad"] == "bolsones"
         assert i["kg_calculado"] == 18000.0
-        assert "226" in i["origen_texto"] and "galp" in i["destino_texto"]
+        assert "226" in i["origen_texto"]
+        assert "galp" in i["destino_texto"].casefold()
 
     def test_si_hay_varios_lotes_candidatos_elige_una_persona(self):
         """El sistema nunca desempata solo: mover el lote equivocado son
