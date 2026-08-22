@@ -1841,6 +1841,7 @@ export const EN = {
   "inicio.dec_staging_titulo": "A file is waiting for your OK",
   "inicio.dec_staging_detalle": "“{nombre}” is ready: {n} rows reviewed.",
   "inicio.dec_calidad_detalle": "{n} cases with a proposed fix — applied with your OK.",
+  "inicio.dec_corregir": "Fix: {que}",
   "inicio.dec_solicitudes_titulo": "Access requests from your team",
   "inicio.dec_solicitudes_detalle": "{n} waiting for your approval.",
   "inicio.dec_revisar": "Review",

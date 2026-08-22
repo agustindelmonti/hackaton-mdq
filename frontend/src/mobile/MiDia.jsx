@@ -153,12 +153,12 @@ export default function MiDia({ user, onAbrirAngela, onTarea, onCerrada, onNaveg
               onChange={(e) => setConsulta(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && consulta.trim()) { onAbrirAngela?.(consulta.trim()); setConsulta(""); } }}
               placeholder={t("rol.consulta_ph")}
-              className="min-h-9 min-w-0 flex-1 bg-transparent text-[0.92rem] outline-none"
+              className="min-h-11 min-w-0 flex-1 bg-transparent text-[0.95rem] outline-none"
             />
             <button
               onClick={() => { if (consulta.trim()) { onAbrirAngela?.(consulta.trim()); setConsulta(""); } }}
               disabled={!consulta.trim()}
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-violeta text-crema disabled:opacity-40">
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-violeta text-crema disabled:opacity-40">
               <ArrowRight size={15} />
             </button>
           </div>

@@ -52,7 +52,7 @@ export default function Campanita({ token, esAdmin, onVerSolicitud }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => { setOpen((v) => !v); if (!open) cargar(); }}
-        className="relative grid h-10 w-10 place-items-center rounded-full border border-linea bg-crema text-tinta-suave hover:text-tinta"
+        className="relative grid h-11 w-11 place-items-center rounded-full border border-linea bg-crema text-tinta-suave hover:text-tinta"
       >
         <Bell size={18} />
         {noLeidas > 0 && (

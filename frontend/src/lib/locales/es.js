@@ -1814,6 +1814,7 @@ export const ES = {
   "inicio.dec_staging_titulo": "Un archivo espera tu OK",
   "inicio.dec_staging_detalle": "“{nombre}” quedó listo: {n} filas revisadas.",
   "inicio.dec_calidad_detalle": "{n} casos con corrección propuesta: se aplica con tu OK.",
+  "inicio.dec_corregir": "Corregir: {que}",
   "inicio.dec_solicitudes_titulo": "Pedidos de acceso de tu equipo",
   "inicio.dec_solicitudes_detalle": "{n} esperando que los apruebes.",
   "inicio.dec_revisar": "Revisar",

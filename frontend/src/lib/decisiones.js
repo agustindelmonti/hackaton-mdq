@@ -45,7 +45,11 @@ export function armarDecisiones(ini, t) {
         id: `calidad-${g.categoria}`,
         tipo: "calidad",
         categoria: g.categoria,
-        titulo: g.label,
+        // El mismo problema aparece DOS veces en el Inicio: como alerta ("mirá
+        // esto") y como decisión ("¿lo corrijo?"). Con el mismo título las dos
+        // tarjetas se leen como un error de la pantalla, así que la decisión
+        // dice lo que es: una corrección esperando el OK.
+        titulo: t("inicio.dec_corregir", { que: g.label }),
         detalle: t("inicio.dec_calidad_detalle", { n: num(g.cantidad) }),
         monto: g.impacto_pesos > 0 ? g.impacto_pesos : null,
       });

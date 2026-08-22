@@ -87,7 +87,7 @@
      salía con texto negro sobre negro y no se leía. */
   --color-superficie: #ffffff;
   --color-tinta: #21201d; /* texto principal */
-  --color-tinta-suave: #6e6a63; /* texto secundario */
+  --color-tinta-suave: #63605a; /* texto secundario (≥4,5:1 a 12px sobre tarjeta tintada) */
   --color-linea: #e9e7e2; /* hairlines */
 
   /* Azul PolPilot: EXCLUSIVO de Ángela / IA (esfera, acciones del agente,

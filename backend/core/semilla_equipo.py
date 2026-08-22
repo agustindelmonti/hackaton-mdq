@@ -37,6 +37,11 @@ MARCA = os.path.join(paths.DATA_DIR, ".semilla_equipo")
 TAREAS = [
     {"texto": "Contar la Cámara 2 de Ruta 226 · lote de Spunta",
      "para": "marcos", "de": "ruben", "dias": 5, "hecho": True},
+    # Marcos tiene que abrir su celular y ver algo: una vista de trabajo que
+    # arranca vacía no se lee como "estás al día", se lee como que la
+    # herramienta no sabe nada de vos.
+    {"texto": "Preparar los bolsones de la carga de Villa Dolores",
+     "para": "marcos", "de": "ruben", "dias": 1, "hecho": False},
     {"texto": "Confirmar lo que llegó de Sierra el lunes",
      "para": "nestor", "de": "ruben", "dias": 4, "hecho": True},
     {"texto": "Revisar el calibre declarado de los tres lotes de Innovator",
