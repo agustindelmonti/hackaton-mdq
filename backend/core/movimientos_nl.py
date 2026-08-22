@@ -120,7 +120,7 @@ Reglas que no se negocian:
   sistema después busca a qué lote real corresponde; no es tu trabajo elegirlo.
 - La cantidad va tal cual la dijo, con su unidad aparte. 'dieciocho bolsones' es
   cantidad=18, unidad='bolsones'. Nunca multipliques vos.
-- 'el galpón' es Galpón Chapadmalal. 'Sierra' es Frigorífico Sierra de los Padres.
+- 'el galpón' es Galpón Mar del Plata. 'Pancani' o 'Dospanca' es el frío de terceros.
   Copiá lo que dijo igual: el sistema resuelve el nombre completo.
 - Si nombró un cliente como destino, el tipo es 'egreso'."""
 
@@ -173,6 +173,9 @@ def _ubicaciones_mencionadas(t: str) -> list[dict]:
                 claves.append(w)
         if u.get("tipo") == "galpon":
             claves.append("galpon")
+        for a in u.get("alias") or []:
+            if _norm(a):
+                claves.append(_norm(a))
         pos = min((t.find(k) for k in claves if k and t.find(k) >= 0), default=-1)
         if pos >= 0:
             hits.append((pos, u))

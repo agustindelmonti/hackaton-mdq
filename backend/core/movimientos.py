@@ -131,6 +131,8 @@ def buscar_ubicacion(texto: str) -> dict | None:
     for u in ubis:
         if _norm(u["nombre"]) == t or u["id"] == t:
             return dict(u)
+        if t in [_norm(a) for a in (u.get("alias") or [])]:
+            return dict(u)
     # por palabra distintiva del nombre ("galpón", "batán", "226", "sierra")
     hits = [u for u in ubis
             if _norm(u["nombre"]).find(t) >= 0 or t in _norm(u["id"])]

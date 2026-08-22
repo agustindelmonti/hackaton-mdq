@@ -8,10 +8,9 @@ POLPILOT_TENANT elige el seed de usuarios (auth.py) y la identidad visible.
 POLPILOT_DATA_DIR aísla el directorio de datos por completo: dos instancias
 nunca se pisan, ni por accidente.
 
-NOTA SOBRE LOS DATOS: la empresa es real y el modelo del negocio está calcado
-de su operación, pero **todo el dataset es sintético** — lo genera
-`data-papasud/generar.py` con seed fija. Las personas del equipo son
-inventadas. Ver el README.
+NOTA SOBRE LOS DATOS: la empresa es real y el modelo sale de la Planilla de
+movimientos 2026. Lo genera `data-papasud/generar.py`. Las personas del equipo
+son inventadas. Ver el README.
 """
 from __future__ import annotations
 

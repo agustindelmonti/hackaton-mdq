@@ -96,12 +96,12 @@ USUARIOS = {
         "rol": "Encargado de depósito", "es_admin": False,
         # El encargado responde por las cuatro: es el que recibe lo que no tiene
         # un operario propio en destino.
-        "ubicaciones": ["sierra", "ruta226", "batan", "chapadmalal"],
+        "ubicaciones": ["planta_santa_ana", "galpon_mdp", "pancani", "campo_santa_ana"],
         "telefono": "+5492230000003", "color": "#2f6f4f",
         "superficies": ["desktop", "mobile"],
         "descripcion": (
-            "Mi función: encargado de las cuatro ubicaciones. Los tres frigoríficos y el "
-            "galpón responden a mí. "
+            "Mi función: encargado de las ubicaciones. La planta, el galpón y el frío de "
+            "terceros responden a mí. "
             "Me encargo de: que cada bolsón esté donde dice la planilla, de los traslados "
             "entre cámaras, de los conteos y de que el equipo cargue lo que movió. "
             "Todos los días miro: qué se movió ayer, qué traslado quedó sin confirmar en "
@@ -129,19 +129,19 @@ USUARIOS = {
         # DÓNDE ESTÁ PARADO. No es decorativo: es lo que hace que "confirmá el
         # traslado que llegó a Ruta 226" le caiga a él y no al encargado. El
         # ruteo de tareas (core/tareas.py) lee esto, no una lista de usernames.
-        "ubicaciones": ["ruta226", "sierra"],
+        "ubicaciones": ["pancani", "planta_santa_ana"],
         "telefono": "+5492230000004", "color": "#3d7ea6",
         # El celular es su herramienta: está parado adentro de una cámara a 4 °C.
         "superficies": ["mobile", "desktop"],
         "descripcion": (
-            "Mi función: operario de frigorífico. Estoy en Ruta 226 y en Sierra. "
+            "Mi función: operario de frigorífico. Estoy en Pancani y en planta. "
             "Me encargo de: mover los bolsones entre cámaras, armar las cargas y contar "
             "cuando me lo piden. "
             "Todos los días miro: qué tengo que mover hoy y qué carga sale. "
             "Decido sobre: nada de plata — yo aviso lo que muevo y lo que veo."
         ),
         "descripcion_en": (
-            "My role: cold-store operator. I work at Ruta 226 and at Sierra. "
+            "My role: cold-store operator. I work at Pancani and at the plant. "
             "I take care of: moving the big bags between chambers, building the loads and "
             "counting when I'm asked to. "
             "Every day I look at: what I have to move today and what's shipping. "
@@ -178,22 +178,22 @@ USUARIOS = {
     "nestor": {
         "username": "nestor", "nombre": "Néstor", "apellido": "Painé",
         "rol": "Operario de galpón", "es_admin": False,
-        "ubicaciones": ["chapadmalal"],
+        "ubicaciones": ["galpon_mdp"],
         "telefono": "+5492230000006", "color": "#a65d3d",
         "superficies": ["mobile", "desktop"],
         # Entró hace poco: el sistema lo sabe y lo acompaña (core/onboarding.py).
         "ingreso": "2026-07-27",
-        "puesto": {"sector": "Galpón Chapadmalal", "turno": "mañana",
+        "puesto": {"sector": "Galpón Mar del Plata", "turno": "mañana",
                    "mentor": "ruben", "contrato": "efectivo"},
         "descripcion": (
-            "Mi función: operario del galpón de Chapadmalal. Entré hace poco. "
+            "Mi función: operario del galpón de Mar del Plata. Entré hace poco. "
             "Me encargo de: recibir lo que llega de los frigoríficos, acondicionar y "
             "preparar lo que se va a cargar. "
             "Todos los días miro: qué llegó y qué tengo que dejar listo. "
             "Decido sobre: nada todavía — pregunto mucho."
         ),
         "descripcion_en": (
-            "My role: operator at the Chapadmalal shed. I started recently. "
+            "My role: operator at the Mar del Plata shed. I started recently. "
             "I take care of: receiving what comes in from the cold stores, conditioning it "
             "and getting the loads ready. "
             "Every day I look at: what arrived and what I need to have ready. "

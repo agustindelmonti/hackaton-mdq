@@ -7,8 +7,8 @@ from __future__ import annotations
 import os
 import re
 
-from . import dominio as D
-from . import modelo as M
+import dominio as D
+import modelo as M
 
 _DTV = re.compile(r"(?:dtv\s*)?(\d{7,9}-\d)", re.I)
 _HILO = re.compile(
@@ -140,10 +140,7 @@ def agrupar_remitos(lineas_con_meta: list[dict]) -> list[dict]:
 def desde_xls(ruta: str) -> dict:
     """Parsea el .xls. Requiere xlrd. No se llama desde los tests unitarios."""
     import xlrd
-    from .generar import construir
-    # El seed cubre las relaciones; el xls las densifica cuando está.
-    # Por ahora devolvemos el seed: la importación completa es el siguiente
-    # paso una vez validado el modelo contra las 27 pruebas.
+    from generar import construir
     if not os.path.isfile(ruta):
         raise FileNotFoundError(ruta)
     book = xlrd.open_workbook(ruta)
