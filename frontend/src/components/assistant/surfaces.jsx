@@ -1,6 +1,7 @@
 import { cn } from "../../lib/cn";
 
 export const field = "bg-papel-hondo";
+export const floating = "border border-linea bg-crema sombra-papel";
 export const mono = "font-mono text-[11px] tracking-tight tabular-nums";
 export const inkButton =
   "bg-violeta text-crema transition-[opacity,scale] duration-150 hover:bg-violeta-hondo active:scale-[0.96]";

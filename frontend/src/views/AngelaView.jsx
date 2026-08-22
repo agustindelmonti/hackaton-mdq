@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FileText, Paperclip, ChevronRight, Check, XCircle } from "lucide-react";
+import { FileText, Check, XCircle } from "lucide-react";
 import { useAui, useAuiState } from "@assistant-ui/react";
 import AngelaMark from "../components/AngelaMark";
 import FacturaFlow from "../components/FacturaFlow";
-import { textoFeed } from "../components/ActividadFeed";
 import { AngelaThread, CameraComposerButton } from "../components/assistant/angela-thread";
-import { fecha } from "../lib/format";
+import { ChatToolbar } from "../components/assistant/chat-toolbar";
 import { api } from "../lib/api";
 import { angelaBus } from "../lib/angelaBus";
 import { authStore } from "../lib/auth";
@@ -14,30 +13,24 @@ import { vistaStore } from "../lib/vistaStore";
 import { setAngelaOnDone, setAngelaRunContext } from "../lib/assistant/run-context";
 import { useT } from "../lib/i18n";
 
-// Chips: `lk` es lo que se MUESTRA y `enviarLk` la clave del payload que va al
-// backend. El catálogo de roles es la única fuente y el texto sale del diccionario.
-const CHIPS = [
-  { lk: "rol.chip_panorama", enviarLk: "rol.chip_panorama" },
-  { lk: "rol.chip_que_esta_trabado", enviarLk: "rol.chip_que_esta_trabado" },
-  { lk: "rol.chip_dif_abiertas", enviarLk: "rol.chip_dif_abiertas" },
-  { lk: "rol.chip_plata_parada", enviarLk: "rol.chip_plata_parada" },
-];
-
-// Chat de Ángela con assistant-ui (thread, tool-call disclosure, voz es-AR).
+// Chips default: chipsAngelaDe(user) desde desktop/mobile.
 export default function AngelaView({
   saludoInicial,
   onNavigate,
-  placeholderChips = CHIPS,
+  placeholderChips,
   inputInicial,
   user,
   onDatosCambiaron,
+  variant = "compact",
+  toolbarTrailing = null,
 }) {
   const t = useT();
   const aui = useAui();
   const threadEmpty = useAuiState((s) => s.thread.isEmpty);
+  const isRunning = useAuiState((s) => s.thread.isRunning);
+  const fullscreen = variant === "fullscreen";
   const [modo, setModo] = useState(null);
   const [fotoAbierta, setFotoAbierta] = useState(false);
-  const [feed, setFeed] = useState([]);
   const ultimaConsulta = useRef(null);
 
   useEffect(() => {
@@ -47,10 +40,6 @@ export default function AngelaView({
       nombre: user?.username,
     });
   }, [user]);
-
-  useEffect(() => {
-    api.actividad().then((a) => setFeed((a.feed || []).slice(0, 3))).catch(() => {});
-  }, []);
 
   const aplicarAcciones = useCallback((acciones = []) => {
     if (!acciones.length) return;
@@ -96,7 +85,7 @@ export default function AngelaView({
     }
   }, [inputInicial, aui]);
 
-  const chips = placeholderChips.map((c) =>
+  const chips = (placeholderChips || []).map((c) =>
     typeof c === "string"
       ? { enviar: c, label: c }
       : {
@@ -119,76 +108,30 @@ export default function AngelaView({
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <header className="flex items-center gap-3 pb-3 pt-1">
-        <AngelaMark size={40} />
-        <div>
-          <h1 className="font-display text-xl font-bold leading-none">Ángela</h1>
-          <p className="mt-0.5 flex items-center gap-1.5 text-[0.78rem] text-tinta-suave">
+    <div className="flex h-full min-h-0 flex-col">
+      <ChatToolbar
+        compact={!fullscreen}
+        className={fullscreen ? "shrink-0 border-b border-linea px-3 py-2.5" : "shrink-0 pb-2"}
+        trailing={toolbarTrailing}
+      />
+
+      {!threadEmpty && !fullscreen && (
+        <header className="flex items-center gap-3 pb-2 pt-0.5">
+          <AngelaMark size={36} estado={isRunning ? "pensando" : "idle"} />
+          <p className="flex items-center gap-1.5 text-[0.76rem] text-tinta-suave">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-salvia" />
             {modo === "simulado" ? t("angela.modo_datos") : t("angela.socia")}
           </p>
-        </div>
-      </header>
-
-      {threadEmpty && feed.length > 0 && (
-        <div className="mb-3 space-y-1.5">
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-tinta-suave">
-            {t("angela.ultimo")}
-          </p>
-          {feed.map((e, i) => (
-            <div key={i} className="flex items-start gap-2.5 rounded-xl border border-linea bg-crema px-3 py-2 sombra-papel">
-              <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${e.tipo === "staging" ? "bg-salvia" : "bg-oro"}`} />
-              <span className="min-w-0 flex-1 text-[0.8rem] leading-snug text-tinta">{textoFeed(e, t)}</span>
-              <span className="shrink-0 text-[0.7rem] text-tinta-suave">{fecha(e.cuando)}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {threadEmpty && (
-        <div className="mb-3 space-y-1.5">
-          {authStore.tiene("cargar") && (
-            <button
-              type="button"
-              onClick={() => setFotoAbierta(true)}
-              className="flex w-full items-center gap-3 rounded-xl border border-linea bg-crema px-3 py-2.5 text-left sombra-papel transition-colors hover:border-violeta/40"
-            >
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-violeta-suave text-violeta">
-                <Paperclip size={16} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[0.85rem] font-semibold leading-tight">{t("angela.accion_foto")}</span>
-                <span className="block text-[0.74rem] text-tinta-suave">{t("angela.accion_foto_sub")}</span>
-              </span>
-              <ChevronRight size={15} className="text-tinta-suave" />
-            </button>
-          )}
-          {onNavigate && authStore.tiene("documentos") && (
-            <button
-              type="button"
-              onClick={() => onNavigate("documentos")}
-              className="flex w-full items-center gap-3 rounded-xl border border-linea bg-crema px-3 py-2.5 text-left sombra-papel transition-colors hover:border-violeta/40"
-            >
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-violeta-suave text-violeta">
-                <FileText size={16} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[0.85rem] font-semibold leading-tight">{t("angela.accion_doc")}</span>
-                <span className="block text-[0.74rem] text-tinta-suave">{t("angela.accion_doc_sub")}</span>
-              </span>
-              <ChevronRight size={15} className="text-tinta-suave" />
-            </button>
-          )}
-        </div>
+        </header>
       )}
 
       <div className="min-h-0 flex-1 overflow-hidden">
         <AngelaThread
+          variant={variant}
           placeholder={t("angela.ph_input")}
+          emptyTitle={fullscreen ? t("angela.titulo") : undefined}
+          emptyDetail={saludoInicial}
           suggestions={chips}
-          emptyTitle={saludoInicial || t("angela.saludo_default")}
-          emptyDetail={t("angela.socia")}
           onOpcion={enviarOpcion}
           renderExtras={renderExtras}
           extraComposer={

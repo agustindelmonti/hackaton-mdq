@@ -47,12 +47,14 @@ export function AngelaThread({
   suggestions = [],
   emptyTitle,
   emptyDetail,
+  variant = "compact",
   className,
   onOpcion,
   renderExtras,
   extraComposer,
 }) {
   const isRunning = useAuiState((s) => s.thread.isRunning);
+  const fullscreen = variant === "fullscreen";
 
   return (
     <ThreadPrimitive.Root
@@ -61,33 +63,60 @@ export function AngelaThread({
     >
       <ThreadPrimitive.Viewport className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pb-2">
         <AuiIf condition={(s) => s.thread.isEmpty}>
-          <div className="flex flex-1 flex-col items-center justify-center px-4 py-6 text-center">
-            <AngelaMark size={48} />
-            <h2 className="mt-3 font-display text-[17px] font-bold leading-none text-tinta">
-              {emptyTitle ?? "Hola, soy Ángela"}
-            </h2>
-            <p className="mt-1 max-w-[280px] text-[13px] leading-relaxed text-tinta-suave">
-              {emptyDetail ?? "Te contesto con los números reales de tu negocio. Las decisiones las firmás vos."}
-            </p>
-            {suggestions.length > 0 && (
-              <div className="mt-5 flex w-full max-w-sm flex-col gap-2">
-                {suggestions.map((chip) => {
-                  const prompt = typeof chip === "string" ? chip : chip.enviar;
-                  const label = typeof chip === "string" ? chip : chip.label ?? chip.enviar;
-                  return (
-                    <ThreadPrimitive.Suggestion
-                      key={typeof chip === "string" ? chip : chip.lk ?? chip.enviar}
-                      prompt={prompt}
-                      send
-                      className="rounded-2xl border border-violeta/30 bg-crema px-4 py-2.5 text-left text-[13px] leading-snug text-violeta transition-colors hover:bg-violeta-suave/60"
-                    >
-                      {label}
-                    </ThreadPrimitive.Suggestion>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          {fullscreen ? (
+            <div className="flex flex-1 flex-col items-center justify-center px-4 py-6 text-center">
+              <AngelaMark size={52} />
+              {emptyTitle && (
+                <h2 className="mt-4 font-display text-[1.15rem] font-bold leading-snug text-tinta">
+                  {emptyTitle}
+                </h2>
+              )}
+              {emptyDetail && (
+                <p className="mt-2 max-w-[320px] text-[0.86rem] leading-relaxed text-tinta-suave">
+                  {emptyDetail}
+                </p>
+              )}
+              {suggestions.length > 0 && (
+                <div className="mt-6 flex w-full max-w-md flex-col gap-2">
+                  {suggestions.map((chip) => {
+                    const prompt = typeof chip === "string" ? chip : chip.enviar;
+                    const label = typeof chip === "string" ? chip : chip.label ?? chip.enviar;
+                    return (
+                      <ThreadPrimitive.Suggestion
+                        key={typeof chip === "string" ? chip : chip.lk ?? chip.enviar}
+                        prompt={prompt}
+                        send
+                        className="rounded-2xl border border-linea bg-crema px-4 py-3 text-left text-[0.88rem] leading-snug text-tinta transition-colors hover:border-violeta/40 hover:bg-violeta-suave/40"
+                      >
+                        {label}
+                      </ThreadPrimitive.Suggestion>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-1 flex-col justify-end px-1 pb-2">
+              {suggestions.length > 0 && (
+                <div className="flex w-full flex-col gap-2">
+                  {suggestions.map((chip) => {
+                    const prompt = typeof chip === "string" ? chip : chip.enviar;
+                    const label = typeof chip === "string" ? chip : chip.label ?? chip.enviar;
+                    return (
+                      <ThreadPrimitive.Suggestion
+                        key={typeof chip === "string" ? chip : chip.lk ?? chip.enviar}
+                        prompt={prompt}
+                        send
+                        className="rounded-2xl border border-linea bg-crema px-3.5 py-3 text-left text-[0.88rem] leading-snug text-tinta transition-colors hover:border-violeta/40 hover:bg-violeta-suave/40"
+                      >
+                        {label}
+                      </ThreadPrimitive.Suggestion>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </AuiIf>
 
         <ThreadPrimitive.Messages>

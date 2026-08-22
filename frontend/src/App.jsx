@@ -39,6 +39,9 @@ export default function App() {
   // B8: null = todavía averiguando si el tenant tiene autologin; true = ya se
   // resolvió (entró solo o corresponde mostrar el login).
   const [autologinResuelto, setAutologinResuelto] = useState(false);
+  const [angelaDockOpen, setAngelaDockOpen] = useState(
+    () => typeof window !== "undefined" && window.innerWidth >= 1280,
+  );
 
   // B8 — Entrada directa del demo (link de YC): sin sesión y con el flag del
   // tenant activo, la URL entra sola como el DUEÑO. Un logout MANUAL deja la
@@ -143,14 +146,16 @@ export default function App() {
   }
 
   const user = session.usuario;
-  const [angelaDockOpen, setAngelaDockOpen] = useState(
-    () => typeof window !== "undefined" && window.innerWidth >= 1280,
-  );
   // key por usuario: al cambiar de identidad ("View as" del demo, P9·E) el
   // árbol entero se rearma — features, secciones, chat de Ángela — CERO
   // arrastre del usuario anterior.
   return (
-    <AngelaRuntimeProvider dockOpen={angelaDockOpen} setDockOpen={setAngelaDockOpen}>
+    <AngelaRuntimeProvider
+      key={user.username}
+      dockOpen={angelaDockOpen}
+      setDockOpen={setAngelaDockOpen}
+      storageKey={user.username}
+    >
       {isDesktop ? (
         <DesktopApp
           key={user.username}

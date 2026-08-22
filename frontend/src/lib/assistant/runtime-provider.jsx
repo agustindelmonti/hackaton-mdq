@@ -26,11 +26,12 @@ const browserStorage = {
   },
 };
 
-const threadListAdapter = createLocalStorageAdapter({
-  storage: browserStorage,
-  prefix: "polpilot.angela",
-  titleGenerator: createSimpleTitleAdapter(),
-});
+const threadListAdapterFor = (storageKey) =>
+  createLocalStorageAdapter({
+    storage: browserStorage,
+    prefix: `polpilot.angela.${storageKey || "anon"}`,
+    titleGenerator: createSimpleTitleAdapter(),
+  });
 
 const DockContext = createContext(null);
 
@@ -46,7 +47,11 @@ export function useAngelaDock() {
   return value;
 }
 
-function useAngelaRuntime() {
+function useAngelaRuntime(storageKey) {
+  const threadListAdapter = useMemo(
+    () => threadListAdapterFor(storageKey),
+    [storageKey],
+  );
   const dictation = useMemo(
     () =>
       new WebSpeechDictationAdapter({
@@ -66,8 +71,8 @@ function useAngelaRuntime() {
   });
 }
 
-export function AngelaRuntimeProvider({ children, dockOpen, setDockOpen }) {
-  const runtime = useAngelaRuntime();
+export function AngelaRuntimeProvider({ children, dockOpen, setDockOpen, storageKey }) {
+  const runtime = useAngelaRuntime(storageKey);
   const toggle = useCallback(() => setDockOpen?.((v) => !v), [setDockOpen]);
   const dock = useMemo(
     () => ({

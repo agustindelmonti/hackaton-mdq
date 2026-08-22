@@ -136,10 +136,8 @@ const CATALOGO = [
 // aparte del CATALOGO porque `rolDe` devuelve null para el admin (su pantalla
 // es el panel completo, no una vista de trabajo).
 const CHIPS_DUENO = [
-  { k: "rol.chip_panorama" },
-  { k: "rol.chip_que_esta_trabado" },
-  { k: "rol.chip_plata_parada" },
-  { k: "rol.chip_dif_abiertas" },
+  { k: "rol.chip_3t_semana" },
+  { k: "rol.chip_cuanto_hay" },
 ];
 
 /** El rol-herramienta de una persona (null = el dueño, que tiene su propio panel). */

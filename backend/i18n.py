@@ -887,6 +887,36 @@ CATALOGO: dict[str, dict[str, str]] = {
               "About to expire: {por_vencer}. Expired: {vencidos}. "
               "Physical/system differences: {discrepancias}. What do you want to look at?",
     },
+    "fb.stock_panorama": {
+        "es": "Hay {total} t repartidas en las cuatro ubicaciones:\n{lineas}\n\n"
+              "¿Querés que te arme un plan de salida para algún pedido?",
+        "en": "There are {total} t across the four locations:\n{lineas}\n\n"
+              "Want me to draft a dispatch plan for an order?",
+    },
+    "fb.stock_fila_ubi": {
+        "es": "• {nombre}: {ton} t · {lotes} lotes · {pct}% ocupación",
+        "en": "• {nombre}: {ton} t · {lotes} batches · {pct}% occupancy",
+    },
+    "fb.stock_tomar_de": {
+        "es": "{nombre}: sacar {tomar_t} t (hay {disp_t} t disponibles)",
+        "en": "{nombre}: take {tomar_t} t ({disp_t} t available)",
+    },
+    "fb.stock_3t_si": {
+        "es": "Sí — con {total} t en stock podés cubrir {pedido} t para la semana que viene.\n\n"
+              "Plan sugerido:\n{plan}\n\n"
+              "Te llevo al depósito para que lo confirmes antes de prometerle al cliente.",
+        "en": "Yes — with {total} t in stock you can cover {pedido} t for next week.\n\n"
+              "Suggested plan:\n{plan}\n\n"
+              "I'll take you to the warehouse view so you can confirm before promising the client.",
+    },
+    "fb.stock_3t_no": {
+        "es": "No alcanza limpio: hay {total} t y pediste {pedido} t (faltan {faltante} t).\n\n"
+              "Lo más cercano que puedo armar:\n{plan}\n\n"
+              "Mirá el detalle por ubicación antes de confirmarle al cliente.",
+        "en": "Not enough clean stock: {total} t available, you asked for {pedido} t "
+              "({faltante} t short).\n\nBest I can suggest:\n{plan}\n\n"
+              "Check the location breakdown before promising the client.",
+    },
     # fb: normalizaciones del staging
     "fb.norm_revertida": {
         "es": "Listo, deshice la normalización de «{revertido}»: "

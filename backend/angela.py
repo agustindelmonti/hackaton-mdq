@@ -2317,9 +2317,10 @@ def _fallback(mensaje: str) -> dict:
     res = ds.resumen()["resumen"]
     cat = _categoria_en(m)
 
-    def resp(texto, acciones=None, opciones=None, tools=None):
+    def resp(texto, acciones=None, opciones=None, tools=None, tool_events=None):
         return {"respuesta": texto, "modo": "simulado", "tools_usadas": tools or [],
-                "acciones": acciones or [], "opciones": opciones or []}
+                "acciones": acciones or [], "opciones": opciones or [],
+                "tool_events": tool_events or []}
 
     def bloqueado(feature):
         """Corta un cluster de intents si el usuario no tiene ese módulo (capa 2 del
@@ -2492,6 +2493,76 @@ def _fallback(mensaje: str) -> dict:
         if rr["atrasados"]:
             base += " " + T("fb.log_arrastre", n=rr["atrasados"])
         return resp(base + " " + T("fb.log_fuente"), tools=["consultar_envios"])
+
+    # --- Stock unificado (Vertical 3): panorama de ubicaciones y disponibilidad ---
+    def _kg_pedido_en(texto: str) -> float | None:
+        import re
+        compacto = texto.replace(" ", "")
+        if re.search(r"\b3\s*t\b", texto) or "3t" in compacto or "tres tonelada" in texto:
+            return 3000.0
+        mt = re.search(r"(\d+(?:[.,]\d+)?)\s*(?:t\b|tonelada)", texto)
+        if mt:
+            return float(mt.group(1).replace(",", ".")) * 1000
+        mk = re.search(r"(\d+(?:[.,]\d+)?)\s*kg", texto)
+        if mk:
+            return float(mk.group(1).replace(",", "."))
+        return None
+
+    def _tool_event(name, inp, result):
+        import uuid
+        return {"id": f"sim-{uuid.uuid4().hex[:8]}", "name": name,
+                "input": inp, "result": result}
+
+    _es_panorama_stock = any(k in m for k in (
+        "cuanto hay", "cuánto hay", "cuanto stock", "cuánto stock", "stock hay",
+        "cada ubicacion", "cada ubicación", "how much stock", "each location",
+        "stock at each",
+    ))
+    _kg_pedido = _kg_pedido_en(m)
+    _es_disponibilidad = _kg_pedido is not None and any(k in m for k in (
+        "saco", "conseguir", "de donde", "de dónde", "semana", "week", "papa",
+        "semilla", "cliente", "confirmar", "pedido", "produccion", "producción",
+        "order", "next week",
+    ))
+    if _es_panorama_stock or _es_disponibilidad:
+        b = bloqueado("deposito")
+        if b:
+            return b
+        result, accion = _run_tool("stock_ubicaciones", {})
+        ubis = result.get("ubicaciones") or []
+        res = result.get("resumen") or {}
+        ev = _tool_event("stock_ubicaciones", {}, result)
+        acc = [accion] if accion else []
+        if _es_disponibilidad and _kg_pedido:
+            total_kg = float(res.get("kg_total") or sum(u.get("kg", 0) for u in ubis))
+            ton_ped = round(_kg_pedido / 1000, 1)
+            plan, rest = [], _kg_pedido
+            for u in sorted(ubis, key=lambda x: -(x.get("kg") or 0)):
+                if rest <= 0:
+                    break
+                disp = float(u.get("kg") or 0)
+                if disp <= 0:
+                    continue
+                tomar = min(disp, rest)
+                plan.append(T("fb.stock_tomar_de", nombre=u["nombre"],
+                              tomar_t=round(tomar / 1000, 1), disp_t=u["toneladas"]))
+                rest -= tomar
+            plan_txt = "\n".join(f"• {p}" for p in plan)
+            if total_kg >= _kg_pedido:
+                texto = T("fb.stock_3t_si", pedido=ton_ped,
+                          total=res.get("toneladas_total"), plan=plan_txt)
+            else:
+                texto = T("fb.stock_3t_no", pedido=ton_ped,
+                          total=res.get("toneladas_total"),
+                          faltante=round(max(0.0, rest) / 1000, 1), plan=plan_txt)
+            return resp(texto, acc, tools=["stock_ubicaciones"], tool_events=[ev])
+        lineas = "\n".join(
+            T("fb.stock_fila_ubi", nombre=u["nombre"], ton=u["toneladas"],
+              lotes=u["lotes"], pct=u.get("ocupacion_pct") if u.get("ocupacion_pct") is not None else "—")
+            for u in ubis
+        )
+        return resp(T("fb.stock_panorama", total=res.get("toneladas_total"), lineas=lineas),
+                    acc, tools=["stock_ubicaciones"], tool_events=[ev])
 
     # --- Depósito (capa sobre el WMS) ---
     _kw_deposito = ("venc", "lote", "ubicacion", "stock fisico", "fisico", "discrepancia",
@@ -3275,6 +3346,8 @@ def stream_responder(
     client, modelo = config.cliente_llm("chat")
     if client is None:
         fb = _fallback(mensaje)
+        for te in fb.get("tool_events") or []:
+            yield {"type": "tool", **te}
         if fb.get("respuesta"):
             yield {"type": "text", "text": fb["respuesta"]}
         yield {"type": "done", "result": {**fb, "ok": True}}
