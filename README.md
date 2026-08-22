@@ -139,9 +139,9 @@ número no cruza.
 | | |
 |---|---|
 | Superficie | 214,3 ha en 5 campos |
-| Producción del ciclo | 7.468,5 t · campaña 2025/26 |
+| Producción del ciclo | 7.468,5 t cosechadas · campaña 2025/26 |
 | Lotes | **147** · 6 variedades · 9 categorías INASE |
-| Stock | 5.528,7 t · $3.427.576.145 inmovilizados |
+| Stock hoy en cámara | 5.524,7 t · $3.423.852.141 inmovilizados |
 | Ocupación | Sierra 83,7% · Ruta 226 73,9% · Batán 90,5% · Galpón 30,9% |
 | Exportación | 27,8% del stock |
 | Movimientos | 330 · Conteos 60 · Órdenes de carga 13 |

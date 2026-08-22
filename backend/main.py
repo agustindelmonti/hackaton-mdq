@@ -36,7 +36,7 @@ import i18n
 from authz import require_admin, require_feature, usuario_actual
 from core import (store, saneamiento, fase, memoria, importer, staging, anomalias,
                   semilla, movimientos, movimientos_nl, conciliacion, ordenes_carga,
-                  trazabilidad, exportacion,
+                  trazabilidad, exportacion, mapa as mapa_op,
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
                   evolucion, ventas, paths, conocimiento, piso, onboarding)
@@ -1077,6 +1077,23 @@ def trazabilidad_get(lote: str, _u: dict = Depends(require_feature("trazabilidad
 
 
 # --- N03 · el copiloto de la carpeta de exportación -------------------------
+# --- El mapa de la operación, con el stock en el centro ---------------------
+@app.get("/api/mapa-operacion")
+def mapa_operacion(_u: dict = Depends(require_feature("mapa"))):
+    """Tres capas fijas: de dónde viene, dónde está, adónde va. El centro son
+    las cuatro ubicaciones — el ojo pasa obligatoriamente por el stock."""
+    return mapa_op.mapa()
+
+
+@app.get("/api/genealogia/{lote}")
+def genealogia_lote(lote: str, _u: dict = Depends(require_feature("mapa"))):
+    """El pedigrí del lote como línea de tiempo: de meristema a contenedor."""
+    r = mapa_op.genealogia(lote)
+    if not r.get("encontrado"):
+        raise HTTPException(404, lote)
+    return r
+
+
 @app.get("/api/exportacion")
 def exportacion_embarques(_u: dict = Depends(require_feature("exportacion"))):
     """Los embarques abiertos que necesitan carpeta."""

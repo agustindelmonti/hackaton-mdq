@@ -8,10 +8,7 @@ import { contarACorregir } from "../lib/alertas";
 import AngelaMark from "../components/AngelaMark";
 import AngelaView from "../views/AngelaView";
 import Inicio from "./sections/Inicio";
-import { InsightNodo } from "./sections/MapaNegocio";
 // La sección del mapa tiene dos vistas (árbol de fuentes / cerebro de
-// entidades). El switch vive en MapaSeccion; acá se monta una sola cosa.
-import MapaSeccion from "./sections/MapaSeccion";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Inventario from "./sections/Inventario";
 import Saneamiento from "./sections/Saneamiento";
@@ -23,6 +20,7 @@ import GestionEquipo from "../sections/GestionEquipo";
 import AdminContexto from "../sections/AdminContexto";
 import Administracion from "../sections/Administracion";
 import Exportacion from "../sections/Exportacion";
+import MapaOperacion from "../sections/MapaOperacion";
 import Ubicaciones from "../sections/Ubicaciones";
 import Movimientos from "../sections/Movimientos";
 import Conciliacion from "../sections/Conciliacion";
@@ -118,13 +116,6 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   const [busqueda, setBusqueda] = useState("");
   const [faseVisible, setFaseVisible] = useState(true);
   const [stagingCount, setStagingCount] = useState(0);
-  // P28·C2 — el insight del nodo clickeado en el mapa: vive ARRIBA del chat,
-  // en el panel de Ángela (la conversación entre el mapa y Ángela).
-  const [mapaInsight, setMapaInsight] = useState(null);
-  useEffect(() => {
-    if (section !== "mapa") setMapaInsight(null);
-  }, [section]);
-
   useEffect(() => {
     api.stagingListar().then((d) => setStagingCount(d.batches.length)).catch(() => {});
   }, []);
@@ -400,8 +391,7 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                       onTarea={(x) => { const k = PREGUNTA_TAREA[x.tipo]; if (k) preguntar(t(k)); }}
                       onCerrada={onRecargar} onNavegar={navegar} /></div>
                   : <Inicio data={data} oportunidades={oportunidades} onNavegar={navegar} onPreguntar={preguntar} />)}
-                {section === "mapa" && <MapaSeccion onNavegar={navegar} onPreguntar={preguntar}
-                  onInsight={(i) => { setMapaInsight(i); if (i) setAngelaOpen(true); }} />}
+                {section === "mapa" && <MapaOperacion onPreguntar={preguntar} />}
                 {section === "inventario" && <Inventario data={data} highlight={highlight} onPreguntar={preguntar} onNavegar={navegar} />}
                 {section === "saneamiento" && <Saneamiento user={user} highlight={highlight} onNavegar={navegar} onPreguntar={preguntar} onRecargar={onRecargar} onStagingCambio={setStagingCount} />}
                 {section === "alertas" && <AlertasNegocio onPreguntar={preguntar} onNavegar={navegar} datos={fase?.datos} />}
@@ -440,18 +430,6 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                   <button onClick={() => setAngelaOpen(false)} className="text-tinta-suave hover:text-tinta"><X size={18} /></button>
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-3">
-                  {/* El panel del mapa vive en el aside, FUERA del boundary de la
-                      sección: un error acá tumbaba toda la vista (pantalla en
-                      blanco). Red de seguridad propia, con key por insight para
-                      que al elegir otro nodo se resetee y muestre el nuevo panel. */}
-                  {section === "mapa" && mapaInsight && (
-                    <ErrorBoundary key={"insight:" + (mapaInsight.esMemory ? "mem"
-                      : mapaInsight.esHallazgo ? "hall:" + (mapaInsight.h?.id || "")
-                      : "nodo:" + (mapaInsight.id || ""))}>
-                      <InsightNodo insight={mapaInsight} onNavegar={navegar}
-                        onPreguntar={preguntar} onCerrar={() => setMapaInsight(null)} />
-                    </ErrorBoundary>
-                  )}
                   <div className="min-h-0 flex-1 overflow-hidden">
                     <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar} placeholderChips={chipsPorRol(user)} />
                   </div>

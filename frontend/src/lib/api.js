@@ -178,6 +178,9 @@ export const api = {
   ordenVerificar: (numero) => get(`/api/ordenes-carga/${numero}/verificar`),
   ordenEmitir: (numero, aceptarAdvertencias = false) =>
     post(`/api/ordenes-carga/${numero}/emitir`, { aceptar_advertencias: aceptarAdvertencias }),
+  // El mapa de la operación (stock en el centro) y la genealogía de un lote
+  mapa: () => get("/api/mapa-operacion"),
+  genealogia: (lote) => get(`/api/genealogia/${encodeURIComponent(lote)}`),
   // N03 · la carpeta de exportación, pre-completada desde la trazabilidad
   exportacion: () => get("/api/exportacion"),
   exportacionCarpeta: (numero) => get(`/api/exportacion/${numero}`),
