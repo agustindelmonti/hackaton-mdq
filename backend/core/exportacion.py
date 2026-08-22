@@ -106,6 +106,13 @@ def campo(etiqueta: str, valor, fuente: str | None = None,
     }
 
 
+def _fmt_monto(x, moneda: str = "USD") -> str:
+    """Un monto como lo escribe un despachante: separador de miles con punto y
+    dos decimales con coma. `f"{x:,.2f}"` da el formato inglés — se da vuelta."""
+    s = f"{float(x or 0):,.2f}"
+    return f"{moneda} " + s.replace(",", "@").replace(".", ",").replace("@", ".")
+
+
 def _fmt_kg(x) -> str:
     return f"{float(x or 0):,.0f}".replace(",", ".") + " kg"
 
@@ -227,7 +234,9 @@ def _factura_proforma(c: dict) -> dict:
         "items": items,
         "totales": [
             campo(f"Total {cli.get('incoterm', 'FOB')} ({cli.get('moneda', 'USD')})",
-                  round(total, 2), fuente_ord),
+                  # el total va FORMATEADO: un "20760240" pelado en una factura
+                  # de exportación se lee mal en pantalla y peor impreso
+                  _fmt_monto(total, cli.get("moneda", "USD")), fuente_ord),
             campo("Peso neto total", _fmt_kg(c["kg_total"]), fuente_ord),
             campo("Bultos", f"{c['bultos']} bolsones", fuente_ord),
         ],
@@ -557,6 +566,31 @@ _ARMADORES = {
 # ---------------------------------------------------------------------------
 # La API del módulo
 # ---------------------------------------------------------------------------
+# El prefijo de la numeración de cada papel. No es cosmético: un documento de
+# exportación sin número correlativo no lo acepta ni el despachante ni la
+# aduana, y el que le sigue tiene que poder referenciarlo.
+_PREFIJO = {
+    "factura_proforma": "PRO",       # proforma, punto de venta de exportación 0004
+    "packing_list": "PKL",
+    "solicitud_inase": "INA",
+    "certificado_fitosanitario": "FIT",
+    "rotulo_oficial": "ROT",
+    "certificado_origen": "ORI",
+}
+
+
+def _correlativo(doc_id: str, numero_orden: str) -> str:
+    """El número del papel, DERIVADO de la orden de carga.
+
+    No es un contador que sube cada vez que alguien aprieta descargar: eso
+    daría dos números distintos para el mismo documento y rompería la
+    referencia cruzada entre la factura y el packing list. Sale de la orden,
+    que es lo único que identifica al embarque, así que es estable y se puede
+    reconstruir: PS-PRO-2026-2461 es la proforma de OC-2026-2461."""
+    cola = numero_orden.split("-", 1)[-1] if "-" in numero_orden else numero_orden
+    return f"PS-{_PREFIJO.get(doc_id, 'DOC')}-{cola}"
+
+
 def documento(numero_orden: str, doc_id: str) -> dict | None:
     """UN documento, pre-completado desde la trazabilidad del embarque."""
     c = _contexto(numero_orden)
@@ -566,6 +600,7 @@ def documento(numero_orden: str, doc_id: str) -> dict | None:
     d["orden"] = numero_orden
     d["cliente"] = c["cliente"].get("nombre")
     d["emitido"] = c["hoy"].isoformat()
+    d["numero"] = _correlativo(doc_id, numero_orden)
     d["completitud"] = _completitud(d)
     return d
 
@@ -584,6 +619,7 @@ def carpeta(numero_orden: str) -> dict | None:
             "id": did,
             "titulo": d["titulo"],
             "organismo": d["organismo"],
+            "numero": _correlativo(did, c["orden"]["numero"]),
             "completitud": d["completitud"],
         })
     listos = sum(1 for d in docs if d["completitud"]["faltan"] == 0)
