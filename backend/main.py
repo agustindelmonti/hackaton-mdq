@@ -22,7 +22,7 @@ import os
 import time
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
@@ -2041,6 +2041,51 @@ def import_preview(req: ImportPreviewRequest, _u: dict = Depends(require_feature
     info = importer.previsualizar_csv(req.csv, req.destino)
     if req.usuario:
         memoria.marcar_dato_cargado(req.usuario, req.destino)
+    return info
+
+
+@app.post("/api/import/preview-archivo")
+async def import_preview_archivo(
+    archivo: UploadFile = File(...),
+    destino: str = Form("venta_historica"),
+    usuario: str | None = Form(None),
+    _u: dict = Depends(require_feature("cargar")),
+):
+    """LA PUERTA PARA LA PLANILLA DE VERDAD.
+
+    Papasud lleva el stock en un Excel que editan varias personas. El preview
+    por texto sólo aceptaba CSV: el dueño soltaba su .xlsx y la app le pedía que
+    lo exportara a CSV primero — o sea, le pedía hacer a mano justo el paso que
+    venimos a sacar. El lector de openpyxl ya estaba en el backend; lo único que
+    faltaba era dejar SUBIR el archivo.
+
+    El .xlsx se guarda en un temporal, se lee, y se borra: el original nunca
+    queda dando vueltas en el server."""
+    import tempfile
+    nombre = archivo.filename or "archivo.xlsx"
+    ext = os.path.splitext(nombre)[1].lower() or ".xlsx"
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(status_code=400,
+                            detail=i18n.t("api.archivo_vacio", _lang(_u)))
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
+    try:
+        tmp.write(contenido)
+        tmp.close()
+        info, csv_equivalente = importer.leer_archivo(tmp.name, destino)
+    except Exception as e:  # noqa: BLE001 — un Excel roto es un 400, no un 500
+        raise HTTPException(status_code=400, detail=str(e)[:200])
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+    if usuario:
+        memoria.marcar_dato_cargado(usuario, destino)
+    # el CSV equivalente vuelve al cliente para que el flujo siga siendo UNO:
+    # preview → confirmar → staging → el dueño aprueba
+    info["csv"] = csv_equivalente
+    info["nombre"] = nombre
     return info
 
 

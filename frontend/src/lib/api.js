@@ -138,6 +138,20 @@ export const api = {
   tareasSugeridas: () => get("/api/tareas/sugeridas"),
   tareasPanorama: () => get("/api/tareas/panorama"),
   tareaCrear: (t) => post("/api/tareas", t),
+  // El Excel viaja como archivo (multipart), no como texto: el .xlsx no es
+  // texto y pedirle al dueño que lo exporte a CSV es el paso manual que
+  // venimos a sacar.
+  importPreviewArchivo: async (file, destino, usuario) => {
+    const fd = new FormData();
+    fd.append("archivo", file);
+    fd.append("destino", destino || "stock_semilla");
+    if (usuario) fd.append("usuario", usuario);
+    const res = await fetch("/api/import/preview-archivo", {
+      method: "POST", headers: _headers(), body: fd,
+    });
+    if (!res.ok) throw _error("/api/import/preview-archivo", res);
+    return res.json();
+  },
   recordatorios: () => get("/api/recordatorios"),
   // P41·4 — el dueño asigna una tarea a alguien; queda PERSISTIDA y la
   // persona la ve en su vista de trabajo y la marca hecha desde ahí.

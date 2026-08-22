@@ -13,8 +13,8 @@ await p.waitForFunction(()=>!/Leyendo tu negocio/.test(document.body.innerText),
 await p.waitForTimeout(2500);
 await p.getByRole("button",{name:/Exportaci/i}).first().click();
 await p.waitForTimeout(4500);
-await p.getByRole("button",{name:/" + (process.env.DOC || "Factura proforma") + "/i}).first().click().catch(()=>{});
-await p.locator("text=" + (process.env.DOC || "Factura proforma") + "").first().click().catch(()=>{});
+const DOC = process.env.DOC || "Factura proforma";
+await p.locator(`text=${DOC}`).first().click().catch(()=>{});
 await p.waitForTimeout(2500);
 await p.screenshot({path:"../docs/shots/cecilia-exportacion.png"});
 const [dl] = await Promise.all([

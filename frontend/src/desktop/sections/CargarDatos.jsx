@@ -1,29 +1,39 @@
 import { useRef, useState } from "react";
-import { UploadCloud, Check, ArrowRight, Sparkles, Camera } from "lucide-react";
+import { UploadCloud, Check, ArrowRight, Sparkles, Camera , TriangleAlert } from "lucide-react";
 import AngelaMark from "../../components/AngelaMark";
 import FacturaFlow from "../../components/FacturaFlow";
 import { api } from "../../lib/api";
 import { useEmpresa } from "../../lib/useEmpresa";
 import { useT } from "../../lib/i18n";
 
-// Vista del DUEÑO: cargar archivos de SU negocio como "cartas de desbloqueo"
-// (valor primero). Al soltar un CSV, Ángela infiere el mapeo de columnas y lo
-// muestra para confirmar. (El mapeo por IA y el lector de Excel se cierran con
-// la API key y un export real — hoy: heurística sobre CSV.)
+// Vista del DUEÑO: cargar los archivos de SU negocio como "cartas de
+// desbloqueo" (el valor primero, el trámite después). Al soltar la planilla,
+// Ángela infiere el mapeo de columnas, MUESTRA QUÉ ESTÁ ROTO ADENTRO, y espera
+// el OK antes de que nada entre.
+//
+// El .xlsx entra como .xlsx. Antes esto decía "por ahora exportalo a CSV", que
+// es exactamente el paso manual que este producto viene a sacar: el lector de
+// openpyxl ya estaba en el backend y sólo faltaba dejar SUBIR el archivo.
+// LAS TRES PLANILLAS QUE PAPASUD YA TIENE.
+// No son "datos que estaría bueno tener": son los tres archivos que hoy viven
+// en la máquina de alguien y que, cargados acá, encienden cosas concretas. La
+// primera es LA del brief — la planilla de stock que editan varias personas a
+// la vez y que es la base de datos de facto de la empresa.
 const CARTAS = [
   {
-    id: "ventas", destino: "venta_historica",
-    lk_titulo: "cargar.ventas_titulo", lk_valor: "cargar.ventas_valor", lk_como: "cargar.ventas_como",
+    id: "stock", destino: "stock_semilla",
+    lk_titulo: "cargar.stock_titulo", lk_valor: "cargar.stock_valor", lk_como: "cargar.stock_como",
   },
   {
-    id: "ctacte", destino: "cuenta_corriente",
-    lk_titulo: "cargar.ctacte_titulo", lk_valor: "cargar.ctacte_valor", lk_como: "cargar.ctacte_como",
+    id: "conteos", destino: "deposito",
+    lk_titulo: "cargar.conteos_titulo", lk_valor: "cargar.conteos_valor", lk_como: "cargar.conteos_como",
   },
   {
     id: "clientes", destino: "cuenta_corriente",
     lk_titulo: "cargar.clientes_titulo", lk_valor: "cargar.clientes_valor", lk_como: "cargar.clientes_como",
   },
 ];
+
 
 export default function CargarDatos({ user, onArchivoCargado, onPreguntar, onAbrirAngela }) {
   const t = useT();
@@ -111,11 +121,20 @@ function CartaLibre({ usuario, onArchivoCargado }) {
 
   const enviar = async () => {
     if (!file) return;
-    if (file.name.toLowerCase().endsWith(".csv")) {
+    const n = file.name.toLowerCase();
+    if (n.endsWith(".csv")) {
       const texto = await file.text();
       await api.stagingCrear(desc || file.name, texto);
       onArchivoCargado?.();  // va a "Datos pendientes"
       return;
+    }
+    if (n.endsWith(".xlsx") || n.endsWith(".xlsm") || n.endsWith(".xls")) {
+      try {
+        const info = await api.importPreviewArchivo(file, "stock_semilla", usuario);
+        await api.stagingCrear(desc || file.name, info.csv);
+        onArchivoCargado?.();
+        return;
+      } catch { /* si el Excel no se puede leer, sigue el camino de siempre */ }
     }
     const r = await api.cargarOtro(file.name, desc, usuario);
     setConfirm(r.mensaje);
@@ -159,10 +178,24 @@ function Carta({ carta, usuario, onArchivoCargado }) {
   const [aviso, setAviso] = useState(null);
   const [enviando, setEnviando] = useState(false);
 
-  const tomar = (file) => {
+  // EL EXCEL ENTRA COMO EXCEL. Antes esto pedía "exportalo a CSV primero", que
+  // es exactamente el paso manual que este producto viene a sacar: el lector de
+  // openpyxl ya estaba en el backend y sólo faltaba dejar SUBIR el archivo.
+  const tomar = async (file) => {
     if (!file) return;
     setAviso(null);
-    if (!file.name.toLowerCase().endsWith(".csv")) {
+    const nombre = file.name.toLowerCase();
+    const esExcel = nombre.endsWith(".xlsx") || nombre.endsWith(".xlsm") || nombre.endsWith(".xls");
+    if (esExcel) {
+      try {
+        const info = await api.importPreviewArchivo(file, carta.destino, usuario);
+        setPreview({ ...info, nombre: file.name, texto: info.csv });
+      } catch {
+        setAviso(t("cargar.aviso_excel_error", { nombre: file.name }));
+      }
+      return;
+    }
+    if (!nombre.endsWith(".csv")) {
       setAviso(t("cargar.aviso_no_csv", { nombre: file.name }));
       return;
     }
@@ -222,6 +255,29 @@ function Carta({ carta, usuario, onArchivoCargado }) {
           </div>
           {preview.sin_mapear?.length > 0 && (
             <p className="mt-2 text-[0.76rem] text-tinta-suave">{t("cargar.sin_reconocer", { lista: preview.sin_mapear.join(", ") })}</p>
+          )}
+
+          {/* LO QUE ESTÁ ROTO ADENTRO. Estructurar la planilla es la mitad del
+              trabajo; la otra mitad es decir qué tiene mal — y con el número de
+              fila del Excel, que es como lo ve el que la cargó. */}
+          {preview.problemas?.length > 0 && (
+            <div className="mt-3 rounded-lg border border-oro/35 bg-oro/[0.07] p-2.5">
+              <p className="flex items-center gap-1.5 text-[0.82rem] font-semibold text-oro-tinta">
+                <TriangleAlert size={13} /> {t("cargar.roto_titulo")}
+              </p>
+              <ul className="mt-1.5 space-y-1.5">
+                {preview.problemas.map((x) => (
+                  <li key={x.clase + x.titulo} className="text-[0.79rem] leading-snug">
+                    <span className="font-semibold">{x.cantidad} · {x.titulo}</span>
+                    <span className="text-tinta-suave"> — {x.detalle}</span>
+                    <span className="block text-[0.72rem] text-tinta-suave">
+                      {t("cargar.roto_filas", { filas: x.filas.join(", ") })}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1.5 text-[0.74rem] text-tinta-suave">{t("cargar.roto_nota")}</p>
+            </div>
           )}
           <p className="mt-2 text-[0.78rem] text-tinta-suave">{t("cargar.confirma")}</p>
           <div className="mt-2.5 flex flex-wrap gap-2">

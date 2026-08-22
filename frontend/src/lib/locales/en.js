@@ -1532,6 +1532,16 @@ export const EN = {
 
   // --- load data (unlock cards) ---
   "cargar.titulo": "Load data",
+  "cargar.roto_titulo": "What's broken inside the spreadsheet",
+  "cargar.roto_filas": "Rows: {filas}",
+  "cargar.roto_nota": "I fix none of this on my own: it goes to the review area and you approve it.",
+  "cargar.stock_titulo": "The stock spreadsheet",
+  "cargar.stock_valor": "The one from the brief: the Excel several people edit at once. I read it as-is, structure it by lot, variety, grade and location, and show you WHAT'S BROKEN INSIDE — lots with no season, kilos that don't add up, duplicate rows of the same lot.",
+  "cargar.stock_como": "Drop the .xlsx exactly as you have it. No need to tidy it first.",
+  "cargar.conteos_titulo": "Chamber counts",
+  "cargar.conteos_valor": "Load the physical counts and I'll cross declared against counted and propose the cause of each difference with its evidence: which movement, what date, who entered it.",
+  "cargar.conteos_como": "Drop the counts spreadsheet (Excel or CSV).",
+  "cargar.aviso_excel_error": "Couldn't read «{nombre}». Are the headers on the first row of the first sheet?",
   "cargar.sub": "Every piece of data you add unlocks something concrete. Drop the file and Ángela maps the columns on her own.",
   // P38·I — the vision, in copy: nobody keys things in or takes ERP courses
   "cargar.erp_atras_1": "You used to key everything into the system by hand. Now you just ask Ángela.",
