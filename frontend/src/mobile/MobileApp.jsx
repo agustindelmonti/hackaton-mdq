@@ -22,7 +22,7 @@ import OportunidadesNegocio from "../sections/OportunidadesNegocio";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { authStore, useSession } from "../lib/auth";
 import { PREGUNTA_TAREA } from "../lib/piso";
-import { tieneVistaHerramienta } from "../lib/roles";
+import { tieneVistaHerramienta, chipsAngelaDe, saludoKeyDe } from "../lib/roles";
 import { toast } from "../lib/toastStore";
 import Toasts from "../components/Toasts";
 import Campanita from "../components/Campanita";
@@ -151,7 +151,8 @@ export default function MobileApp({ data, oportunidades, fase, user, onRecargar 
       case "perfil":
         return <MiPerfil user={user} />;
       case "angela":
-        return <AngelaView inputInicial={consultaAngela} user={user} onNavigate={navegarMobile} onDatosCambiaron={onRecargar} />;
+        return <AngelaView inputInicial={consultaAngela} user={user} onNavigate={navegarMobile} onDatosCambiaron={onRecargar}
+                    placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />;
       default:
         return null;
     }

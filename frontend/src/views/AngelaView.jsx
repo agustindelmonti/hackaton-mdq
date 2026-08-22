@@ -13,14 +13,17 @@ import { equipoStore } from "../lib/equipoStore";
 import { vistaStore } from "../lib/vistaStore";
 import { useT, useLang } from "../lib/i18n";
 
-// Chips: lk es lo que se MUESTRA (traducido); "enviar" es el payload que va al
-// backend y queda en ES (el motor de Ángela entiende castellano). Los chips que
-// llegan por props como strings simples se muestran y envían tal cual.
+// Chips: `lk` es lo que se MUESTRA y `enviarLk` la clave del payload que va al
+// backend. Antes el payload era un string en ES hardcodeado al lado del label:
+// por eso el dueño de una semillera se encontraba con "¿cuánta plata tengo en
+// manteca?", herencia de otro cliente. Ahora el catálogo de roles es la única
+// fuente y el texto sale del diccionario. Los chips que llegan como string
+// simple se muestran y envían tal cual.
 const CHIPS = [
-  { lk: "angela.chip_manteca", enviar: "¿Cuánta plata tengo en manteca?" },
-  { lk: "angela.chip_fantasma", enviar: "¿Cuáles son mis productos fantasma?" },
-  { lk: "angela.chip_anota", enviar: "Anotá que Vanesa revise los precios de calibre" },
-  { lk: "angela.chip_riesgo", enviar: "¿Dónde está el mayor riesgo de mi inventario?" },
+  { lk: "rol.chip_panorama", enviarLk: "rol.chip_panorama" },
+  { lk: "rol.chip_que_esta_trabado", enviarLk: "rol.chip_que_esta_trabado" },
+  { lk: "rol.chip_dif_abiertas", enviarLk: "rol.chip_dif_abiertas" },
+  { lk: "rol.chip_plata_parada", enviarLk: "rol.chip_plata_parada" },
 ];
 
 // Chat de Ángela, compartido entre mobile (pantalla completa) y desktop (panel).
@@ -270,7 +273,7 @@ export default function AngelaView({
             {placeholderChips.map((c) => (
               <button
                 key={typeof c === "string" ? c : c.lk}
-                onClick={() => enviar(typeof c === "string" ? c : c.enviar)}
+                onClick={() => enviar(typeof c === "string" ? c : (c.enviar || t(c.enviarLk || c.lk)))}
                 className="rounded-full border border-linea bg-crema px-3 py-1.5 text-left text-[0.82rem] font-medium text-tinta-suave transition-colors hover:border-violeta/40 hover:text-tinta"
               >
                 {typeof c === "string" ? c : t(c.lk)}

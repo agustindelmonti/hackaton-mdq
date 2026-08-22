@@ -33,13 +33,12 @@ import Auditoria from "./sections/Auditoria";
 import Avatar from "../components/Avatar";
 import MiDia from "../mobile/MiDia";
 import { PREGUNTA_TAREA } from "../lib/piso";
-import { tieneVistaHerramienta } from "../lib/roles";
+import { tieneVistaHerramienta, chipsAngelaDe, saludoKeyDe } from "../lib/roles";
 import { authStore, useSession } from "../lib/auth";
 import { cargarSenales, contarAlertas } from "../lib/centroAlertas";
 import { useDocNuevo } from "../lib/docStore";
 import { resaltarPorId } from "../lib/navGuiada";
 import Campanita from "../components/Campanita";
-import LangSwitch from "../components/LangSwitch";
 import { VerComoChip } from "../components/VerComo";
 import { useT, tRol } from "../lib/i18n";
 import { toast } from "../lib/toastStore";
@@ -321,7 +320,6 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
             />
           </form>
           <VerComoChip />
-          <LangSwitch />
           <Campanita
             token={session?.token}
             esAdmin={user.es_admin}
@@ -431,7 +429,8 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-3">
                   <div className="min-h-0 flex-1 overflow-hidden">
-                    <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar} placeholderChips={chipsPorRol(user)} />
+                    <AngelaView onNavigate={navegar} inputInicial={consultaAngela} user={user} onDatosCambiaron={onRecargar}
+                                placeholderChips={chipsAngelaDe(user)} saludoInicial={t(saludoKeyDe(user))} />
                   </div>
                 </div>
               </motion.aside>
@@ -443,23 +442,3 @@ export default function DesktopApp({ data, oportunidades, fase, user, onRecargar
   );
 }
 
-// Los chips muestran el label traducido (lk) y mandan el payload en ES
-// (el motor de Ángela entiende castellano) — mismo patrón que CHIPS default.
-function chipsPorRol(user) {
-  if (user.features.includes("inventario"))
-    return [
-      { lk: "angela.chip_llevame_fantasma", enviar: "Llevame a los productos fantasma" },
-      { lk: "angela.chip_manteca", enviar: "¿Cuánta plata tengo en manteca?" },
-      { lk: "angela.chip_balanzas", enviar: "Mostrame los calibres fuera de grado" },
-      { lk: "angela.chip_riesgo", enviar: "¿Dónde está el mayor riesgo de mi inventario?" },
-    ];
-  if (user.features.includes("deposito"))
-    return [
-      { lk: "angela.chip_negativo", enviar: "Mostrame el stock negativo" },
-      { lk: "angela.chip_fantasma", enviar: "¿Cuáles son mis productos fantasma?" },
-    ];
-  return [
-    { lk: "angela.chip_hoy", enviar: "¿Qué tengo que hacer hoy?" },
-    { lk: "angela.chip_recordatorio", enviar: "Anotá un recordatorio" },
-  ];
-}

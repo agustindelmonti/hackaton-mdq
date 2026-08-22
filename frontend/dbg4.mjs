@@ -1,0 +1,14 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport:{width:390,height:844} });
+await p.goto("http://localhost:5210/", { waitUntil:"domcontentloaded" });
+await p.waitForSelector("input",{timeout:30000}).catch(()=>{});
+await p.locator("input").first().fill("marcos");
+await p.locator('input[type="password"]').first().fill("campania-9443");
+await p.keyboard.press("Enter");
+await p.waitForFunction(()=>!/Leyendo tu negocio/.test(document.body.innerText),null,{timeout:60000}).catch(()=>{});
+await p.waitForTimeout(3000);
+const bb = await p.evaluate(()=>{ const i=[...document.images].find(x=>x.src.includes("papasud")); if(!i) return null; const r=i.getBoundingClientRect(); return {x:r.x,y:r.y,w:r.width,h:r.height, cs: getComputedStyle(i).opacity+"/"+getComputedStyle(i).visibility}; });
+console.log("BOX", JSON.stringify(bb));
+await p.screenshot({ path:"../docs/shots/mob-header.png", clip:{x:0,y:0,width:390,height:70} });
+await b.close();
