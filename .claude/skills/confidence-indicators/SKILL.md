@@ -147,10 +147,21 @@ A worked, running example of both shapes lives in this project:
 - `frontend/src/components/assistant/angela-thread.jsx` — the wiring
   point for the per-span shape in the AI chat: `AssistantMessage` renders
   `ConfidenceMarker` whenever a message's `meta.claims` is present,
-  falling back to plain text otherwise. The backend doesn't populate
-  `claims` yet — this is the same "wired but honestly empty" pattern as
-  `FUERZA_REGLA` above, ready for whenever Ángela's narration is
-  segmented server-side.
+  falling back to plain text otherwise.
+- `backend/angela.py` (`mark_confidence_claims` in `TOOLS`) +
+  `backend/core/confidence.py` — the backend half that actually populates
+  `claims`, end to end. The model only names WHAT it's talking about (a
+  movement/count/note/reconciliation-rule reference); `core/confidence.py`
+  resolves the real confidence from that reference deterministically —
+  same split as `movimientos.buscar_lote()` (model extracts language, code
+  resolves the fact). One structural gotcha worth knowing before touching
+  this kind of tool-loop: a turn that calls a tool normally has its text
+  discarded (only a tool-free turn's text gets shown), so a tool meant to
+  annotate the model's own final answer has to be treated as *terminal* —
+  `stream_responder` special-cases `mark_confidence_claims` to capture that
+  turn's text and end there instead of round-tripping. New code from this
+  point in the project is written in English (names, comments, tool
+  schemas); existing Spanish modules were left as they are.
 - `frontend/confidence-indicator-demo.html` /
   `frontend/src/confidence-indicator-demo.jsx` — a standalone, dev-only
   page exercising every state, band, variant, and anti-pattern guard of

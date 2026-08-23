@@ -82,6 +82,12 @@ def texto_en(n: dict, lang: str | None = None) -> str:
     return n.get("texto", "")
 
 
+def get_by_id(nota_id: str) -> dict | None:
+    """Una nota por su id, o None. English name: nuevo desde acá en más el
+    código nace en inglés (ver core/confidence.py, que es quien la usa)."""
+    return next((dict(n) for n in _load().get("notas", []) if n.get("id") == nota_id), None)
+
+
 def sobre_cliente(nombre: str, desde: str | None = None) -> list[dict]:
     return listar(cliente=nombre, desde=desde)
 
