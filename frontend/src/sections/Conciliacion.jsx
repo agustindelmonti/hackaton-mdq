@@ -4,6 +4,7 @@ import {
   FileSearch, ChevronDown, ChevronRight,
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
+import ConfidenceIndicator from "../components/ConfidenceIndicator";
 import { api } from "../lib/api";
 import { num, peso, pesoCorto, fecha } from "../lib/format";
 import { useT } from "../lib/i18n";
@@ -44,6 +45,19 @@ const CLASE = {
     icono: Check, tono: "salvia",
     borde: "border-linea", fondo: "bg-crema/60", texto: "text-salvia",
   },
+};
+
+// La fuerza de cada regla, tal como está hoy: un juicio del oficio (cascada
+// determinística de conciliacion.py), no todavía una estadística medida.
+// Cuando el motor de docs/motor-conciliacion-confianza.md esté conectado,
+// el backend va a mandar confianza_score/muestra_n reales por hipótesis y
+// esta tabla deja de hacer falta — <ConfidenceIndicator> ya sabe mostrar esa
+// versión medida en cuanto los datos lleguen (ver su prop `score`).
+const FUERZA_REGLA = {
+  movimiento_sin_confirmar: { tier: 0, qualitativeBand: "high" },
+  cantidad_mal_tipeada: { tier: 0, qualitativeBand: "medium" },
+  merma_fisica: { tier: 0, qualitativeBand: "medium" },
+  sin_explicacion: { tier: 0, qualitativeBand: "low" },
 };
 
 export default function Conciliacion({ onPreguntar }) {
@@ -196,12 +210,23 @@ function Diferencia({ dif, trabajando, onEjecutar, onPreguntar }) {
 
       <div className="space-y-3 px-4 py-3">
         <div>
-          <p className="mb-1 flex items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-tinta-suave">
-            <FileSearch size={12} /> {t("conc.hipotesis")}
-            <span className={`rounded-full px-1.5 py-px text-[0.65rem] normal-case ${c.fondo} ${c.texto}`}>
-              {t(`conc.confianza_${h.confianza}`)}
-            </span>
-          </p>
+          <div className="mb-1.5 flex flex-wrap items-start justify-between gap-2">
+            <p className="flex items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-tinta-suave">
+              <FileSearch size={12} /> {t("conc.hipotesis")}
+            </p>
+            <ConfidenceIndicator
+              size="sm"
+              tier={FUERZA_REGLA[h.clase]?.tier ?? 0}
+              qualitativeBand={FUERZA_REGLA[h.clase]?.qualitativeBand}
+              onViewEvidence={() => setVerEvidencia((v) => !v)}
+              legend={{
+                high: t("conc.confianza_leyenda_alta"),
+                medium: t("conc.confianza_leyenda_media"),
+                low: t("conc.confianza_leyenda_baja"),
+                unverified: t("conc.confianza_leyenda_sin_confirmar"),
+              }}
+            />
+          </div>
           <p className="text-[0.92rem] leading-snug">{h.texto}</p>
         </div>
 
