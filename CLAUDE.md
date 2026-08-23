@@ -219,3 +219,4 @@ Por valor de demo por minuto. **Cortar desde abajo.**
 | `track-b-handoff.md` | Modelo real Campo→Lote, endpoints `/api/papasud` |
 | `cadena-planta-papasud.md` | **Charla 22/08.** Planta como hub, orden de carga, báscula, frío que vuelve |
 | `papasud.md` | Notas originales del brief (previas a la investigación) |
+| `generalizacion-mapa-operacion.md` | **Post-hackathon.** Cómo generalizar el mapa de operación a un modelo multi-industria (schema en `supabase/`) |
