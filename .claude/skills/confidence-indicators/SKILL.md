@@ -102,30 +102,63 @@ Before writing any UI, find out what's actually driving the number:
   Prefer a native element where one exists with the right semantics for
   free (e.g. HTML `<meter>` for a meter variant) over a hand-rolled div.
 
+## Two shapes of the same pattern
+
+The interaction requirements above apply to both call-site shapes — pick
+the one that matches where the claim lives:
+
+- **Per-item** (a card, a hypothesis, a whole recommendation): a
+  score/meter/badge attached to that one item, with its own legend
+  popover. Use this when the claim is already a discrete unit in the UI.
+- **Per-span** (a sentence or clause *inside* a longer piece of prose — an
+  AI chat answer, a paragraph of analysis): an inline underline marker
+  under just that clause, with a hover/tap-revealed basis pill. Use this
+  when forcing every claim into its own card would fragment prose that
+  should read as one paragraph. This shape needs the claims to already be
+  segmented and each one classified — that segmentation must be produced
+  by the same calibrated/qualitative logic as the per-item shape, never by
+  asking the LLM to self-rate each clause as it writes (see "Calibration
+  is the whole point").
+
 ## Reference implementation in this repo
 
-A worked, running example lives in this project:
+A worked, running example of both shapes lives in this project:
 
-- `frontend/src/components/ConfidenceIndicator.jsx` — the reusable
+- `frontend/src/components/ConfidenceIndicator.jsx` — the per-item
   component (React + this project's Tailwind v4 token system), with the
   calibration guards, all four states, badge and meter variants, a
   keyboard-accessible legend popover, and the qualitative-vs-measured
   distinction described above.
+- `frontend/src/components/assistant/confidence-marker.jsx` — the
+  per-span component (`ConfidenceMarker`), adapted from
+  assistant-ui.com/elements/confidence-marker: three confidence tiers
+  (`grounded`/`inferred`/`uncertain`) as inline underlines with a
+  hover-or-tap basis pill, reusing the same salvia/oro/rojo color language
+  as the per-item component (two components of one pattern cannot speak
+  two color languages) and adding tap-to-pin for touch, since this
+  project's users read it one-handed with gloves on, not with a mouse.
 - `frontend/src/sections/Conciliacion.jsx` (see `FUERZA_REGLA`) — the real
-  production integration: today the backend only has hand-set rule
-  strength (no measured stats yet), so every badge on that screen renders
-  through the *qualitative* path — an honest reflection of where the
-  system's confidence engine actually is right now. See
-  `docs/motor-conciliacion-confianza.md` for the plan to replace that with
-  real calibrated scores (Wilson intervals over resolved cases).
+  production integration of the per-item shape: today the backend only
+  has hand-set rule strength (no measured stats yet), so every badge on
+  that screen renders through the *qualitative* path — an honest
+  reflection of where the system's confidence engine actually is right
+  now. See `docs/motor-conciliacion-confianza.md` for the plan to replace
+  that with real calibrated scores (Wilson intervals over resolved cases).
+- `frontend/src/components/assistant/angela-thread.jsx` — the wiring
+  point for the per-span shape in the AI chat: `AssistantMessage` renders
+  `ConfidenceMarker` whenever a message's `meta.claims` is present,
+  falling back to plain text otherwise. The backend doesn't populate
+  `claims` yet — this is the same "wired but honestly empty" pattern as
+  `FUERZA_REGLA` above, ready for whenever Ángela's narration is
+  segmented server-side.
 - `frontend/confidence-indicator-demo.html` /
   `frontend/src/confidence-indicator-demo.jsx` — a standalone, dev-only
-  page exercising every state, band, and anti-pattern guard with real
-  interaction (not screenshots). Run `npm run dev` inside `frontend/` and
-  open `/confidence-indicator-demo.html`.
+  page exercising every state, band, variant, and anti-pattern guard of
+  both components with real interaction (not screenshots). Run
+  `npm run dev` inside `frontend/` and open `/confidence-indicator-demo.html`.
 
-When generating an implementation in *this* repo, extend or reuse
-`ConfidenceIndicator.jsx` rather than writing a new one from scratch.
+When generating an implementation in *this* repo, extend or reuse these
+two components rather than writing new ones from scratch.
 
 ## Steps to generate an implementation in a new project
 

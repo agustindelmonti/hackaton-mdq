@@ -1,6 +1,7 @@
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import ConfidenceIndicator from "./components/ConfidenceIndicator";
+import { ConfidenceMarker } from "./components/assistant/confidence-marker";
 import { useT } from "./lib/i18n";
 import "./index.css";
 
@@ -56,11 +57,13 @@ function Demo() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-10 text-tinta">
       <header className="mb-8">
-        <h1 className="font-display text-3xl font-bold">ConfidenceIndicator</h1>
+        <h1 className="font-display text-3xl font-bold">Confidence Indicators</h1>
         <p className="mt-1 max-w-2xl text-[0.95rem] text-tinta-suave">
-          Referencia ejecutable del patrón "Confidence Indicators": badges/meters
-          calibrados, con leyenda, hedging y los cuatro estados de interacción.
-          Cada swatch de abajo es el componente real, no una captura.
+          Referencia ejecutable de las dos formas del patrón: <code>ConfidenceIndicator</code>{" "}
+          (badge/meter por ítem, secciones 1-5) y <code>ConfidenceMarker</code>{" "}
+          (subrayado por tramo de texto, sección 6). Calibrados, con leyenda,
+          hedging y los cuatro estados de interacción. Cada swatch de abajo es
+          el componente real, no una captura.
         </p>
       </header>
 
@@ -196,6 +199,29 @@ function Demo() {
             el "medido sobre 40 casos" queda visible siempre, no sólo en las bandas dudosas.
           </p>
         </Swatch>
+      </Section>
+
+      <Section
+        title="6 · ConfidenceMarker — el mismo patrón, por tramo de texto"
+        note={
+          <>
+            Adaptado de assistant-ui.com/elements/confidence-marker: en vez de
+            un badge por ítem, marca tramos DENTRO de un párrafo largo — pensado
+            para el chat de Ángela (ver <code>meta.claims</code> en
+            src/components/assistant/angela-thread.jsx). Tocá una claim en el
+            celu para fijarla; en desktop alcanza con pasar el mouse o
+            tabular con teclado.
+          </>
+        }
+      >
+        <ConfidenceMarker
+          className="max-w-none"
+          claims={[
+            { id: "c1", text: "El lote 002 tiene 17.400 kg en Frigorífico Dospanca.", confidence: "grounded", basis: "conteo #482, 22/08" },
+            { id: "c2", text: "Es probable que los 600 kg que faltan estén en San Cayetano, sin registrar todavía.", confidence: "inferred", basis: "movimiento M-2201, sin confirmar en destino" },
+            { id: "c3", text: "No encontré ninguna nota del equipo que lo confirme.", confidence: "uncertain", basis: "busqué en las notas de los últimos 14 días" },
+          ]}
+        />
       </Section>
     </main>
   );

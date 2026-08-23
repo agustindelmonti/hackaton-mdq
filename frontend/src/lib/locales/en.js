@@ -2371,6 +2371,11 @@ export const EN = {
   "conf.hedge_no_data": "No resolved cases yet to measure this.",
   "conf.hedge_sample": "Measured over {n} similar resolved cases.",
   "conf.hedge_qualitative": "The rule's own judgment call, not yet measured against real cases.",
+
+  // --- ConfidenceMarker (components/assistant/confidence-marker.jsx) ---
+  "conf.marker_grounded": "from a source",
+  "conf.marker_inferred": "inferred",
+  "conf.marker_uncertain": "unverified",
   "mov.titulo": "Stock movements",
   "mov.subtitulo": "Say what you moved the way you'd say it out loud. The system builds the transaction and checks the stock is there.",
   "mov.error": "I couldn't read the movements.",

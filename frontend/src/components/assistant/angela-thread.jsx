@@ -10,6 +10,7 @@ import {
 import { WebSpeechDictationAdapter } from "@assistant-ui/core";
 import { ArrowUpIcon, Camera, SquareIcon } from "lucide-react";
 import AngelaMark from "../AngelaMark";
+import { ConfidenceMarker } from "./confidence-marker";
 import { ErrorState } from "./error-state";
 import { ThinkingIndicator } from "./thinking-indicator";
 import { AngelaToolCall } from "./angela-tool";
@@ -160,7 +161,18 @@ function AssistantMessage({ onOpcion, renderExtras }) {
           <div className="rounded-2xl rounded-tl-md border border-linea bg-crema px-3.5 py-2.5 sombra-papel">
             <MessagePrimitive.Parts
               components={{
-                Text: ({ text }) => <AssistantText text={text} />,
+                // meta.claims: cuando el backend narre segmentando la
+                // respuesta en tramos con su propia confianza (ver
+                // docs/motor-conciliacion-confianza.md — todavía no lo
+                // hace), esto la muestra con ConfidenceMarker en vez del
+                // párrafo plano. Nada cambia mientras no llegue: el texto
+                // de siempre sigue siendo el camino por defecto.
+                Text: ({ text }) =>
+                  meta?.claims?.length ? (
+                    <ConfidenceMarker claims={meta.claims} className="max-w-none" />
+                  ) : (
+                    <AssistantText text={text} />
+                  ),
                 tools: {
                   Fallback: AngelaToolCall,
                 },
