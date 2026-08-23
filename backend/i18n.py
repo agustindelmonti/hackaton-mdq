@@ -740,6 +740,19 @@ CATALOGO: dict[str, dict[str, str]] = {
         "es": "No tenés recordatorios pendientes.",
         "en": "You have no pending reminders.",
     },
+    # fb: memoria por hechos sueltos ("acordate que...")
+    "fb.hecho_guardado": {
+        "es": "Guardado: {texto}. Lo vas a poder ver y borrar en Mi perfil.",
+        "en": "Saved: {texto}. You can see it and remove it in My profile.",
+    },
+    "fb.hecho_actualizado": {
+        "es": "Listo, actualicé lo que tenía anotado: ahora dice «{texto}».",
+        "en": "Done, I updated what I had noted: it now says \"{texto}\".",
+    },
+    "fb.hecho_ya_sabia": {
+        "es": "Eso ya lo tenía anotado.",
+        "en": "I already had that noted.",
+    },
     "fb.rec_marca_disparado": {"es": "AHORA", "en": "NOW"},
     "fb.rec_marca_activo": {"es": "pendiente", "en": "pending"},
     "fb.rec_marca_latente": {"es": "vigilando", "en": "watching"},

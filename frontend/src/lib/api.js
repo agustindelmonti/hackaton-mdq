@@ -248,6 +248,16 @@ export const api = {
     if (!res.ok) throw _error("/api/preferencias", res);
     return res.json();
   },
+  // Hechos sueltos ("acordate que…"): mismo trato que las preferencias — se
+  // listan con /api/preferencias y se borran/confirman uno por uno.
+  hechoConfirmar: (id) => post(`/api/hechos/${encodeURIComponent(id)}/confirmar`, {}),
+  hechoBorrar: async (id) => {
+    const res = await fetch(`/api/hechos/${encodeURIComponent(id)}`, {
+      method: "DELETE", headers: _headers(),
+    });
+    if (!res.ok) throw _error("/api/hechos", res);
+    return res.json();
+  },
   perfil: (usuario) => get(`/api/perfil/${encodeURIComponent(usuario)}`),
   perfilDescripcion: (usuario, token, texto) =>
     post(`/api/perfil/${encodeURIComponent(usuario)}/descripcion`, { token, texto }),

@@ -832,6 +832,28 @@ TOOLS = [
         },
     },
     {
+        "name": "recordar_hecho",
+        "description": "Proponé guardar un dato del NEGOCIO que la persona mencionó al pasar sin "
+        "pedirte explícitamente que lo anotes (ej: charlando de otra cosa dice 'el cliente López "
+        "siempre pide la entrega a la tarde'). A diferencia de 'recordar' (que es para cuando la "
+        "persona SÍ te pidió anotar algo), esto queda marcado como DUDOSO hasta que la persona lo "
+        "confirme con un toque — nunca lo trates como un hecho ya confirmado en la misma respuesta. "
+        "No uses esto para tareas o recordatorios (eso es 'crear_recordatorio'), ni para pedidos "
+        "explícitos de anotar (esos ya se resuelven solos, antes de que te llegue el mensaje). "
+        "'categoria' es opcional: usala cuando el hecho reemplaza a uno anterior sobre lo mismo "
+        "(ej: 'horario_entrega_lopez') para que se actualice en vez de duplicarse.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "texto": {"type": "string", "description": "el hecho, en una frase clara"},
+                "categoria": {"type": "string",
+                              "description": "clave corta opcional para identificar el hecho y "
+                              "poder actualizarlo después"},
+            },
+            "required": ["texto"],
+        },
+    },
+    {
         "name": "recordar_preferencia",
         "description": "Persistí una preferencia de VISTA del usuario que la interfaz aplica sola "
         "desde ahora y para siempre (sobrevive recargas y sesiones). Catálogo cerrado de claves: "
@@ -872,14 +894,15 @@ TOOLS = [
         "name": "leer_preferencias",
         "description": "Trae TODO lo que recordás de cómo le gusta ver el negocio a este usuario: "
         "preferencias de vista aplicadas por la interfaz (sin_torta, margen_pin_umbral, orden del "
-        "inicio, widgets fijados) y las notas libres. Usala antes de generar gráficos o tocar la "
-        "vista, y cuando te pregunten qué recordás.",
+        "inicio, widgets fijados), las notas libres y los hechos sueltos (con su confianza: "
+        "'confirmado' o 'dudoso'). Usala antes de generar gráficos o tocar la vista, y cuando te "
+        "pregunten qué recordás.",
         "input_schema": {"type": "object", "properties": {}},
     },
     {
         "name": "recuperar",
         "description": "Trae lo que recordás del usuario (preferencias, objetivos, datos cargados, "
-        "recomendaciones previas) para personalizar tu respuesta.",
+        "hechos sueltos, recomendaciones previas) para personalizar tu respuesta.",
         "input_schema": {"type": "object", "properties": {}},
     },
     {
@@ -1752,8 +1775,21 @@ def _run_tool(name: str, args: dict) -> tuple[dict | list, dict | None]:
     if name == "recordar":
         memoria.set_pref(_usuario_actual(), args.get("clave", ""), args.get("valor", ""))
         return {"ok": True, "recordado": args.get("clave")}, None
+    if name == "recordar_hecho":
+        # Mención al pasar: queda 'dudoso' — el modelo NO puede confirmarla por sí
+        # mismo, así que la respuesta tiene que tratarla como pendiente de un toque.
+        try:
+            hecho, cambio = memoria.agregar_hecho(
+                _usuario_actual(), args.get("texto", ""), categoria=args.get("categoria"),
+                rol=_rol_actual(), fuente="tool", confianza="dudoso")
+        except ValueError as e:
+            return {"ok": False, "motivo": str(e)}, None
+        return {"ok": True, "hecho": hecho, "cambio": cambio}, None
     if name == "recuperar":
-        return memoria.get(_usuario_actual()), None
+        m = memoria.get(_usuario_actual())
+        es_admin = _usuario_para_manual().get("es_admin", False)
+        return {**m, "hechos": memoria.listar_hechos(_usuario_actual(), rol=_rol_actual(),
+                                                      ver_todo=es_admin)}, None
     if name == "recordar_preferencia":
         # P19·A: preferencia de vista ESTRUCTURADA — la interfaz la aplica sola.
         # La accion viaja al frontend para que el cambio se vea EN EL MOMENTO
@@ -1766,7 +1802,10 @@ def _run_tool(name: str, args: dict) -> tuple[dict | list, dict | None]:
                 {"type": "preferencia", "vista": vista})
     if name == "leer_preferencias":
         m = memoria.get(_usuario_actual())
-        return {"vista": m.get("vista", {}), "notas": m.get("preferencias", {})}, None
+        es_admin = _usuario_para_manual().get("es_admin", False)
+        hechos = memoria.listar_hechos(_usuario_actual(), rol=_rol_actual(), ver_todo=es_admin)
+        return {"vista": m.get("vista", {}), "notas": m.get("preferencias", {}),
+                "hechos": hechos}, None
     if name == "reordenar_inicio":
         # P19·B: el Home se reordena por chat y queda persistido por usuario.
         if args.get("reset"):
@@ -3159,6 +3198,45 @@ def _fallback(mensaje: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Memoria por frase explícita ("acordate que...") — determinística, corre ANTES
+# de tocar el modelo (haya o no API key) para que sea previsible y auditable:
+# lo que se guarda cuando la persona lo pide directo no depende de que el LLM
+# elija bien. Distinta de la tool 'recordar_hecho' (el modelo la usa para algo
+# mencionado al pasar, y queda 'dudoso' hasta que alguien la confirma).
+# ---------------------------------------------------------------------------
+
+_RE_HECHO_EXPLICITO = re.compile(
+    r"(?:acord[aá]te(?:\s+de)?\s+que|no\s+te\s+olvid[eé]s(?:\s+de)?\s+que|"
+    r"ten[eé]s?\s+en\s+cuenta\s+que|quiero\s+que\s+sepas\s+que|que\s+sepas\s+que|"
+    r"keep\s+in\s+mind\s+that|remember\s+that|just\s+so\s+you\s+know(?:\s+that)?)"
+    r"\s*[:,]?\s*(.+)",
+    re.IGNORECASE,
+)
+
+
+def _intentar_recordar_explicito(mensaje: str) -> dict | None:
+    """Si el mensaje dispara una frase de memoria explícita, guarda el hecho y
+    devuelve la respuesta ya armada. None si no matchea (sigue el flujo normal)."""
+    mat = _RE_HECHO_EXPLICITO.search((mensaje or "").strip())
+    if not mat:
+        return None
+    texto = mat.group(1).strip(" .,:;")
+    if not texto:
+        return None
+    lang = _idioma_actual()
+    hecho, cambio = memoria.agregar_hecho(
+        _usuario_actual(), texto, rol=_rol_actual(), fuente="explicito", confianza="confirmado")
+    ev = {"id": f"mem-{hecho['id']}-{cambio}", "name": "recordar_hecho",
+          "input": {"texto": texto},
+          "result": {"ok": True, "hecho": hecho, "cambio": cambio}}
+    clave = {"added": "fb.hecho_guardado", "updated": "fb.hecho_actualizado",
+             "existing": "fb.hecho_ya_sabia"}[cambio]
+    return {"respuesta": i18n.t(clave, lang, texto=texto), "modo": "determinista",
+            "tools_usadas": ["recordar_hecho"], "acciones": [], "opciones": [],
+            "tool_events": [ev]}
+
+
+# ---------------------------------------------------------------------------
 # Conversación con Claude (tool use loop)
 # ---------------------------------------------------------------------------
 
@@ -3178,6 +3256,12 @@ def responder(
         idioma = perfiles.idioma_de(nombre) if nombre else paths.DEFAULT_LANG
     # Sesión request-scoped (P9·A): features acotan las 3 capas anti-fuga.
     _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
+
+    # Frase explícita de memoria ("acordate que...") → determinística, antes de
+    # tocar el modelo (haya o no API key).
+    directo = _intentar_recordar_explicito(mensaje)
+    if directo is not None:
+        return directo
 
     # El transporte lo decide config: Gateway de Vercel, API directa de
     # Anthropic, o ninguno. Sin modelo real, el router determinista responde lo
@@ -3227,6 +3311,18 @@ def responder(
                 quien += f"\n- Ordenó los bloques de su Inicio así: {', '.join(_prefs['orden_home'])}."
             for k, v in list(_notas.items())[:6]:
                 quien += f"\n- Nota: {k} = {v}"
+        # Hechos sueltos ("acordate que..."): filtrados por ROL (memoria privada
+        # de la persona, pero lo que Ángela usa de contexto respeta bajo qué rol
+        # se dijo cada cosa — el dueño ve/usa todo lo suyo sin recorte). Los
+        # 'dudosos' entran igual, marcados como tales: son pistas, no verdades.
+        _es_admin = _usuario_para_manual().get("es_admin", False)
+        _hechos = memoria.listar_hechos(nombre, rol=rol, ver_todo=_es_admin) if nombre else []
+        if _hechos:
+            quien += "\n\nHECHOS SUELTOS QUE TE CONTÓ ANTES (no los repitas, tenelos en cuenta):"
+            for h in _hechos[:8]:
+                marca = " [sin confirmar, tratalo como pista, no como dato firme]" \
+                    if h.get("confianza") == "dudoso" else ""
+                quien += f"\n- {h['texto']}{marca}"
     except Exception:  # noqa: BLE001 — la memoria nunca tira el chat abajo
         pass
     # CAPA 3 — contexto acotado: el snapshot del inventario (inmovilizado, alertas, stock)
@@ -3343,6 +3439,17 @@ def stream_responder(
         idioma = perfiles.idioma_de(nombre) if nombre else paths.DEFAULT_LANG
     _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
 
+    # Frase explícita de memoria ("acordate que...") → determinística, antes de
+    # tocar el modelo (haya o no API key).
+    directo = _intentar_recordar_explicito(mensaje)
+    if directo is not None:
+        for te in directo.get("tool_events") or []:
+            yield {"type": "tool", **te}
+        if directo.get("respuesta"):
+            yield {"type": "text", "text": directo["respuesta"]}
+        yield {"type": "done", "result": {**directo, "ok": True}}
+        return
+
     client, modelo = config.cliente_llm("chat")
     if client is None:
         fb = _fallback(mensaje)
@@ -3390,6 +3497,18 @@ def stream_responder(
                 quien += f"\n- Ordenó los bloques de su Inicio así: {', '.join(_prefs['orden_home'])}."
             for k, v in list(_notas.items())[:6]:
                 quien += f"\n- Nota: {k} = {v}"
+        # Hechos sueltos ("acordate que..."): filtrados por ROL (memoria privada
+        # de la persona, pero lo que Ángela usa de contexto respeta bajo qué rol
+        # se dijo cada cosa — el dueño ve/usa todo lo suyo sin recorte). Los
+        # 'dudosos' entran igual, marcados como tales: son pistas, no verdades.
+        _es_admin = _usuario_para_manual().get("es_admin", False)
+        _hechos = memoria.listar_hechos(nombre, rol=rol, ver_todo=_es_admin) if nombre else []
+        if _hechos:
+            quien += "\n\nHECHOS SUELTOS QUE TE CONTÓ ANTES (no los repitas, tenelos en cuenta):"
+            for h in _hechos[:8]:
+                marca = " [sin confirmar, tratalo como pista, no como dato firme]" \
+                    if h.get("confianza") == "dudoso" else ""
+                quien += f"\n- {h['texto']}{marca}"
     except Exception:  # noqa: BLE001
         pass
 

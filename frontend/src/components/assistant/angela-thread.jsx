@@ -13,6 +13,7 @@ import AngelaMark from "../AngelaMark";
 import { ErrorState } from "./error-state";
 import { ThinkingIndicator } from "./thinking-indicator";
 import { AngelaToolCall } from "./angela-tool";
+import { MemoryChipsToolUI } from "./memory-chips";
 import { ComposerVoice, ComposerVoiceButton } from "./composer";
 import { inkButton, ghostButton } from "./surfaces";
 import { cn } from "../../lib/cn";
@@ -162,6 +163,7 @@ function AssistantMessage({ onOpcion, renderExtras }) {
               components={{
                 Text: ({ text }) => <AssistantText text={text} />,
                 tools: {
+                  by_name: { recordar_hecho: MemoryChipsToolUI },
                   Fallback: AngelaToolCall,
                 },
               }}

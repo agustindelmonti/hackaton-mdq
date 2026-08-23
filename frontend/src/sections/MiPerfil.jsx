@@ -512,21 +512,37 @@ function PreferenciasAngela() {
     items.push({ clave: k, texto: `${k}: ${val}`, nota: true });
   }
 
+  const hechos = prefs.hechos || [];
+
   const borrar = async (clave) => {
     try {
       const r = await api.preferenciaBorrar(clave);
-      setPrefs({ vista: r.vista, notas: r.notas });
+      setPrefs((p) => ({ ...p, vista: r.vista, notas: r.notas }));
       // La vista local vuelve al default de esa preferencia en el momento.
       const { vistaStore } = await import("../lib/vistaStore");
       vistaStore.hidratarServer({ vista: r.vista });
     } catch { /* si falla queda como estaba; el server manda */ }
   };
 
+  const confirmarHecho = async (id) => {
+    try {
+      const r = await api.hechoConfirmar(id);
+      setPrefs((p) => ({ ...p, hechos: (p.hechos || []).map((h) => (h.id === id ? r.hecho : h)) }));
+    } catch { /* si falla queda como estaba */ }
+  };
+
+  const borrarHecho = async (id) => {
+    try {
+      await api.hechoBorrar(id);
+      setPrefs((p) => ({ ...p, hechos: (p.hechos || []).filter((h) => h.id !== id) }));
+    } catch { /* si falla queda como estaba */ }
+  };
+
   return (
     <section>
       <h2 className="mb-1 font-display text-[1.1rem] font-bold">{t("miperfil.prefs_titulo")}</h2>
       <p className="mb-3 text-[0.84rem] text-tinta-suave">{t("miperfil.prefs_sub")}</p>
-      {items.length === 0 && reglas.length === 0 ? (
+      {items.length === 0 && reglas.length === 0 && hechos.length === 0 ? (
         <p className="rounded-xl border border-linea bg-crema px-3.5 py-3 text-[0.85rem] text-tinta-suave">
           {t("miperfil.prefs_vacio")}
         </p>
@@ -537,6 +553,30 @@ function PreferenciasAngela() {
               <AngelaMark size={20} />
               <p className="min-w-0 flex-1 text-[0.86rem] text-tinta">{it.texto}</p>
               <button onClick={() => borrar(it.clave)} aria-label={t("miperfil.pref_borrar")}
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-tinta-suave hover:bg-rojo/10 hover:text-rojo">
+                <XCircle size={16} />
+              </button>
+            </div>
+          ))}
+          {/* Hechos sueltos ("acordate que…"): los dudosos (Ángela los propuso
+              sola de algo mencionado al pasar) piden un toque de confirmación
+              además de la X — nada queda como verdad sin que alguien la valide. */}
+          {hechos.map((h) => (
+            <div key={h.id} className="flex items-center gap-3 border-b border-linea/70 px-3.5 py-2.5 last:border-0">
+              <AngelaMark size={20} estado={h.confianza === "dudoso" ? "esperando" : undefined} />
+              <div className="min-w-0 flex-1">
+                <p className="text-[0.86rem] text-tinta">{h.texto}</p>
+                {h.confianza === "dudoso" && (
+                  <p className="text-[0.72rem] text-oro-tinta">{t("miperfil.hecho_dudoso")}</p>
+                )}
+              </div>
+              {h.confianza === "dudoso" && (
+                <button onClick={() => confirmarHecho(h.id)} aria-label={t("miperfil.hecho_confirmar")}
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-tinta-suave hover:bg-salvia/10 hover:text-salvia">
+                  <CheckCircle2 size={16} />
+                </button>
+              )}
+              <button onClick={() => borrarHecho(h.id)} aria-label={t("miperfil.hecho_borrar")}
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-tinta-suave hover:bg-rojo/10 hover:text-rojo">
                 <XCircle size={16} />
               </button>

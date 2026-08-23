@@ -12,8 +12,10 @@ from __future__ import annotations
 
 import json
 import os
+import secrets
 
 from . import paths
+from .fechas import hoy
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = paths.DATA_DIR  # por-tenant: env POLPILOT_DATA_DIR o data/ (ver core/paths.py)
@@ -26,6 +28,7 @@ _VACIO = {
     "objetivos": [],
     "datos_cargados": [],
     "recomendaciones": [],
+    "hechos": [],  # cosas sueltas que la persona contó — ver agregar_hecho()
 }
 
 
@@ -203,3 +206,96 @@ def agregar_objetivo(usuario: str, objetivo: str) -> None:
     if objetivo not in u["objetivos"]:
         u["objetivos"].append(objetivo)
     _save(data)
+
+
+# --- Hechos sueltos ("acordate que...") ----------------------------------------
+# Lo que la persona cuenta de pasada y no entra en ningún catálogo cerrado: un
+# dato del negocio, la costumbre de un cliente, algo de su función. Cada uno
+# queda con el ROL bajo el que se dijo (para que a un empleado de piso no le
+# vuelva una nota que el dueño dejó en otro contexto — memoria privada de cada
+# usuario, pero FILTRADA por rol) y con una CONFIANZA:
+#   - 'confirmado': la persona lo dijo directo ("acordate que...") o tocó
+#     confirmar. Es lo que Ángela puede usar como verdad.
+#   - 'dudoso': Ángela lo propuso sola de algo mencionado al pasar (tool
+#     'recordar_hecho') y todavía espera el toque de confirmación — nada queda
+#     como verdad sin que una persona lo confirme.
+#
+# `categoria` es la clave de identidad opcional: dos hechos con la misma
+# categoria son LA MISMA nota (el segundo actualiza al primero, como
+# recordar_preferencia); sin categoria, cada mención es un hecho nuevo salvo
+# que el texto sea idéntico a uno ya guardado.
+
+def _norm_hecho(s) -> str:
+    return " ".join((s or "").strip().lower().split())
+
+
+def agregar_hecho(usuario: str, texto: str, *, categoria: str | None = None,
+                  rol: str | None = None, fuente: str = "explicito",
+                  confianza: str = "confirmado") -> tuple[dict, str]:
+    """Guarda un hecho suelto. Devuelve (hecho, cambio) con cambio en
+    {'added','updated','existing'} — es lo que pinta el chip en el frontend."""
+    texto = (texto or "").strip()
+    if not texto:
+        raise ValueError("el hecho no puede estar vacío")
+    if confianza not in ("confirmado", "dudoso"):
+        raise ValueError(f"confianza desconocida: {confianza!r}")
+    data = _load()
+    u = _usuario(data, usuario)
+    hechos = u.setdefault("hechos", [])
+    cat_norm = _norm_hecho(categoria) if categoria else None
+    if cat_norm:
+        existente = next((h for h in hechos
+                          if _norm_hecho(h.get("categoria")) == cat_norm), None)
+    else:
+        existente = next((h for h in hechos if not h.get("categoria")
+                          and _norm_hecho(h.get("texto")) == _norm_hecho(texto)), None)
+    ahora = hoy().isoformat()
+    if existente:
+        if _norm_hecho(existente.get("texto")) == _norm_hecho(texto):
+            _save(data)
+            return existente, "existing"
+        existente.update(texto=texto, rol=rol or existente.get("rol"),
+                         fuente=fuente, confianza=confianza, actualizado_en=ahora)
+        _save(data)
+        return existente, "updated"
+    hecho = {
+        "id": "h" + secrets.token_hex(4), "texto": texto,
+        "categoria": categoria or None, "rol": rol, "fuente": fuente,
+        "confianza": confianza, "creado_en": ahora, "actualizado_en": ahora,
+    }
+    hechos.append(hecho)
+    _save(data)
+    return hecho, "added"
+
+
+def listar_hechos(usuario: str, rol: str | None = None, ver_todo: bool = False) -> list[dict]:
+    """Los hechos de este usuario. Con `rol` y sin `ver_todo`, sólo los dichos
+    bajo ese rol (más los sin rol — notas de alcance general). `ver_todo=True`
+    es para el dueño: su propia memoria, completa, sin recorte por rol."""
+    hechos = get(usuario).get("hechos", [])
+    if ver_todo or not rol:
+        return list(hechos)
+    return [h for h in hechos if not h.get("rol") or h["rol"] == rol]
+
+
+def confirmar_hecho(usuario: str, hecho_id: str) -> dict | None:
+    """Pasa un hecho 'dudoso' (propuesto por la tool) a 'confirmado'."""
+    data = _load()
+    u = _usuario(data, usuario)
+    for h in u.get("hechos", []):
+        if h.get("id") == hecho_id:
+            h["confianza"] = "confirmado"
+            _save(data)
+            return h
+    return None
+
+
+def borrar_hecho(usuario: str, hecho_id: str) -> bool:
+    data = _load()
+    u = _usuario(data, usuario)
+    antes = len(u.get("hechos", []))
+    u["hechos"] = [h for h in u.get("hechos", []) if h.get("id") != hecho_id]
+    if len(u["hechos"]) != antes:
+        _save(data)
+        return True
+    return False

@@ -2048,7 +2048,11 @@ def memoria_set(usuario: str, req: PrefRequest, u: dict = Depends(usuario_actual
 @app.get("/api/preferencias")
 def preferencias_get(u: dict = Depends(usuario_actual)):
     m = memoria.get(u["username"])
-    return {"vista": m.get("vista", {}), "notas": m.get("preferencias", {})}
+    # Mi perfil es la vista de transparencia total: ve TODOS sus hechos, sin
+    # recorte por rol (el recorte por rol es para lo que Ángela usa de contexto
+    # en el chat, no para lo que la persona puede ver de sí misma).
+    hechos = memoria.listar_hechos(u["username"], ver_todo=True)
+    return {"vista": m.get("vista", {}), "notas": m.get("preferencias", {}), "hechos": hechos}
 
 
 @app.post("/api/preferencias")
@@ -2069,6 +2073,25 @@ def preferencias_del(clave: str, u: dict = Depends(usuario_actual)):
         raise HTTPException(status_code=404, detail="esa preferencia no existe")
     m = memoria.get(u["username"])
     return {"ok": True, "vista": m.get("vista", {}), "notas": m.get("preferencias", {})}
+
+
+# --- Hechos sueltos ("acordate que...") — misma transparencia: se ven y se
+# borran uno por uno. Los 'dudosos' (propuestos por la tool de Ángela sin que
+# la persona lo pidiera) se confirman con un toque; siempre del PROPIO usuario.
+
+@app.post("/api/hechos/{hecho_id}/confirmar")
+def hecho_confirmar(hecho_id: str, u: dict = Depends(usuario_actual)):
+    hecho = memoria.confirmar_hecho(u["username"], hecho_id)
+    if not hecho:
+        raise HTTPException(status_code=404, detail="ese hecho no existe")
+    return {"ok": True, "hecho": hecho}
+
+
+@app.delete("/api/hechos/{hecho_id}")
+def hecho_borrar(hecho_id: str, u: dict = Depends(usuario_actual)):
+    if not memoria.borrar_hecho(u["username"], hecho_id):
+        raise HTTPException(status_code=404, detail="ese hecho no existe")
+    return {"ok": True}
 
 
 # --- Conocimiento del negocio ("lo que Aldo le enseñó a Ángela") ---

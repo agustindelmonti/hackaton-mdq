@@ -19,6 +19,8 @@ export const TOOL_LABELS = {
   capital_recuperable: { running: "Calculando recuperable…", done: "Calculó recuperable" },
   mostrarGrafico: { running: "Armando el gráfico…", done: "Armó el gráfico" },
   mostrarTabla: { running: "Armando la tabla…", done: "Armó la tabla" },
+  recordar: { running: "Guardando en la memoria…", done: "Guardó en la memoria" },
+  recordar_hecho: { running: "Guardando lo que dijiste…", done: "Guardó lo que dijiste" },
 };
 
 export function toolLabels(name) {
