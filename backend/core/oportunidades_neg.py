@@ -347,18 +347,46 @@ def _card_rotulos(lang, ctx) -> dict | None:
 # ---------------------------------------------------------------------------
 # 7 · Análisis por vencer para exportación
 # ---------------------------------------------------------------------------
+def _codigos_comprometidos(ordenes: list[dict]) -> dict[int, list[str]]:
+    """codigo -> números de orden abierta (no despachada) que lo incluyen.
+    Es lo que le da filo a "vence en N días": ese lote no sólo tiene un
+    análisis viejo, tiene plata comprometida esperándolo."""
+    out: dict[int, list[str]] = {}
+    for o in ordenes:
+        for item in o.get("items") or []:
+            cod = item.get("codigo")
+            if cod is None:
+                continue
+            out.setdefault(cod, []).append(o.get("numero"))
+    return out
+
+
 def _card_analisis(lang, ctx) -> dict | None:
     """Un análisis de más de 180 días frena el fitosanitario del SENASA. Los
-    lotes marcados para exportación son los que hay que reanalizar primero."""
+    lotes marcados para exportación son los que hay que reanalizar primero —
+    y entre esos, primero los que YA tienen una orden abierta esperándolos:
+    ahí el vencimiento no es sólo un plazo administrativo, es plata
+    comprometida que se frena si no se resuelve a tiempo."""
     export = [a for a in ctx["arts"] if a.get("destino") == "exportacion"]
     vencidos = [a for a in export
                 if a["_dias_analisis"] is not None
                 and a["_dias_analisis"] > DIAS_ANALISIS_EXPORTACION - 30]
     if not vencidos:
         return None
-    vencidos.sort(key=lambda a: -(a["_dias_analisis"] or 0))
+    comprometidos = _codigos_comprometidos(ctx["ordenes"])
+    for a in vencidos:
+        a["_ordenes"] = comprometidos.get(a.get("codigo")) or []
+    # Comprometido primero (ahí el vencimiento pega en plata ya prometida),
+    # y adentro de cada grupo el más vencido primero.
+    vencidos.sort(key=lambda a: (not a["_ordenes"], -(a["_dias_analisis"] or 0)))
     total = sum(a["_valor"] for a in vencidos)
     ya = [a for a in vencidos if a["_dias_analisis"] > DIAS_ANALISIS_EXPORTACION]
+    comprometidos_n = sum(1 for a in vencidos if a["_ordenes"])
+    porque = [_t("core.opn.analisis_p1", lang, n=len(vencidos),
+                 limite=DIAS_ANALISIS_EXPORTACION, total=_pesos(total, lang)),
+              _t("core.opn.analisis_p2", lang, ya=len(ya))]
+    if comprometidos_n:
+        porque.append(_t("core.opn.analisis_p3", lang, n=comprometidos_n))
     return {
         "id": "analisis_por_vencer", "tipo": "gestionar",
         "titulo": _t("core.opn.analisis_t", lang, n=len(vencidos)),
@@ -367,16 +395,21 @@ def _card_analisis(lang, ctx) -> dict | None:
                       total=_pesos(total, lang)),
         "accion_chat": _t("core.opn.analisis_chat", lang),
         "navegar": "trazabilidad",
-        "fuentes": [_t("core.opn.f_lotes", lang), _t("core.opn.f_senasa", lang)],
+        "fuentes": [_t("core.opn.f_lotes", lang), _t("core.opn.f_senasa", lang),
+                    _t("core.opn.f_ordenes", lang)],
         "drill": {
-            "porque": [_t("core.opn.analisis_p1", lang, n=len(vencidos),
-                          limite=DIAS_ANALISIS_EXPORTACION, total=_pesos(total, lang)),
-                       _t("core.opn.analisis_p2", lang, ya=len(ya))],
+            "porque": porque,
             "grafico": None,
-            "involucrados": [{"nombre": a.get("lote"), "monto": round(a["_valor"], 2),
-                              "detalle": _t("core.opn.analisis_i", lang,
-                                            dias=a["_dias_analisis"])}
-                             for a in vencidos[:12]],
+            "involucrados": [
+                {
+                    "nombre": a.get("lote"), "monto": round(a["_valor"], 2),
+                    "detalle": (_t("core.opn.analisis_i_comprometido", lang,
+                                   dias=a["_dias_analisis"], ordenes=", ".join(a["_ordenes"]))
+                                if a["_ordenes"]
+                                else _t("core.opn.analisis_i", lang, dias=a["_dias_analisis"])),
+                }
+                for a in vencidos[:12]
+            ],
             "supuestos": [_t("core.opn.analisis_s", lang, limite=DIAS_ANALISIS_EXPORTACION)],
         },
     }

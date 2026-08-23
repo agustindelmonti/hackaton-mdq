@@ -1903,6 +1903,33 @@ def oportunidades(u: dict = Depends(usuario_actual)):
 
 
 
+# New endpoints from here on are named/commented in English (house
+# convention going forward, see docs/inferencias-predictivas-automatizaciones.md);
+# existing endpoints above are untouched.
+@app.get("/api/capacity-forecast")
+def capacity_forecast_get(dias: int = 30, u: dict = Depends(require_feature("deposito"))):
+    """When each cold storage location saturates at its current intake rate —
+    empty when nothing is actually filling up, never a fabricated date."""
+    from core import capacity_forecast
+    return {"ubicaciones": capacity_forecast.forecast(dias)}
+
+
+@app.get("/api/recount-priority")
+def recount_priority_get(u: dict = Depends(require_feature("conciliacion"))):
+    """Open reconciliation differences ranked by expected cost of staying
+    open, not just by money — see core/recount_priority.py."""
+    from core import recount_priority
+    return {"diferencias": recount_priority.prioritized()}
+
+
+@app.get("/api/rule-reliability")
+def rule_reliability_get(u: dict = Depends(require_feature("conciliacion"))):
+    """How much each reconciliation rule is carrying right now — see
+    core/rule_reliability.py. calibrado=false until diff_resolutions exists."""
+    from core import rule_reliability
+    return {"reglas": rule_reliability.reporte()}
+
+
 @app.get("/api/vencimientos")
 def vencimientos_get(dias: int = 30, u: dict = Depends(require_feature("deposito"))):
     """P38·H — vencimiento × ritmo real de venta: qué NO llegás a vender antes

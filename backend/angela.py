@@ -88,6 +88,8 @@ TOOL_FEATURE = {
     "stock_ubicaciones": "deposito", "consultar_lote": "inventario",
     "verificar_disponibilidad": "movimientos", "registrar_movimiento": "movimientos",
     "explicar_diferencia": "conciliacion", "verificar_orden_carga": "logistica",
+    "forecast_capacity": "deposito", "prioritize_recounts": "conciliacion",
+    "rule_reliability_report": "conciliacion",
     "consultar_deposito": "deposito", "consultar_envios": "logistica",
     "consultar_evolucion": "evolucion", "generar_documento": "documentos",
     "normalizaciones_staging": "cargar", "consultar_compras": "cargar",
@@ -1389,6 +1391,48 @@ TOOLS = [
             "required": ["spans"],
         },
     },
+    {
+        "name": "forecast_capacity",
+        "description": (
+            "Projects when each cold storage location will saturate at its "
+            "current real intake rate (from the movements ledger). An empty "
+            "result means nothing is actually trending toward full — this "
+            "never invents a saturation date. Use for 'when do we run out of "
+            "room', 'which cámara fills up first'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "days_window": {
+                    "type": "integer",
+                    "description": "Days of recent history to estimate the trend from (default 30).",
+                },
+            },
+        },
+    },
+    {
+        "name": "prioritize_recounts",
+        "description": (
+            "Ranks open reconciliation differences by expected cost of "
+            "staying unresolved (money at stake x uncertainty x days open), "
+            "not just by money. Use for 'what should I recount first', "
+            "'which discrepancy is most urgent'."
+        ),
+        "input_schema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "rule_reliability_report",
+        "description": (
+            "How much each reconciliation rule (unconfirmed transfer, digit "
+            "entry error, physical shrinkage, bag tare, no explanation) is "
+            "carrying today, and its declared strength. This is NOT yet a "
+            "measured statistic (every row comes back with calibrado=false) "
+            "— say so plainly if asked how reliable the system is. Use for "
+            "'which reconciliation rule do we lean on most', 'how much do "
+            "you trust your own explanations'."
+        ),
+        "input_schema": {"type": "object", "properties": {}},
+    },
 ]
 
 # Herramientas que producen un efecto en el frontend (no consultan datos).
@@ -2029,6 +2073,19 @@ def _run_tool(name: str, args: dict) -> tuple[dict | list, dict | None]:
         from core import confidence
         claims = confidence.resolve_claims(args.get("spans", []), _idioma_actual())
         return {"ok": True, "claims": claims}, None
+
+    if name == "forecast_capacity":
+        from core import capacity_forecast
+        dias = int(args.get("days_window") or capacity_forecast.VENTANA_DIAS)
+        return {"ubicaciones": capacity_forecast.forecast(dias)}, None
+
+    if name == "prioritize_recounts":
+        from core import recount_priority
+        return {"diferencias": recount_priority.prioritized()}, None
+
+    if name == "rule_reliability_report":
+        from core import rule_reliability
+        return {"reglas": rule_reliability.reporte()}, None
 
     if name == "verificar_orden_carga":
         from core import ordenes_carga as _oc
