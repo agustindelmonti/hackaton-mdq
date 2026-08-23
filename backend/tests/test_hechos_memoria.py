@@ -17,6 +17,7 @@ import pytest
 TENANT_PAPASUD = True
 
 import angela
+import i18n
 from core import memoria
 
 
@@ -125,3 +126,61 @@ def test_frase_explicita_no_matchea_mensajes_comunes():
     assert angela._intentar_recordar_explicito("cuánto stock hay en el galpón 2") is None
     # "recordame" sigue siendo del riel de recordatorios/tareas, no de hechos
     assert angela._intentar_recordar_explicito("recordame llamar al proveedor mañana") is None
+
+
+# --- El mensaje trae DOS pedidos: guardar la memoria no puede costar la respuesta ---
+
+def test_frase_explicita_con_pregunta_devuelve_continuar():
+    angela._set_sesion(usuario="ruben", rol="Encargado de depósito")
+    r = angela._intentar_recordar_explicito(
+        "acordate que el cliente López paga tarde, ¿cuánto stock hay?")
+    assert r["tipo"] == "continuar"
+    assert r["resto"].strip().startswith("¿cuánto stock hay")
+    assert r["tool_event"]["result"]["hecho"]["texto"] == "el cliente López paga tarde"
+    # el hecho ya quedó guardado (no espera a que se resuelva el resto)
+    assert memoria.listar_hechos("ruben", ver_todo=True)[0]["texto"] == "el cliente López paga tarde"
+
+
+def test_frase_explicita_con_y_pedido_devuelve_continuar():
+    angela._set_sesion(usuario="ruben", rol="Encargado de depósito")
+    r = angela._intentar_recordar_explicito(
+        "tené en cuenta que el flete de hoy sale tarde y decime cuánto stock hay")
+    assert r["tipo"] == "continuar"
+    assert r["resto"].startswith("y decime")
+    assert r["tool_event"]["result"]["hecho"]["texto"] == "el flete de hoy sale tarde"
+
+
+def test_frase_explicita_pregunta_sin_separador_claro_no_arriesga():
+    angela._set_sesion(usuario="ruben", rol="Encargado de depósito")
+    r = angela._intentar_recordar_explicito(
+        "acordate que el flete sale caro no se puede hacer nada mas raro que eso?")
+    assert r is None
+    assert memoria.listar_hechos("ruben") == []  # no guardó nada a medias
+
+
+def test_responder_frase_explicita_con_pregunta_contesta_las_dos_cosas():
+    r = angela.responder(
+        "acordate que el cliente López paga tarde, ¿cuánto stock hay?",
+        rol="Encargado de depósito", nombre="ruben")
+    prefijo = i18n.t("fb.hecho_guardado", "es", texto="el cliente López paga tarde")
+    assert r["respuesta"].startswith(prefijo)
+    assert len(r["respuesta"]) > len(prefijo)  # además contestó lo que preguntó
+    assert "recordar_hecho" in r["tools_usadas"]
+    assert memoria.listar_hechos("ruben", ver_todo=True)[0]["texto"] == "el cliente López paga tarde"
+
+
+def test_stream_responder_frase_explicita_con_pregunta():
+    eventos = list(angela.stream_responder(
+        "no te olvides que el galpón 2 tiene la balanza rota, ¿cuánto stock hay?",
+        rol="Encargado de depósito", nombre="ruben"))
+    tipos = [e["type"] for e in eventos]
+    # el hecho se guardó Y la pregunta de stock disparó su PROPIA tool — las
+    # dos cosas que pidió el mensaje tienen que verse, no solo una.
+    assert "tool" in tipos and tipos[-1] == "done"
+    nombres_tool = {e["name"] for e in eventos if e["type"] == "tool"}
+    assert "recordar_hecho" in nombres_tool
+    done = eventos[-1]["result"]
+    assert "recordar_hecho" in done["tools_usadas"]
+    prefijo = i18n.t("fb.hecho_guardado", "es", texto="el galpón 2 tiene la balanza rota")
+    assert done["respuesta"].startswith(prefijo)
+    assert len(done["respuesta"]) > len(prefijo)

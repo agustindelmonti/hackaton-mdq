@@ -3203,25 +3203,74 @@ def _fallback(mensaje: str) -> dict:
 # lo que se guarda cuando la persona lo pide directo no depende de que el LLM
 # elija bien. Distinta de la tool 'recordar_hecho' (el modelo la usa para algo
 # mencionado al pasar, y queda 'dudoso' hasta que alguien la confirma).
+#
+# El mensaje puede traer DOS pedidos ("acordate que el cliente López paga
+# tarde, ¿cuánto stock queda en el galpón 2?"): el hecho se guarda YA, pero el
+# resto sigue su curso normal (fallback o modelo) para que la pregunta también
+# se conteste — guardar la memoria nunca puede costar la respuesta.
 # ---------------------------------------------------------------------------
 
 _RE_HECHO_EXPLICITO = re.compile(
     r"(?:acord[aá]te(?:\s+de)?\s+que|no\s+te\s+olvid[eé]s(?:\s+de)?\s+que|"
     r"ten[eé]s?\s+en\s+cuenta\s+que|quiero\s+que\s+sepas\s+que|que\s+sepas\s+que|"
     r"keep\s+in\s+mind\s+that|remember\s+that|just\s+so\s+you\s+know(?:\s+that)?)"
-    r"\s*[:,]?\s*(.+)",
+    r"\s*[:,]?\s*",
     re.IGNORECASE,
 )
 
+# "y decime/contame/..." — un segundo pedido explícito encadenado con "y".
+_RE_Y_PEDIDO = re.compile(
+    r"\by\s+(?:decime|contame|avisame|confirmame|mostrame|fijate)\b", re.IGNORECASE)
+
+
+def _partir_hecho_y_resto(cola: str) -> tuple[str, str | None]:
+    """De lo que sigue al disparador, separa EL HECHO de un pedido EXTRA en el
+    MISMO mensaje. Sólo corta con señales fuertes: un '¿' (arranca una
+    pregunta), un 'y decime/contame/...' explícito, o una coma/'y' antes de un
+    '?' cuando no hay manera más clara de ubicarlo. Si hay un '?' en algún
+    lado y ninguna señal lo ubica con confianza, devuelve resto=None: mejor no
+    partir que guardar un hecho a medias con la pregunta adentro."""
+    i = cola.find("¿")
+    if i != -1:
+        return cola[:i].strip(" .,:;"), cola[i:]
+
+    m = _RE_Y_PEDIDO.search(cola)
+    if m:
+        return cola[:m.start()].strip(" .,:;"), cola[m.start():].lstrip(" ,.")
+
+    i_preg = cola.find("?")
+    if i_preg != -1:
+        i_coma = cola.rfind(",", 0, i_preg)
+        if i_coma != -1:
+            return cola[:i_coma].strip(" .,:;"), cola[i_coma:].lstrip(" ,.")
+        m_y = re.search(r"\by\b", cola[:i_preg], re.IGNORECASE)
+        if m_y:
+            return cola[:m_y.start()].strip(" .,:;"), cola[m_y.start():].lstrip(" ,.")
+        return cola.strip(" .,:;"), None
+
+    m_punto = re.search(r"\.\s+\S", cola)
+    if m_punto:
+        return cola[:m_punto.start()].strip(" .,:;"), cola[m_punto.start():].lstrip(" .,")
+
+    return cola.strip(" .,:;"), ""
+
 
 def _intentar_recordar_explicito(mensaje: str) -> dict | None:
-    """Si el mensaje dispara una frase de memoria explícita, guarda el hecho y
-    devuelve la respuesta ya armada. None si no matchea (sigue el flujo normal)."""
+    """Si el mensaje tiene una frase de memoria explícita, guarda el hecho ya
+    mismo (determinístico). Devuelve None si no matchea, si el hecho quedó
+    vacío, o si hay una pregunta que no se pudo separar con confianza (sigue
+    el flujo normal en cualquiera de esos casos). Si no, devuelve:
+      - {"tipo": "final", ...}: el mensaje ERA solo la memoria — la respuesta
+        de confirmación es TODA la respuesta.
+      - {"tipo": "continuar", "resto", "confirmacion", "tool_event"}: había
+        más pedido en el mismo mensaje — el llamador sigue procesando `resto`
+        y suma `confirmacion`/`tool_event` al resultado final."""
     mat = _RE_HECHO_EXPLICITO.search((mensaje or "").strip())
     if not mat:
         return None
-    texto = mat.group(1).strip(" .,:;")
-    if not texto:
+    cola = mensaje[mat.end():]
+    texto, resto = _partir_hecho_y_resto(cola)
+    if not texto or resto is None:
         return None
     lang = _idioma_actual()
     hecho, cambio = memoria.agregar_hecho(
@@ -3231,9 +3280,27 @@ def _intentar_recordar_explicito(mensaje: str) -> dict | None:
           "result": {"ok": True, "hecho": hecho, "cambio": cambio}}
     clave = {"added": "fb.hecho_guardado", "updated": "fb.hecho_actualizado",
              "existing": "fb.hecho_ya_sabia"}[cambio]
-    return {"respuesta": i18n.t(clave, lang, texto=texto), "modo": "determinista",
-            "tools_usadas": ["recordar_hecho"], "acciones": [], "opciones": [],
-            "tool_events": [ev]}
+    confirmacion = i18n.t(clave, lang, texto=texto)
+    if not resto.strip(" ?¿.,:;"):
+        return {"tipo": "final", "respuesta": confirmacion, "modo": "determinista",
+                "tools_usadas": ["recordar_hecho"], "acciones": [], "opciones": [],
+                "tool_events": [ev]}
+    return {"tipo": "continuar", "resto": resto, "confirmacion": confirmacion, "tool_event": ev}
+
+
+def _fusionar_directo(resultado: dict, directo: dict | None) -> dict:
+    """Suma el guardado determinístico de la frase de memoria explícita a la
+    respuesta que resolvió el RESTO del mensaje: la confirmación adelante del
+    texto, la tool y el tool_event sumados — las dos cosas que pidió tienen
+    que verse, no solo la que resolvió el modelo."""
+    if not directo:
+        return resultado
+    resultado = dict(resultado)
+    resp = (resultado.get("respuesta") or "").strip()
+    resultado["respuesta"] = f"{directo['confirmacion']} {resp}".strip() if resp else directo["confirmacion"]
+    resultado["tools_usadas"] = ["recordar_hecho", *(resultado.get("tools_usadas") or [])]
+    resultado["tool_events"] = [directo["tool_event"], *(resultado.get("tool_events") or [])]
+    return resultado
 
 
 # ---------------------------------------------------------------------------
@@ -3258,17 +3325,19 @@ def responder(
     _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
 
     # Frase explícita de memoria ("acordate que...") → determinística, antes de
-    # tocar el modelo (haya o no API key).
+    # tocar el modelo (haya o no API key). Si el mensaje traía además un pedido
+    # de verdad, `directo` trae el RESTO para seguir procesando y se suma al final.
     directo = _intentar_recordar_explicito(mensaje)
-    if directo is not None:
+    if directo is not None and directo["tipo"] == "final":
         return directo
+    mensaje_efectivo = directo["resto"] if directo else mensaje
 
     # El transporte lo decide config: Gateway de Vercel, API directa de
     # Anthropic, o ninguno. Sin modelo real, el router determinista responde lo
     # mismo con los mismos módulos core — la demo no se cae por una red ajena.
     client, modelo = config.cliente_llm("chat")
     if client is None:
-        return _fallback(mensaje)
+        return _fusionar_directo(_fallback(mensaje_efectivo), directo)
     quien = ""
     if nombre or rol:
         quien = (
@@ -3366,7 +3435,7 @@ def responder(
     for turn in (historial or [])[-6:]:
         if turn.get("role") in ("user", "assistant") and turn.get("content"):
             messages.append({"role": turn["role"], "content": turn["content"]})
-    messages.append({"role": "user", "content": mensaje})
+    messages.append({"role": "user", "content": mensaje_efectivo})
 
     tools_usadas: list[str] = []
     acciones: list[dict] = []
@@ -3406,21 +3475,21 @@ def responder(
 
             # Respuesta final
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
-            return {
+            return _fusionar_directo({
                 "respuesta": texto,
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
-            }
+            }, directo)
 
-        return {
+        return _fusionar_directo({
             "respuesta": "Estoy dando muchas vueltas con esa consulta. ¿Me la reformulás más simple?",
             "modo": "claude",
             "tools_usadas": tools_usadas,
             "acciones": acciones,
-        }
+        }, directo)
     except Exception as e:  # noqa: BLE001 — degradar nunca tira la app abajo
-        fb = _fallback(mensaje)
+        fb = _fusionar_directo(_fallback(mensaje_efectivo), directo)
         fb["error_tecnico"] = str(e)
         return fb
 
@@ -3440,19 +3509,21 @@ def stream_responder(
     _set_sesion(usuario=nombre, rol=rol, features=features, idioma=idioma)
 
     # Frase explícita de memoria ("acordate que...") → determinística, antes de
-    # tocar el modelo (haya o no API key).
+    # tocar el modelo (haya o no API key). Si el mensaje traía además un pedido
+    # de verdad, `directo` trae el RESTO para seguir procesando y se suma al final.
     directo = _intentar_recordar_explicito(mensaje)
-    if directo is not None:
+    if directo is not None and directo["tipo"] == "final":
         for te in directo.get("tool_events") or []:
             yield {"type": "tool", **te}
         if directo.get("respuesta"):
             yield {"type": "text", "text": directo["respuesta"]}
         yield {"type": "done", "result": {**directo, "ok": True}}
         return
+    mensaje_efectivo = directo["resto"] if directo else mensaje
 
     client, modelo = config.cliente_llm("chat")
     if client is None:
-        fb = _fallback(mensaje)
+        fb = _fusionar_directo(_fallback(mensaje_efectivo), directo)
         for te in fb.get("tool_events") or []:
             yield {"type": "tool", **te}
         if fb.get("respuesta"):
@@ -3542,7 +3613,7 @@ def stream_responder(
     for turn in (historial or [])[-6:]:
         if turn.get("role") in ("user", "assistant") and turn.get("content"):
             messages.append({"role": turn["role"], "content": turn["content"]})
-    messages.append({"role": "user", "content": mensaje})
+    messages.append({"role": "user", "content": mensaje_efectivo})
 
     tools_usadas: list[str] = []
     acciones: list[dict] = []
@@ -3582,36 +3653,32 @@ def stream_responder(
                 continue
 
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
-            yield {"type": "text", "text": texto}
-            yield {
-                "type": "done",
-                "result": {
-                    "ok": True,
-                    "respuesta": texto,
-                    "modo": "claude",
-                    "tools_usadas": tools_usadas,
-                    "acciones": acciones,
-                },
-            }
+            resultado = _fusionar_directo({
+                "respuesta": texto, "modo": "claude",
+                "tools_usadas": tools_usadas, "acciones": acciones,
+            }, directo)
+            if directo:
+                yield {"type": "tool", **directo["tool_event"]}
+            yield {"type": "text", "text": resultado["respuesta"]}
+            yield {"type": "done", "result": {**resultado, "ok": True}}
             return
 
         msg = "Estoy dando muchas vueltas con esa consulta. ¿Me la reformulás más simple?"
-        yield {"type": "text", "text": msg}
-        yield {
-            "type": "done",
-            "result": {
-                "ok": True,
-                "respuesta": msg,
-                "modo": "claude",
-                "tools_usadas": tools_usadas,
-                "acciones": acciones,
-            },
-        }
+        resultado = _fusionar_directo({
+            "respuesta": msg, "modo": "claude",
+            "tools_usadas": tools_usadas, "acciones": acciones,
+        }, directo)
+        if directo:
+            yield {"type": "tool", **directo["tool_event"]}
+        yield {"type": "text", "text": resultado["respuesta"]}
+        yield {"type": "done", "result": {**resultado, "ok": True}}
     except Exception as e:  # noqa: BLE001
-        fb = _fallback(mensaje)
+        fb = _fusionar_directo(_fallback(mensaje_efectivo), directo)
         fb["error_tecnico"] = str(e)
         fb["ok"] = False
         fb["error_code"] = "provider"
+        for te in fb.get("tool_events") or []:
+            yield {"type": "tool", **te}
         if fb.get("respuesta"):
             yield {"type": "text", "text": fb["respuesta"]}
         yield {"type": "done", "result": fb}
