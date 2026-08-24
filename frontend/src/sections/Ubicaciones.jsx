@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import {
   Snowflake, Warehouse, TriangleAlert, Sprout, MapPin, ArrowRight,
-  ShieldCheck, PackageCheck,
+  ShieldCheck, PackageCheck, Plus, Pencil, Trash2, Loader2, FlaskConical, Factory,
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
+import UbicacionForm from "../components/UbicacionForm";
 import { api } from "../lib/api";
 import { num, peso, pesoCorto } from "../lib/format";
 import { useT } from "../lib/i18n";
+import { useSession } from "../lib/auth";
+import { toast } from "../lib/toastStore";
 
 // ============================================================================
 // N02 · LA VISTA ÚNICA — cuatro ubicaciones, una sola verdad.
@@ -21,7 +24,13 @@ import { useT } from "../lib/i18n";
 // sobrevive a que alguien pregunte «¿y esto está verificado?».
 // ============================================================================
 
-const ICONO = { frigorifico: Snowflake, galpon: Warehouse };
+// Mismo mapa tipo→ícono que el resto de las vistas del mapa de operación
+// (ver TIPOS_UBICACION en UbicacionForm.jsx): elegir el tipo en el formulario
+// ES elegir el ícono, acá y en MapaOperacion.jsx.
+const ICONO = {
+  frigorifico: Snowflake, galpon: Warehouse, campo: Sprout,
+  laboratorio: FlaskConical, planta: Factory,
+};
 
 const COLOR = {
   verde: { borde: "border-salvia/30", chip: "bg-salvia/10 text-salvia", punto: "bg-salvia" },
@@ -31,11 +40,13 @@ const COLOR = {
 
 export default function Ubicaciones({ onPreguntar }) {
   const t = useT();
+  const { usuario } = useSession() || {};
+  const puedeGestionar = Boolean(usuario?.features?.includes("gestion_ubicaciones"));
   const [d, setD] = useState(null);
+  const [form, setForm] = useState(null); // null | "crear" | <ubicacion a editar>
 
-  useEffect(() => {
-    api.ubicaciones().then(setD).catch(() => setD(false));
-  }, []);
+  const recargar = () => api.ubicaciones().then(setD).catch(() => setD(false));
+  useEffect(() => { recargar(); }, []);
 
   // Tres estados explícitos: null = todavía no sé (esqueleto), false = falló,
   // vacío = no hay datos. Mostrar el estado vacío antes de saber es mentir.
@@ -48,10 +59,26 @@ export default function Ubicaciones({ onPreguntar }) {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="font-display text-3xl font-bold">{t("ubi.titulo")}</h1>
-        <p className="mt-1 text-[0.95rem] text-tinta-suave">{t("ubi.subtitulo")}</p>
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-3xl font-bold">{t("ubi.titulo")}</h1>
+          <p className="mt-1 text-[0.95rem] text-tinta-suave">{t("ubi.subtitulo")}</p>
+        </div>
+        {puedeGestionar && (
+          <button type="button" onClick={() => setForm("crear")}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-tinta px-4 py-2.5 text-[0.86rem] font-semibold text-crema active:scale-95">
+            <Plus size={15} /> {t("ubi.nueva")}
+          </button>
+        )}
       </header>
+
+      {form && (
+        <UbicacionForm
+          inicial={form === "crear" ? null : form}
+          onCerrar={() => setForm(null)}
+          onGuardado={recargar}
+        />
+      )}
 
       {/* El titular: el total, y ENSEGUIDA cuánto de ese total está en duda. */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -105,18 +132,38 @@ export default function Ubicaciones({ onPreguntar }) {
       )}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {ubis.map((u) => <Tarjeta key={u.id} u={u} onPreguntar={onPreguntar} />)}
+        {ubis.map((u) => (
+          <Tarjeta key={u.id} u={u} onPreguntar={onPreguntar}
+            puedeGestionar={puedeGestionar}
+            onEditar={() => setForm(u)}
+            onEliminado={recargar} />
+        ))}
       </div>
     </div>
   );
 }
 
 // --- una ubicación ----------------------------------------------------------
-function Tarjeta({ u, onPreguntar }) {
+function Tarjeta({ u, onPreguntar, puedeGestionar, onEditar, onEliminado }) {
   const t = useT();
   const Icono = ICONO[u.tipo] || MapPin;
   const c = COLOR[u.estado] || COLOR.verde;
   const sinFrio = u.tipo === "galpon";
+  const [confirmando, setConfirmando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
+
+  const eliminar = async () => {
+    setEliminando(true);
+    try {
+      await api.ubicacionEliminar(u.id);
+      toast(t("ubi.eliminar_ok"));
+      onEliminado?.();
+    } catch {
+      toast(t("ubi.error_generico"), "error");
+    }
+    setEliminando(false);
+    setConfirmando(false);
+  };
 
   return (
     <section className={`overflow-hidden rounded-[var(--radius-card)] border ${c.borde} bg-superficie sombra-papel`}>
@@ -136,6 +183,37 @@ function Tarjeta({ u, onPreguntar }) {
           <p className="text-[0.7rem] text-tinta-suave">{t("ubi.lotes", { n: num(u.lotes) })}</p>
         </div>
       </header>
+
+      {puedeGestionar && (
+        <div className="flex items-center gap-2 border-b border-linea bg-crema/40 px-4 py-1.5">
+          {confirmando ? (
+            <>
+              <span className="flex-1 text-[0.76rem] text-rojo">
+                {t("ubi.eliminar_confirmar", { nombre: u.nombre })}
+              </span>
+              <button type="button" onClick={eliminar} disabled={eliminando}
+                className="rounded-full bg-rojo px-2.5 py-1 text-[0.74rem] font-semibold text-crema disabled:opacity-50">
+                {eliminando ? <Loader2 size={12} className="animate-spin" /> : t("ubi.eliminar")}
+              </button>
+              <button type="button" onClick={() => setConfirmando(false)}
+                className="text-[0.74rem] font-semibold text-tinta-suave">
+                {t("ubi.cancelar")}
+              </button>
+            </>
+          ) : (
+            <>
+              <button type="button" onClick={onEditar}
+                className="flex items-center gap-1 rounded-full px-2 py-1 text-[0.74rem] font-semibold text-tinta-suave hover:bg-crema">
+                <Pencil size={12} /> {t("ubi.editar")}
+              </button>
+              <button type="button" onClick={() => setConfirmando(true)}
+                className="flex items-center gap-1 rounded-full px-2 py-1 text-[0.74rem] font-semibold text-rojo hover:bg-rojo/10">
+                <Trash2 size={12} /> {t("ubi.eliminar")}
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       <div className="space-y-3 px-4 py-3">
         {/* ocupación: cuánto queda de lugar, que es la pregunta del encargado */}

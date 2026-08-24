@@ -40,7 +40,7 @@ from core import (store, saneamiento, fase, memoria, importer, staging, anomalia
                   organizacion, documentos, sync, conectores,
                   deposito, logistica, recordatorios, perfiles, notificaciones,
                   evolucion, ventas, paths, conocimiento, piso, onboarding, tareas,
-                  cerebro as cerebro_mod, planilla)
+                  cerebro as cerebro_mod, planilla, ubicaciones as ubicaciones_crud)
 
 
 def _lang(u: dict | None = None) -> str:
@@ -964,6 +964,63 @@ def ubicaciones_get(_u: dict = Depends(require_feature("deposito"))):
         "ubicaciones": conciliacion.por_ubicacion(),
         "catalogo": semilla.ubicaciones(),
     }
+
+
+class UbicacionCrearRequest(BaseModel):
+    nombre: str
+    tipo: str
+    capacidad_kg: float | None = None
+    temp_objetivo: float | None = None
+    temp_tolerancia: float | None = None
+    direccion: str | None = None
+    camaras: list[str] | None = None
+
+
+class UbicacionEditarRequest(BaseModel):
+    nombre: str | None = None
+    tipo: str | None = None
+    capacidad_kg: float | None = None
+    temp_objetivo: float | None = None
+    temp_tolerancia: float | None = None
+    direccion: str | None = None
+    camaras: list[str] | None = None
+
+
+# Nace 5ª+ ubicación: crear/editar/eliminar son configuración de negocio (no
+# operación diaria), por eso el módulo propio en vez de colgar de "deposito" —
+# mismo criterio que "gestion_equipo" al lado de "equipo".
+@app.post("/api/ubicaciones")
+def ubicacion_crear(req: UbicacionCrearRequest,
+                    u: dict = Depends(require_feature("gestion_ubicaciones"))):
+    try:
+        return ubicaciones_crud.crear(
+            req.nombre, req.tipo, capacidad_kg=req.capacidad_kg,
+            temp_objetivo=req.temp_objetivo, temp_tolerancia=req.temp_tolerancia,
+            direccion=req.direccion, camaras=req.camaras, actor=u["username"])
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/api/ubicaciones/{uid}/editar")
+def ubicacion_editar(uid: str, req: UbicacionEditarRequest,
+                     u: dict = Depends(require_feature("gestion_ubicaciones"))):
+    cambios = {k: v for k, v in req.model_dump().items() if v is not None}
+    try:
+        return ubicaciones_crud.editar(uid, cambios, actor=u["username"])
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/api/ubicaciones/{uid}/eliminar")
+def ubicacion_eliminar(uid: str, u: dict = Depends(require_feature("gestion_ubicaciones"))):
+    try:
+        return ubicaciones_crud.eliminar(uid, actor=u["username"])
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.get("/api/snapshot-offline")

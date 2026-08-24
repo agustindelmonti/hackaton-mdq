@@ -169,6 +169,10 @@ export const api = {
   // --- VERTICAL 3 · stock, trazabilidad y compliance -------------------------
   // N02 · la vista única de las cuatro ubicaciones
   ubicaciones: () => get("/api/ubicaciones"),
+  // Gestión de nodos (crear/editar/eliminar) — sólo con el feature "gestion_ubicaciones"
+  ubicacionCrear: (datos) => post("/api/ubicaciones", datos),
+  ubicacionEditar: (id, cambios) => post(`/api/ubicaciones/${id}/editar`, cambios),
+  ubicacionEliminar: (id) => post(`/api/ubicaciones/${id}/eliminar`, {}),
   // Todo lo que el celular necesita para trabajar SIN SEÑAL (52 KB).
   snapshotOffline: () => get("/api/snapshot-offline"),
   // N02 · lo declarado contra lo contado, con la causa ya buscada en los datos

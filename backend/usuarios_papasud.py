@@ -30,8 +30,8 @@ cual — son SUS palabras.
 _TODO = [
     "panel", "mapa", "cerebro", "inventario", "deposito", "movimientos", "conciliacion",
     "logistica", "exportacion", "trazabilidad", "saneamiento", "evolucion",
-    "alertas", "oportunidades", "equipo", "gestion_equipo", "cargar",
-    "documentos", "auditoria", "perfil", "angela",
+    "alertas", "oportunidades", "equipo", "gestion_equipo", "gestion_ubicaciones",
+    "cargar", "documentos", "auditoria", "perfil", "angela",
 ]
 
 USUARIOS = {

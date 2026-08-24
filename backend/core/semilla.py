@@ -44,7 +44,13 @@ def hay_datos() -> bool:
 
 # --- Ubicaciones -----------------------------------------------------------
 def ubicaciones() -> list[dict]:
-    return list(_cargar().get("ubicaciones") or [])
+    # El seed (arriba) + lo que se creó/editó/eliminó en runtime (ver
+    # core/ubicaciones.py — CRUD de N02). El seed nunca se reescribe: es un
+    # archivo versionado, no estado; el merge vive en un solo lugar para que
+    # el resto del backend (mapa, conciliación, depósito, NL de movimientos)
+    # siga leyendo por acá sin saber que la capa de overrides existe.
+    from . import ubicaciones as _ubicaciones_overrides
+    return _ubicaciones_overrides.aplicar(list(_cargar().get("ubicaciones") or []))
 
 
 def ubicacion(uid: str) -> dict | None:

@@ -67,6 +67,9 @@ ACCIONES: dict[str, dict] = {
     "normalizacion_nivel1": {"clase": "datos", "gate": "sistema", "reversible": True},
     "crear_apartado":       {"clase": "datos", "gate": "sistema"},
     # --- stock y piso --------------------------------------------------------
+    "crear_ubicacion":   {"clase": "stock", "gate": "aprobacion"},
+    "editar_ubicacion":  {"clase": "stock", "gate": "aprobacion"},
+    "eliminar_ubicacion": {"clase": "stock", "gate": "aprobacion"},
     "preparar_orden_compra": {"clase": "stock", "gate": "aprobacion"},
     "reportar_faltante":  {"clase": "stock", "gate": "propia"},
     "marcar_conteo":      {"clase": "stock", "gate": "propia"},

@@ -39,6 +39,7 @@ MODULOS = {
     "mapa": "El mapa de la operación",
     "inventario": "Lotes de semilla",
     "deposito": "Las cuatro ubicaciones",
+    "gestion_ubicaciones": "Gestión de ubicaciones (crear, editar, eliminar)",
     "movimientos": "Movimientos de stock",
     "conciliacion": "Conciliación de conteos",
     "logistica": "Despachos y órdenes de carga",

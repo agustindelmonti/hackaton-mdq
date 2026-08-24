@@ -86,6 +86,10 @@ TOOL_FEATURE = {
     # de la misma feature que la vista que los muestra (el mapa/cerebro, del dueño)
     "consultar_cruces": "mapa",
     "stock_ubicaciones": "deposito", "consultar_lote": "inventario",
+    # gestión de nodos del mapa (config de negocio, no operación diaria) —
+    # mismo criterio que "gestion_equipo": módulo propio, no "deposito".
+    "crear_ubicacion": "gestion_ubicaciones", "editar_ubicacion": "gestion_ubicaciones",
+    "eliminar_ubicacion": "gestion_ubicaciones",
     "verificar_disponibilidad": "movimientos", "registrar_movimiento": "movimientos",
     "explicar_diferencia": "conciliacion", "verificar_orden_carga": "logistica",
     "consultar_deposito": "deposito", "consultar_envios": "logistica",
@@ -1088,6 +1092,60 @@ TOOLS = [
         },
     },
     {
+        "name": "crear_ubicacion",
+        "description": "Da de alta una ubicación nueva en el mapa de la operación (un depósito, "
+        "campo, cámara o galpón que se suma a las que ya existen). SÓLO para quien tiene el "
+        "módulo de gestión de ubicaciones (el dueño). Leele a la persona el nombre y el tipo "
+        "que vas a crear ANTES de llamar esta tool, y llamala recién después de que confirme "
+        "explícitamente — es un cambio de configuración de negocio, no una consulta.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "nombre": {"type": "string"},
+                "tipo": {"type": "string", "description":
+                    "Uno de: frigorifico, galpon, campo, laboratorio, planta, otro."},
+                "capacidad_kg": {"type": "number"},
+                "temp_objetivo": {"type": "number", "description": "Grados °C, si tiene frío."},
+                "direccion": {"type": "string"},
+            },
+            "required": ["nombre", "tipo"],
+        },
+    },
+    {
+        "name": "editar_ubicacion",
+        "description": "Cambia datos de una ubicación que YA existe (nombre, tipo, capacidad, "
+        "temperatura, dirección). Primero resuelve `ubicacion` contra el catálogo real: si hay "
+        "más de un candidato, te los devuelve para que le preguntes a la persona cuál es — NUNCA "
+        "elijas vos. Si hay uno solo, aplicá el cambio recién después de que la persona confirme "
+        "explícitamente lo que va a quedar.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ubicacion": {"type": "string", "description":
+                    "Como la nombró la persona ('Batán', 'el galpón', 'ruta226')."},
+                "nombre": {"type": "string"},
+                "tipo": {"type": "string"},
+                "capacidad_kg": {"type": "number"},
+                "temp_objetivo": {"type": "number"},
+                "direccion": {"type": "string"},
+            },
+            "required": ["ubicacion"],
+        },
+    },
+    {
+        "name": "eliminar_ubicacion",
+        "description": "Borra una ubicación del mapa. Acción DESTRUCTIVA: confirmá con la "
+        "persona antes de llamarla, siempre. Resuelve `ubicacion` contra el catálogo real igual "
+        "que editar_ubicacion (candidatos si hay más de uno, nunca elige sola). El sistema "
+        "rechaza el borrado si la ubicación todavía tiene stock — en ese caso decile a la "
+        "persona que hay que trasladar o descargar el saldo primero, no lo intentes de nuevo.",
+        "input_schema": {
+            "type": "object",
+            "properties": {"ubicacion": {"type": "string"}},
+            "required": ["ubicacion"],
+        },
+    },
+    {
         "name": "consultar_lote",
         "description": "TODO sobre un lote de semilla: variedad, categoria INASE, campania, "
         "calibre declarado y medido, analisis sanitario, donde esta guardado, cuantos kilos "
@@ -1932,6 +1990,41 @@ def _run_tool(name: str, args: dict) -> tuple[dict | list, dict | None]:
                 ubis = [x for x in ubis if x["id"] == u["id"]]
         return ({"resumen": _conc.resumen(), "ubicaciones": ubis},
                 {"type": "navigate", "section": "deposito"})
+
+    if name == "crear_ubicacion":
+        from core import ubicaciones as _ubi
+        try:
+            nueva = _ubi.crear(
+                args.get("nombre", ""), args.get("tipo", ""),
+                capacidad_kg=args.get("capacidad_kg"), temp_objetivo=args.get("temp_objetivo"),
+                direccion=args.get("direccion"), actor=_usuario_actual())
+            return ({"ok": True, "ubicacion": nueva},
+                    {"type": "navigate", "section": "deposito"})
+        except ValueError as e:
+            return {"error": str(e)}, None
+
+    if name in ("editar_ubicacion", "eliminar_ubicacion"):
+        from core import ubicaciones as _ubi
+        candidatos = _ubi.resolver(args.get("ubicacion", ""))
+        if not candidatos:
+            return {"error": "No encontré ninguna ubicación que matchee eso. "
+                    "Fijate el nombre y probá de nuevo."}, None
+        if len(candidatos) > 1:
+            # Nunca elige sola (regla de arquitectura #3): le da a la persona
+            # la lista ranqueada y espera que la conversación desambigüe.
+            return {"candidatos": [{"id": u["id"], "nombre": u["nombre"]} for u in candidatos]}, None
+        uid = candidatos[0]["id"]
+        try:
+            if name == "editar_ubicacion":
+                cambios = {k: v for k, v in args.items()
+                          if k != "ubicacion" and v is not None}
+                res = _ubi.editar(uid, cambios, actor=_usuario_actual())
+                return ({"ok": True, "ubicacion": res},
+                        {"type": "navigate", "section": "deposito"})
+            res = _ubi.eliminar(uid, actor=_usuario_actual())
+            return (res, {"type": "navigate", "section": "deposito"})
+        except (ValueError, KeyError) as e:
+            return {"error": str(e)}, None
 
     if name == "consultar_lote":
         from core import trazabilidad as _traz

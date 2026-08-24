@@ -7,11 +7,15 @@ import "@xyflow/react/dist/style.css";
 import {
   Snowflake, Warehouse, FlaskConical, Sprout, Ship, Users, Package,
   Globe, Anchor, Lock, ArrowRight, X, Route, Eye, EyeOff, Factory,
+  Plus, Pencil, Trash2, Loader2,
 } from "lucide-react";
 import AngelaSays from "../components/AngelaSays";
+import UbicacionForm from "../components/UbicacionForm";
 import { api } from "../lib/api";
 import { num, peso, pesoCorto, fecha } from "../lib/format";
 import { useT } from "../lib/i18n";
+import { useSession } from "../lib/auth";
+import { toast } from "../lib/toastStore";
 
 // ============================================================================
 // EL MAPA DE LA OPERACIÓN — Papasud en el medio de sus cuatro ubicaciones.
@@ -220,13 +224,40 @@ function ladosDelCorredor(a, b) {
 
 export default function MapaOperacion({ onPreguntar }) {
   const t = useT();
+  const { usuario } = useSession() || {};
+  const puedeGestionar = Boolean(usuario?.features?.includes("gestion_ubicaciones"));
   const [d, setD] = useState(null);
   const [foco, setFoco] = useState(null);         // el hallazgo iluminado
   const [detalle, setDetalle] = useState(null);   // el panel flotante
   const [genealogia, setGenealogia] = useState(null);
   const [todosLosIngresos, setTodosLosIngresos] = useState(false);
+  const [form, setForm] = useState(null); // null | "crear" | <ubicacion cruda a editar>
 
-  useEffect(() => { api.mapa().then(setD).catch(() => setD(false)); }, []);
+  const recargar = useCallback(() => api.mapa().then(setD).catch(() => setD(false)), []);
+  useEffect(() => { recargar(); }, [recargar]);
+
+  // El nodo del panel trae MÉTRICAS derivadas (toneladas, ocupación), no el
+  // registro crudo que el formulario necesita para editar (capacidad_kg,
+  // temp_tolerancia). Se busca en el catálogo real — misma fuente que
+  // Ubicaciones.jsx — en vez de armarlo a mano con lo que trae el mapa.
+  const editarDesdeNodo = useCallback(async () => {
+    const uidReal = String(detalle?.id || "").replace(/^ubi_/, "");
+    try {
+      const resp = await api.ubicaciones();
+      const cruda = (resp.catalogo || []).find((c) => c.id === uidReal);
+      if (cruda) setForm(cruda);
+    } catch { toast(t("ubi.error_generico"), "error"); }
+  }, [detalle, t]);
+
+  const eliminarDesdeNodo = useCallback(async () => {
+    const uidReal = String(detalle?.id || "").replace(/^ubi_/, "");
+    try {
+      await api.ubicacionEliminar(uidReal);
+      toast(t("ubi.eliminar_ok"));
+      setDetalle(null);
+      recargar();
+    } catch { toast(t("ubi.error_generico"), "error"); }
+  }, [detalle, t, recargar]);
 
   // --- posiciones ----------------------------------------------------------
   const { nodosBase, aristasBase } = useMemo(() => {
@@ -235,7 +266,14 @@ export default function MapaOperacion({ onPreguntar }) {
     const marca = d.nodos.find((n) => n.tipo === "marca");
     const planta = d.nodos.find((n) => n.tipo === "planta");
     const galpones = d.nodos.filter((n) => n.tipo === "galpon");
-    const ubis = d.nodos.filter((n) => n.capa === "centro" && n.tipo === "ubicacion");
+    // La grilla 2×2 del centro está armada a mano para CUATRO nodos (ver nota
+    // de arriba: diagonales que no cruzan el logo, ladosDelCorredor indexado
+    // 0-3). Una 5ª+ ubicación creada en runtime no reescribe esa geometría —
+    // cae en la misma fila dinámica que ya usan planta/galpones, que SÍ se
+    // ancha sola con la cantidad de elementos (ver "extra" más abajo).
+    const ubisTodos = d.nodos.filter((n) => n.capa === "centro" && n.tipo === "ubicacion");
+    const ubis = ubisTodos.slice(0, 4);
+    const ubisExtra = ubisTodos.slice(4);
     const origen = d.nodos.filter((n) => n.capa === "origen");
     const ordenes = d.nodos.filter((n) => n.tipo === "orden");
     const salida = d.nodos.filter(
@@ -269,7 +307,7 @@ export default function MapaOperacion({ onPreguntar }) {
         zIndex: 1200,
       });
     }
-    const extra = [planta, ...galpones].filter(Boolean);
+    const extra = [planta, ...galpones, ...ubisExtra].filter(Boolean);
     if (extra.length) {
       const yExtra = GRID_Y[1] + 250;
       const x0 = CENTRO_MEDIO.x - (extra.length * (W.centro + 20)) / 2;
@@ -433,15 +471,31 @@ export default function MapaOperacion({ onPreguntar }) {
             {d.regla || t("mapa.subtitulo")}
           </p>
         </div>
-        <div className="flex flex-wrap gap-5 text-right">
-          <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
-          <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
-          <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
-               tono={r.diferencias ? "alerta" : "ok"} />
-          <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
-               tono={r.kg_en_transito ? "alerta" : "ok"} />
+        <div className="flex flex-wrap items-end gap-5">
+          <div className="flex flex-wrap gap-5 text-right">
+            <Kpi valor={`${num(r.toneladas)} t`} etiqueta={t("mapa.k_stock")} />
+            <Kpi valor={pesoCorto(r.valor)} etiqueta={t("mapa.k_valor")} />
+            <Kpi valor={num(r.diferencias)} etiqueta={t("mapa.k_dif")}
+                 tono={r.diferencias ? "alerta" : "ok"} />
+            <Kpi valor={`${num(r.kg_en_transito)} kg`} etiqueta={t("mapa.k_transito")}
+                 tono={r.kg_en_transito ? "alerta" : "ok"} />
+          </div>
+          {puedeGestionar && (
+            <button type="button" onClick={() => setForm("crear")}
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-tinta px-4 py-2.5 text-[0.86rem] font-semibold text-crema active:scale-95">
+              <Plus size={15} /> {t("ubi.nueva")}
+            </button>
+          )}
         </div>
       </header>
+
+      {form && (
+        <UbicacionForm
+          inicial={form === "crear" ? null : form}
+          onCerrar={() => setForm(null)}
+          onGuardado={recargar}
+        />
+      )}
 
       {/* los hallazgos: cada uno ilumina SU camino en el lienzo */}
       <div className="flex flex-wrap items-center gap-1.5">
@@ -525,7 +579,9 @@ export default function MapaOperacion({ onPreguntar }) {
         {/* el panel: flotante, para no comerle ancho al mapa cuando no hace falta */}
         {detalle && (
           <Panel detalle={detalle} genealogia={genealogia} onPreguntar={onPreguntar}
-                 onCerrar={() => setDetalle(null)} t={t} />
+                 onCerrar={() => setDetalle(null)} t={t}
+                 puedeGestionar={puedeGestionar}
+                 onEditar={editarDesdeNodo} onEliminar={eliminarDesdeNodo} />
         )}
       </div>
     </div>
@@ -533,7 +589,18 @@ export default function MapaOperacion({ onPreguntar }) {
 }
 
 // --- el panel lateral -------------------------------------------------------
-function Panel({ detalle, genealogia, onPreguntar, onCerrar, t }) {
+function Panel({ detalle, genealogia, onPreguntar, onCerrar, t, puedeGestionar, onEditar, onEliminar }) {
+  const esUbicacion = detalle.tipo === "ubicacion";
+  const [confirmando, setConfirmando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
+
+  const confirmarEliminar = async () => {
+    setEliminando(true);
+    await onEliminar();
+    setEliminando(false);
+    setConfirmando(false);
+  };
+
   return (
     <aside className="absolute right-3 top-11 z-20 max-h-[calc(100%-3.5rem)] w-[21rem] space-y-3 overflow-y-auto rounded-[var(--radius-card)] border border-linea bg-superficie p-4 sombra-alta">
       <div className="flex items-start justify-between gap-2">
@@ -551,6 +618,35 @@ function Panel({ detalle, genealogia, onPreguntar, onCerrar, t }) {
           <X size={16} />
         </button>
       </div>
+
+      {esUbicacion && puedeGestionar && (
+        confirmando ? (
+          <div className="flex items-center gap-2 rounded-lg border border-rojo/25 bg-rojo/[0.04] px-3 py-2">
+            <span className="flex-1 text-[0.76rem] text-rojo">
+              {t("ubi.eliminar_confirmar", { nombre: detalle.etiqueta })}
+            </span>
+            <button type="button" onClick={confirmarEliminar} disabled={eliminando}
+              className="rounded-full bg-rojo px-2.5 py-1 text-[0.74rem] font-semibold text-crema disabled:opacity-50">
+              {eliminando ? <Loader2 size={12} className="animate-spin" /> : t("ubi.eliminar")}
+            </button>
+            <button type="button" onClick={() => setConfirmando(false)}
+              className="text-[0.74rem] font-semibold text-tinta-suave">
+              {t("ubi.cancelar")}
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={onEditar}
+              className="flex items-center gap-1 rounded-full border border-linea px-2.5 py-1 text-[0.74rem] font-semibold text-tinta-suave hover:bg-crema">
+              <Pencil size={12} /> {t("ubi.editar")}
+            </button>
+            <button type="button" onClick={() => setConfirmando(true)}
+              className="flex items-center gap-1 rounded-full border border-rojo/30 px-2.5 py-1 text-[0.74rem] font-semibold text-rojo hover:bg-rojo/10">
+              <Trash2 size={12} /> {t("ubi.eliminar")}
+            </button>
+          </div>
+        )
+      )}
 
       {detalle.detalle && (
         <p className="rounded-lg bg-crema/70 px-3 py-2 text-[0.82rem] leading-snug">

@@ -27,6 +27,7 @@ data-papasud/memoria.json
 data-papasud/staging.json
 data-papasud/macro_cache.json
 data-papasud/organizacion.json
+data-papasud/ubicaciones_overrides.json
 data-papasud/recordatorios.json
 data-papasud/perfiles.json
 data-papasud/notificaciones.json
