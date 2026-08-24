@@ -50,6 +50,7 @@ function metaFromDone(result) {
     modo: result.modo,
     acciones: result.acciones || [],
     opciones: result.opciones || [],
+    claims: result.claims || [],
     plan: plan ? { pasos: plan.pasos, resumen: plan.resumen } : undefined,
     documento: docAccion?.documento,
     sinModelo: result.modo === "simulado",

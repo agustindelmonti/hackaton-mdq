@@ -338,6 +338,12 @@ def _aplicar_al_stock(mov: dict) -> None:
     store.guardar(raw)
 
 
+def get_by_number(numero: str) -> dict | None:
+    """Un movimiento por su número, o None. English name: nuevo desde acá en
+    más el código nace en inglés (ver core/confidence.py, que es quien la usa)."""
+    return next((m for m in _filas() if m.get("numero") == numero), None)
+
+
 def confirmar_en_destino(numero: str, actor: str) -> dict:
     """Alguien del otro lado dice «llegó». Recién ahí los kilos existen en destino.
 

@@ -206,6 +206,7 @@ Por valor de demo por minuto. **Cortar desde abajo.**
 | `hackathon-recomendacion-final.md` | **Empezar acá.** Decisión, plan hora por hora, reglas de riesgo |
 | `papasud-features-y-flows.md` | 38 features, 20 casos de uso, 9 flows detallados, priorización |
 | `papa-semilla-modelo-de-datos.md` | Esquema SQL listo, curva de merma, vocabulario para el STT |
+| `motor-conciliacion-confianza.md` | Post-hackathon: motor de inferencia y confianza en 3 niveles (reglas → estadística → agente), migraciones Supabase en `supabase/` |
 | `hackathon-demo-strategy.md` | Qué gana este hackathon en particular |
 | `papasud-company-research.md` | La empresa: familia, escala, mercados, crisis 2025, regulación |
 | `seed-potato-domain-reference.md` | Dominio agronómico: ciclo, variedades, plagas, certificación |

@@ -3235,6 +3235,43 @@ CATALOGO: dict[str, dict[str, str]] = {
      "en": "Only open (undispatched) orders are counted, at the lot's production cost."},
     "core.opn.recuperable_nota": {"es": "Suma sólo lo recuperable, una vez cada peso. Lo accionable ya está contado adentro de otra card y el riesgo es exposición, no plata que entra.",
      "en": "Sums only what's recoverable, counting each peso once. Actionable items are already counted inside another card, and risk is exposure, not incoming money."},
+
+    # --- core/confidence.py — basis text for mark_confidence_claims. The tool
+    # itself and its resolver are English (new code, per house convention
+    # going forward); this is user-facing copy so it stays bilingual like
+    # everything else a person reads. See docs/motor-conciliacion-confianza.md.
+    "core.confidence.movement_confirmed": {
+        "es": "movimiento {numero} confirmado por {quien}",
+        "en": "movement {numero} confirmed by {quien}",
+    },
+    "core.confidence.movement_unconfirmed": {
+        "es": "movimiento {numero}, sin confirmar en destino",
+        "en": "movement {numero}, unconfirmed at destination",
+    },
+    "core.confidence.movement_not_found": {
+        "es": "no encontré el movimiento {numero}",
+        "en": "couldn't find movement {numero}",
+    },
+    "core.confidence.count": {
+        "es": "conteo #{id}",
+        "en": "count #{id}",
+    },
+    "core.confidence.note": {
+        "es": "nota de {autor}",
+        "en": "note from {autor}",
+    },
+    "core.confidence.note_not_found": {
+        "es": "nota del equipo",
+        "en": "team note",
+    },
+    "core.confidence.rule_no_data": {
+        "es": "juicio de la regla, sin medir contra casos reales",
+        "en": "the rule's own judgment call, not yet measured against real cases",
+    },
+    "core.confidence.no_reference": {
+        "es": "sin dato que lo respalde",
+        "en": "no supporting data",
+    },
 }
 
 

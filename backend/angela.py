@@ -1339,6 +1339,56 @@ TOOLS = [
         "'¿qué objetivos me pongo?', '¿en qué me enfoco este mes?'.",
         "input_schema": {"type": "object", "properties": {}},
     },
+    # New tools are written in English from here on (name, description,
+    # schema) — house convention going forward; existing tools above stay as
+    # they are. See core/confidence.py for the resolver and
+    # .claude/skills/confidence-indicators/SKILL.md for the pattern this
+    # serves (ConfidenceMarker in the frontend chat).
+    {
+        "name": "mark_confidence_claims",
+        "description": (
+            "Tag the spans of YOUR OWN final answer worth marking with real "
+            "confidence — only risky claims (a cause, a figure, a hypothesis), "
+            "never every sentence. For each span, name the concrete data "
+            "behind it (a movement, a count, a note, a reconciliation rule); "
+            "you never pick the confidence level yourself, the system "
+            "computes it from that data. Call this alone, in the same turn as "
+            "your final answer — never combined with another tool."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "spans": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "text": {
+                                "type": "string",
+                                "description": "The EXACT span of your answer, copied verbatim.",
+                            },
+                            "reference": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": ["movement", "count", "note", "reconciliation_rule", "no_data"],
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Movement number, count id, note id, or the reconciliation rule's key.",
+                                    },
+                                },
+                                "required": ["type"],
+                            },
+                        },
+                        "required": ["text", "reference"],
+                    },
+                },
+            },
+            "required": ["spans"],
+        },
+    },
 ]
 
 # Herramientas que producen un efecto en el frontend (no consultan datos).
@@ -1974,6 +2024,11 @@ def _run_tool(name: str, args: dict) -> tuple[dict | list, dict | None]:
             difs = [d for d in difs if lote in str(d.get("lote", "")).lower()]
         return ({"resumen": _conc.resumen(), "diferencias": difs},
                 {"type": "navigate", "section": "conciliacion"})
+
+    if name == "mark_confidence_claims":
+        from core import confidence
+        claims = confidence.resolve_claims(args.get("spans", []), _idioma_actual())
+        return {"ok": True, "claims": claims}, None
 
     if name == "verificar_orden_carga":
         from core import ordenes_carga as _oc
@@ -3427,6 +3482,7 @@ def stream_responder(
 
     tools_usadas: list[str] = []
     acciones: list[dict] = []
+    claims: list[dict] = []
     try:
         for _ in range(MAX_TOOL_TURNS):
             resp = client.messages.create(
@@ -3438,6 +3494,45 @@ def stream_responder(
             )
 
             if resp.stop_reason == "tool_use":
+                tool_blocks = [b for b in resp.content if b.type == "tool_use"]
+                # mark_confidence_claims is terminal: it annotates the text of
+                # THIS SAME turn, and that text would otherwise be silently
+                # dropped below (a turn that calls a tool never shows its
+                # text — only a tool-free turn does). Resolving confidence
+                # needs no round trip back to the model, so when it's the
+                # only tool called, capture the text here and end the turn
+                # instead of looping. If it shows up alongside other tools
+                # (the tool description asks it not to), fall through to the
+                # normal round-trip path below — safe, just no inline markers
+                # for that one turn.
+                if len(tool_blocks) == 1 and tool_blocks[0].name == "mark_confidence_claims":
+                    block = tool_blocks[0]
+                    tools_usadas.append(block.name)
+                    result, _accion = _run_tool(block.name, block.input or {})
+                    if isinstance(result, dict):
+                        claims.extend(result.get("claims", []))
+                    yield {
+                        "type": "tool",
+                        "id": block.id,
+                        "name": block.name,
+                        "input": block.input or {},
+                        "result": result,
+                    }
+                    texto = "".join(b.text for b in resp.content if b.type == "text").strip()
+                    yield {"type": "text", "text": texto}
+                    yield {
+                        "type": "done",
+                        "result": {
+                            "ok": True,
+                            "respuesta": texto,
+                            "modo": "claude",
+                            "tools_usadas": tools_usadas,
+                            "acciones": acciones,
+                            "claims": claims,
+                        },
+                    }
+                    return
+
                 messages.append({"role": "assistant", "content": resp.content})
                 tool_results = []
                 for block in resp.content:
@@ -3447,6 +3542,8 @@ def stream_responder(
                     result, accion = _run_tool(block.name, block.input or {})
                     if accion:
                         acciones.append(accion)
+                    if block.name == "mark_confidence_claims" and isinstance(result, dict):
+                        claims.extend(result.get("claims", []))
                     yield {
                         "type": "tool",
                         "id": block.id,
@@ -3472,6 +3569,7 @@ def stream_responder(
                     "modo": "claude",
                     "tools_usadas": tools_usadas,
                     "acciones": acciones,
+                    "claims": claims,
                 },
             }
             return
@@ -3486,6 +3584,7 @@ def stream_responder(
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
+                "claims": claims,
             },
         }
     except Exception as e:  # noqa: BLE001
