@@ -16,12 +16,12 @@ import { AngelaToolCall } from "./angela-tool";
 import { ComposerVoice, ComposerVoiceButton } from "./composer";
 import { inkButton, ghostButton } from "./surfaces";
 import { cn } from "../../lib/cn";
+import { useT } from "../../lib/i18n";
 import { toolLabels } from "../../lib/assistant/tool-labels";
+import { AngelaMarkdown } from "./angela-markdown";
 
 function AssistantText({ text }) {
-  return (
-    <p className="whitespace-pre-line text-[0.95rem] leading-snug text-tinta">{text}</p>
-  );
+  return <AngelaMarkdown text={text} />;
 }
 
 function chatErrorFields(status) {
@@ -148,9 +148,13 @@ function UserMessage() {
 }
 
 function AssistantMessage({ onOpcion, renderExtras }) {
+  const t = useT();
   const meta = useAuiState((s) => s.message.metadata?.custom);
   const aui = useAui();
   const hasParts = useAuiState((s) => (s.message.content?.length ?? 0) > 0);
+  const isLast = useAuiState((s) => s.message.isLast);
+  const sugerencias = meta?.sugerencias || [];
+  const showSugerencias = isLast && sugerencias.length > 0;
 
   return (
     <MessagePrimitive.Root className="flex gap-2.5">
@@ -186,6 +190,29 @@ function AssistantMessage({ onOpcion, renderExtras }) {
                 {op.label}
               </button>
             ))}
+          </div>
+        )}
+        {showSugerencias && (
+          <div className="mt-2">
+            <p className="mb-1.5 px-0.5 text-[0.72rem] font-semibold uppercase tracking-wide text-tinta-suave">
+              {t("angela.indagar")}
+            </p>
+            <div className="flex flex-col gap-1.5">
+              {sugerencias.map((op, k) => {
+                const prompt = typeof op === "string" ? op : op.enviar ?? op.label;
+                const label = typeof op === "string" ? op : op.label ?? op.enviar;
+                return (
+                  <button
+                    key={`${k}-${prompt}`}
+                    type="button"
+                    onClick={() => onOpcion?.(prompt)}
+                    className="rounded-xl border border-linea bg-papel px-3 py-2 text-left text-[0.86rem] leading-snug text-tinta transition-colors hover:border-violeta/40 hover:bg-violeta-suave/40"
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
         <MessagePrimitive.Error>

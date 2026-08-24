@@ -274,6 +274,23 @@ pantalla ya muestra: si un gráfico quedó fijado, decí dónde quedó y UNA cos
 que se ve — no narres todos sus números. El dueño escanea; corto no es frío.
 - SIN EMOJIS. Ni en las respuestas ni en los títulos. Sos una socia seria, no un bot \
 con caritas.
+- FORMATO MARKDOWN: escribí en Markdown. Negritas para el dato que manda, listas \
+cuando hay dos o más puntos, un heading corto (###) sólo si la respuesta tiene \
+secciones. Nada de HTML. Los montos `_fmt` se copian tal cual, también adentro \
+del Markdown.
+- DESPUÉS de la respuesta, en un bloque APARTE (nunca mezclado con el texto que \
+lee el dueño), agregá exactamente 3 preguntas de seguimiento para INDAGAR MÁS A \
+FONDO. Las formás a partir del CONTEXTO de la conversación y del ÚLTIMO mensaje \
+del dueño: nombran lo que acaba de preguntar (ubicación, lote, variedad, cliente) \
+y profundizan con lo que ya se habló en el hilo. Si preguntó por Sierra, seguí \
+en Sierra — no saltes a un tema que no estuvo. Cortas, concretas, en el mismo \
+idioma, sin números que no vinieron de una herramienta. Formato exacto:
+
+:::siguientes
+pregunta 1
+pregunta 2
+pregunta 3
+:::
 
 CÓMO USÁS LOS DATOS:
 - SIEMPRE que te pregunten por un número del negocio, usá las herramientas para \
@@ -3159,6 +3176,412 @@ def _fallback(mensaje: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Suggested queries: el dueño sigue indagando (no confirma, no repite)
+# ---------------------------------------------------------------------------
+
+_RE_SIGUIENTES = re.compile(
+    r"(?:\n|\A)\s*:::siguientes\s*\n([\s\S]*?)\n\s*:::\s*\s*$",
+    re.IGNORECASE,
+)
+
+_CIERRES_SIN_SEGUIMIENTO = (
+    "eso está fuera de lo que manejo",
+    "that's outside what i handle",
+    "soy ángela — me ocupo solo",
+    "i'm ángela — i only handle",
+    "listo, lo cancelo",
+    "done, cancelled",
+    "esa consulta es del área",
+    "that question belongs to the",
+)
+
+_STOP_ALIAS = {
+    "frigorifico", "galpon", "campo", "establecimiento", "camara", "sector",
+    "cold", "room", "shed", "warehouse", "the", "and", "del", "de", "los",
+    "las", "una", "uno",
+}
+
+
+def _idioma_sugerencias() -> str:
+    return "en" if _idioma_actual() == "en" else "es"
+
+
+def _como_sugerencias(items) -> list[dict]:
+    out = []
+    seen = set()
+    for raw in items or []:
+        if isinstance(raw, dict):
+            enviar = (raw.get("enviar") or raw.get("label") or "").strip()
+            label = (raw.get("label") or enviar).strip()
+        else:
+            enviar = str(raw or "").strip()
+            label = enviar
+        enviar = re.sub(r"^[-*•]\s+", "", enviar)
+        enviar = re.sub(r"^\d+[\.)]\s+", "", enviar).strip()
+        label = re.sub(r"^[-*•]\s+", "", label)
+        label = re.sub(r"^\d+[\.)]\s+", "", label).strip()
+        if not enviar or enviar.lower() in seen or len(enviar) > 140:
+            continue
+        seen.add(enviar.lower())
+        out.append({"label": label or enviar, "enviar": enviar})
+        if len(out) == 3:
+            break
+    return out
+
+
+def extraer_sugerencias(texto: str) -> tuple[str, list[dict]]:
+    """Saca el bloque :::siguientes del final. El texto visible queda limpio."""
+    crudo = (texto or "").strip()
+    if not crudo:
+        return "", []
+    m = _RE_SIGUIENTES.search(crudo)
+    if not m:
+        return crudo, []
+    limpio = (crudo[:m.start()] + crudo[m.end():]).strip()
+    lineas = [ln.strip() for ln in m.group(1).splitlines() if ln.strip()]
+    return limpio, _como_sugerencias(lineas)
+
+
+def omitir_sugerencias(texto: str) -> bool:
+    t = (texto or "").strip().lower()
+    if not t:
+        return True
+    return t.startswith(_CIERRES_SIN_SEGUIMIENTO)
+
+
+def _texto_turno(mensaje: str, respuesta: str = "", historial: list[dict] | None = None) -> str:
+    partes = []
+    for turn in (historial or [])[-6:]:
+        if turn.get("content"):
+            partes.append(str(turn["content"]))
+    if mensaje:
+        partes.append(mensaje)
+    if respuesta:
+        partes.append(respuesta)
+    return "\n".join(partes)
+
+
+def _nombre_corto(nombre: str) -> str:
+    n = re.sub(r"^(frigorífico|frigorifico|galpón|galpon|campo)\s+", "",
+               nombre or "", flags=re.IGNORECASE).strip()
+    n = re.split(r"\s+[—–-]\s+", n)[0].strip()
+    return n or (nombre or "").strip()
+
+
+def _aliases_de(nombre: str, uid: str = "") -> list[str]:
+    n = ds._strip(nombre or "")
+    out = []
+    for raw in (n, ds._strip(uid or ""), ds._strip(_nombre_corto(nombre))):
+        if raw and raw not in out:
+            out.append(raw)
+    corto = re.sub(r"^(frigorifico|galpon|campo)\s+", "", n).strip()
+    if corto and corto not in out:
+        out.append(corto)
+    for tok in re.split(r"[^\w]+", corto):
+        if len(tok) >= 5 and tok not in _STOP_ALIAS and tok not in out:
+            out.append(tok)
+    return out
+
+
+def _alias_en_texto(alias: str, blob: str) -> bool:
+    if not alias or not blob:
+        return False
+    if " " in alias or any(c.isdigit() for c in alias):
+        return alias in blob
+    return re.search(rf"\b{re.escape(alias)}\b", blob) is not None
+
+
+def _catalogo_sugerencias() -> dict:
+    try:
+        from core import semilla
+        return {
+            "ubicaciones": semilla.ubicaciones(),
+            "variedades": semilla.variedades(),
+            "categorias": semilla.categorias(),
+            "clientes": semilla.clientes(),
+            "campos": semilla.campos(),
+        }
+    except Exception:  # noqa: BLE001
+        return {"ubicaciones": [], "variedades": [], "categorias": [],
+                "clientes": [], "campos": []}
+
+
+def _entidades_en(texto: str) -> dict:
+    """Nombres del catálogo y lotes que aparecen en este texto."""
+    blob = ds._strip(texto or "")
+    halladas = {k: [] for k in ("ubicaciones", "variedades", "categorias",
+                                "clientes", "campos", "lotes")}
+    if not blob:
+        return halladas
+    cat = _catalogo_sugerencias()
+
+    def recoger(clave, filas, campo="nombre"):
+        ranked = []
+        for fila in filas or []:
+            nombre = fila.get(campo) or ""
+            aliases = _aliases_de(nombre, fila.get("id") or "")
+            hit = next((a for a in sorted(aliases, key=len, reverse=True)
+                        if _alias_en_texto(a, blob)), None)
+            if hit:
+                ranked.append((-len(hit), _nombre_corto(nombre) or nombre))
+        ranked.sort()
+        for _, nombre in ranked:
+            if nombre not in halladas[clave]:
+                halladas[clave].append(nombre)
+
+    recoger("ubicaciones", cat["ubicaciones"])
+    recoger("variedades", cat["variedades"])
+    recoger("categorias", cat["categorias"])
+    recoger("clientes", cat["clientes"])
+    recoger("campos", cat["campos"])
+    for m in re.finditer(r"\b(?:lote\s+)?(L\d+)\b", texto or "", flags=re.IGNORECASE):
+        lid = m.group(1).upper()
+        if lid not in halladas["lotes"]:
+            halladas["lotes"].append(lid)
+    return halladas
+
+
+def _primero(*listas) -> str:
+    for xs in listas:
+        if xs:
+            return xs[0]
+    return ""
+
+
+def _angulo(mensaje: str, tools_usadas: list[str] | None) -> str:
+    blob = ds._strip(mensaje or "")
+    tools = set(tools_usadas or [])
+    if tools & {"explicar_diferencia"} or any(
+            k in blob for k in ("merma", "conteo", "discrepan", "diferencia", "contado",
+                                "shrink", "count")):
+        return "merma"
+    if tools & {"consultar_lote"} or any(
+            k in blob for k in ("linaje", "categoria", "inase", "padre", "generacion",
+                                "lineage", "lote ")):
+        return "linaje"
+    if tools & {"verificar_orden_carga", "verificar_disponibilidad"} or any(
+            k in blob for k in ("despacho", "remito", "orden de carga", "embarque",
+                                "dtv", "dispatch", "shipment")):
+        return "despacho"
+    if tools & {"stock_ubicaciones", "consultar_deposito", "resumen_negocio"} or any(
+            k in blob for k in ("stock", "kilo", "bolson", "camara", "ubicacion",
+                                "frigor", "galpon")):
+        return "stock"
+    return "otro"
+
+
+def _preguntas_del_turno(
+    mensaje: str,
+    respuesta: str = "",
+    historial: list[dict] | None = None,
+    tools_usadas: list[str] | None = None,
+) -> list[str]:
+    """3 preguntas ancladas al último mensaje y al hilo — no a un menú genérico."""
+    lang = _idioma_sugerencias()
+    last = _entidades_en(mensaje)
+    ans = _entidades_en(respuesta)
+    ctx = _entidades_en(_texto_turno(mensaje, respuesta, historial))
+    ubi = _primero(last["ubicaciones"], ans["ubicaciones"], ctx["ubicaciones"])
+    var = _primero(last["variedades"], ans["variedades"], ctx["variedades"])
+    cat = _primero(last["categorias"], ans["categorias"], ctx["categorias"])
+    lote = _primero(last["lotes"], ans["lotes"], ctx["lotes"])
+    cli = _primero(last["clientes"], ans["clientes"], ctx["clientes"])
+    campo = _primero(last["campos"], ans["campos"], ctx["campos"])
+    otras_ubi = [x for x in ctx["ubicaciones"] if x != ubi]
+    angulo = _angulo(mensaje, tools_usadas)
+    es = lang != "en"
+    out: list[str] = []
+
+    def add(q: str | None) -> None:
+        q = (q or "").strip()
+        if not q or q in out:
+            return
+        if ds._strip(q) == ds._strip(mensaje or ""):
+            return
+        out.append(q)
+
+    if lote:
+        if es:
+            add(f"¿De qué lote padre desciende el {lote}?")
+            add(f"¿La categoría INASE del {lote} cierra con el linaje?")
+            add(f"¿Cuánta merma llevó el {lote} en cámara?")
+        else:
+            add(f"Which parent lot does {lote} come from?")
+            add(f"Does the INASE category of {lote} match its lineage?")
+            add(f"How much weight has {lote} lost in storage?")
+        if ubi:
+            add(f"¿El {lote} está en {ubi}?" if es else f"Is {lote} in {ubi}?")
+
+    if ubi and var:
+        add(f"¿Cuánto {var} hay en {ubi}?" if es else f"How much {var} is in {ubi}?")
+    if ubi and cat:
+        add(f"¿Qué lotes {cat} hay en {ubi}?" if es
+            else f"Which {cat} lots are in {ubi}?")
+    if var and not ubi:
+        add(f"¿En qué ubicación está el {var}?" if es
+            else f"Which location holds the {var}?")
+        add(f"¿Qué categoría INASE tiene el {var} que está en stock?" if es
+            else f"What INASE category is the {var} currently in stock?")
+
+    if ubi:
+        if angulo == "merma":
+            add(f"¿La diferencia en {ubi} queda dentro de la merma esperada?" if es
+                else f"Is the gap in {ubi} still inside expected shrinkage?")
+            add(f"¿Qué movimientos pueden explicar el faltante en {ubi}?" if es
+                else f"Which movements could explain the missing kilos in {ubi}?")
+            add(f"¿Conviene volver a contar en {ubi}?" if es
+                else f"Should we recount in {ubi}?")
+        elif angulo == "despacho":
+            add(f"¿Hay stock suficiente en {ubi} para cerrar ese remito?" if es
+                else f"Is there enough stock in {ubi} to close that dispatch note?")
+            add(f"¿El linaje de los lotes de {ubi} cierra para exportar?" if es
+                else f"Does the lineage of the lots in {ubi} hold for export?")
+        else:
+            add(f"¿Qué lotes de {ubi} tienen merma fuera de curva?" if es
+                else f"Which lots in {ubi} are losing more weight than they should?")
+            add(f"¿Hay stock suficiente en {ubi} para el próximo despacho?" if es
+                else f"Is there enough stock in {ubi} for the next dispatch?")
+        if otras_ubi:
+            add(f"¿Cómo está {ubi} contra {otras_ubi[0]}?" if es
+                else f"How does {ubi} compare to {otras_ubi[0]}?")
+        else:
+            add(f"¿Cómo está {ubi} contra las otras ubicaciones?" if es
+                else f"How does {ubi} compare to the other locations?")
+
+    if cat and not ubi:
+        add(f"¿El lote padre de esa {cat} es de categoría igual o superior?" if es
+            else f"Is the parent lot of that {cat} the same category or higher?")
+        add(f"¿Qué generación comercial tiene esa {cat}?" if es
+            else f"What commercial generation is that {cat}?")
+
+    if cli:
+        add(f"¿Hay stock para el pedido de {cli}?" if es
+            else f"Is there stock for the {cli} order?")
+        add(f"¿Qué papeles faltan en la carpeta de {cli}?" if es
+            else f"Which papers are still missing from the {cli} folder?")
+
+    if campo:
+        add(f"¿Qué lotes de {campo} están por despachar?" if es
+            else f"Which lots from {campo} are about to ship?")
+
+    if len(out) < 3:
+        if angulo == "merma":
+            add("¿La diferencia queda dentro de la merma esperada?" if es
+                else "Is the gap still inside expected shrinkage?")
+            add("¿Qué movimientos pueden explicar el faltante?" if es
+                else "Which movements could explain the missing kilos?")
+        elif angulo == "linaje":
+            add("¿El lote padre es de categoría igual o superior?" if es
+                else "Is the parent lot the same category or higher?")
+            add("¿Eso frena un despacho o sólo hay que corregir el rótulo?" if es
+                else "Does that block a dispatch or is it just a label fix?")
+        elif angulo == "despacho":
+            add("¿Hay stock suficiente para cerrar ese remito?" if es
+                else "Is there enough stock to close that dispatch note?")
+            add("¿Qué papeles faltan en la carpeta de embarque?" if es
+                else "Which papers are still missing from the shipping folder?")
+        else:
+            add("¿Me desglosás eso por ubicación?" if es
+                else "Can you break that down by location?")
+            add("¿Hay alguna alerta o bloqueo relacionado con esto?" if es
+                else "Is there an alert or hold related to this?")
+            add("¿Qué convendría revisar ahora a partir de lo que pregunté?" if es
+                else "What should we check next based on what I just asked?")
+    return out[:3]
+
+
+def sugerencias_heuristicas(
+    mensaje: str,
+    tools_usadas: list[str] | None = None,
+    respuesta: str = "",
+    historial: list[dict] | None = None,
+) -> list[dict]:
+    """3 preguntas de seguimiento armadas con el hilo y el último mensaje."""
+    return _como_sugerencias(
+        _preguntas_del_turno(mensaje, respuesta, historial, tools_usadas))
+
+
+def _sugerencias_desde_llm(
+    client,
+    modelo: str,
+    mensaje: str,
+    respuesta: str,
+    historial: list[dict] | None,
+) -> list[dict]:
+    """Una pasada corta, sin tools: 3 preguntas del hilo + último mensaje."""
+    if client is None or omitir_sugerencias(respuesta):
+        return []
+    lang = _idioma_sugerencias()
+    if lang == "en":
+        consigna = (
+            "Propose exactly 3 follow-up questions formed ONLY from the conversation "
+            "context and the user's LAST message. Name the concrete things just discussed "
+            "(location, lot, variety, customer) and go DEEPER into that last message — "
+            "do not jump to a topic that was not in this thread. Not repeats, not yes/no "
+            "confirmations. Short, same language as the answer. Do not invent numbers. "
+            "Reply with JSON only: "
+            '{"sugerencias":["q1","q2","q3"]}'
+        )
+    else:
+        consigna = (
+            "Proponé exactamente 3 preguntas de seguimiento formadas SOLO a partir del "
+            "contexto de la conversación y del ÚLTIMO mensaje del usuario. Nombrá las "
+            "cosas concretas que se acaban de hablar (ubicación, lote, variedad, cliente) "
+            "y profundizá ESE último mensaje — no saltes a un tema que no estuvo en este "
+            "hilo. No repitas, no confirmes un sí/no. Cortas, mismo idioma que la "
+            "respuesta. No inventes números. Respondé sólo JSON: "
+            '{"sugerencias":["p1","p2","p3"]}'
+        )
+    recorte = ["HISTORIAL:"]
+    for turn in (historial or [])[-6:]:
+        if turn.get("role") in ("user", "assistant") and turn.get("content"):
+            recorte.append(f"{turn['role']}: {str(turn['content'])[:400]}")
+    if len(recorte) == 1:
+        recorte.append("(sin turnos previos)")
+    recorte.append(f"ÚLTIMO MENSAJE DEL USUARIO:\n{mensaje}")
+    recorte.append(f"ÚLTIMA RESPUESTA:\n{(respuesta or '')[:800]}")
+    try:
+        resp = client.messages.create(
+            model=modelo,
+            max_tokens=220,
+            system=consigna,
+            messages=[{"role": "user", "content": "\n".join(recorte)}],
+        )
+        raw = "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
+        m = re.search(r"\{[\s\S]*\}", raw)
+        if not m:
+            return []
+        data = json.loads(m.group(0))
+        return _como_sugerencias(data.get("sugerencias") or data.get("suggestions"))
+    except Exception:  # noqa: BLE001 — las sugerencias nunca tiran el chat
+        return []
+
+
+def resolver_sugerencias(
+    texto: str,
+    mensaje: str,
+    historial: list[dict] | None,
+    tools_usadas: list[str] | None,
+    *,
+    client=None,
+    modelo: str | None = None,
+) -> tuple[str, list[dict]]:
+    """Texto visible + 3 suggested queries. Primero el bloque del modelo."""
+    limpio, sugerencias = extraer_sugerencias(texto)
+    if omitir_sugerencias(limpio):
+        return limpio, []
+    if sugerencias:
+        return limpio, sugerencias
+    if client is not None and modelo:
+        sugerencias = _sugerencias_desde_llm(
+            client, modelo, mensaje, limpio, historial)
+    if not sugerencias:
+        sugerencias = sugerencias_heuristicas(
+            mensaje, tools_usadas, respuesta=limpio, historial=historial)
+    return limpio, sugerencias
+
+
+# ---------------------------------------------------------------------------
 # Conversación con Claude (tool use loop)
 # ---------------------------------------------------------------------------
 
@@ -3310,11 +3733,16 @@ def responder(
 
             # Respuesta final
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
+            texto, sugerencias = resolver_sugerencias(
+                texto, mensaje, historial, tools_usadas,
+                client=client, modelo=modelo,
+            )
             return {
                 "respuesta": texto,
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
+                "sugerencias": sugerencias,
             }
 
         return {
@@ -3348,9 +3776,14 @@ def stream_responder(
         fb = _fallback(mensaje)
         for te in fb.get("tool_events") or []:
             yield {"type": "tool", **te}
-        if fb.get("respuesta"):
-            yield {"type": "text", "text": fb["respuesta"]}
-        yield {"type": "done", "result": {**fb, "ok": True}}
+        texto, sugerencias = resolver_sugerencias(
+            fb.get("respuesta") or "", mensaje, historial, fb.get("tools_usadas") or [])
+        if texto:
+            yield {"type": "text", "text": texto}
+        if sugerencias:
+            yield {"type": "suggestions", "suggestions": sugerencias}
+        yield {"type": "done", "result": {**fb, "ok": True, "respuesta": texto,
+                                         "sugerencias": sugerencias}}
         return
 
     quien = ""
@@ -3463,7 +3896,14 @@ def stream_responder(
                 continue
 
             texto = "".join(b.text for b in resp.content if b.type == "text").strip()
-            yield {"type": "text", "text": texto}
+            texto, sugerencias = resolver_sugerencias(
+                texto, mensaje, historial, tools_usadas,
+                client=client, modelo=modelo,
+            )
+            if texto:
+                yield {"type": "text", "text": texto}
+            if sugerencias:
+                yield {"type": "suggestions", "suggestions": sugerencias}
             yield {
                 "type": "done",
                 "result": {
@@ -3472,6 +3912,7 @@ def stream_responder(
                     "modo": "claude",
                     "tools_usadas": tools_usadas,
                     "acciones": acciones,
+                    "sugerencias": sugerencias,
                 },
             }
             return
@@ -3486,6 +3927,7 @@ def stream_responder(
                 "modo": "claude",
                 "tools_usadas": tools_usadas,
                 "acciones": acciones,
+                "sugerencias": [],
             },
         }
     except Exception as e:  # noqa: BLE001
@@ -3493,6 +3935,12 @@ def stream_responder(
         fb["error_tecnico"] = str(e)
         fb["ok"] = False
         fb["error_code"] = "provider"
-        if fb.get("respuesta"):
-            yield {"type": "text", "text": fb["respuesta"]}
+        texto, sugerencias = resolver_sugerencias(
+            fb.get("respuesta") or "", mensaje, historial, fb.get("tools_usadas") or [])
+        fb["respuesta"] = texto
+        fb["sugerencias"] = sugerencias
+        if texto:
+            yield {"type": "text", "text": texto}
+        if sugerencias:
+            yield {"type": "suggestions", "suggestions": sugerencias}
         yield {"type": "done", "result": fb}
