@@ -542,7 +542,7 @@ def objetivos_medidos_endpoint(u: dict = Depends(usuario_actual)):
             por_brotar += 1
 
     # lo que está parado en el galpón, que no tiene frío
-    galpon = sum(1 for a in arts if a.get("ubicacion_id") == "chapadmalal")
+    galpon = sum(1 for a in arts if a.get("ubicacion_id") == "galpon_mdp")
 
     try:
         total_issues = store.libro_triado(lang).get("total_issues")

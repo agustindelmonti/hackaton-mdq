@@ -21,7 +21,13 @@ import { useT } from "../lib/i18n";
 // sobrevive a que alguien pregunte «¿y esto está verificado?».
 // ============================================================================
 
-const ICONO = { frigorifico: Snowflake, galpon: Warehouse };
+const ICONO = {
+  frigorifico: Snowflake,
+  frio_tercero: Snowflake,
+  galpon: Warehouse,
+  planta: Warehouse,
+  campo: MapPin,
+};
 
 const COLOR = {
   verde: { borde: "border-salvia/30", chip: "bg-salvia/10 text-salvia", punto: "bg-salvia" },

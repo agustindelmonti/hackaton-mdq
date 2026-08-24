@@ -1,124 +1,359 @@
 {
  "ubicaciones": [
   {
-   "id": "sierra",
-   "nombre": "Frigorífico Sierra de los Padres",
-   "tipo": "frigorifico",
-   "camaras": [
-    "Cámara 1",
-    "Cámara 2",
-    "Cámara 3",
-    "Cámara 4"
+   "id": "campo_santa_ana",
+   "nombre": "Campo Santa Ana",
+   "tipo": "campo",
+   "propia": true,
+   "chacra_id": "santa_ana",
+   "alias": [
+    "santa ana",
+    "sta ana",
+    "marisol"
    ],
-   "capacidad_kg": 2850000,
-   "temp_objetivo": 4.0,
-   "temp_tolerancia": 1.0,
-   "direccion": "Ruta 226 km 14,5 — Sierra de los Padres"
+   "camaras": [],
+   "capacidad_kg": null
   },
   {
-   "id": "ruta226",
-   "nombre": "Frigorífico Ruta 226",
-   "tipo": "frigorifico",
-   "camaras": [
-    "Cámara A",
-    "Cámara B",
-    "Cámara C"
+   "id": "planta_santa_ana",
+   "nombre": "Planta Santa Ana",
+   "tipo": "planta",
+   "propia": true,
+   "chacra_id": "santa_ana",
+   "alias": [
+    "planta",
+    "en planta",
+    "tolvas",
+    "papasud"
    ],
-   "capacidad_kg": 2100000,
-   "temp_objetivo": 4.0,
-   "temp_tolerancia": 1.0,
-   "direccion": "Ruta 226 km 31 — Partido de General Pueyrredón"
+   "camaras": [],
+   "capacidad_kg": null
   },
   {
-   "id": "batan",
-   "nombre": "Frigorífico Batán",
-   "tipo": "frigorifico",
-   "camaras": [
-    "Cámara 1",
-    "Cámara 2"
-   ],
-   "capacidad_kg": 1450000,
-   "temp_objetivo": 3.5,
-   "temp_tolerancia": 1.0,
-   "direccion": "Parque Industrial Batán — Mar del Plata"
-  },
-  {
-   "id": "chapadmalal",
-   "nombre": "Galpón Chapadmalal",
+   "id": "galpon_mdp",
+   "nombre": "Galpón Mar del Plata",
    "tipo": "galpon",
+   "propia": true,
+   "alias": [
+    "galpon",
+    "galpón",
+    "galpon-galpon",
+    "galpon mdp",
+    "galpon mar del plata"
+   ],
    "camaras": [
     "Sector Norte",
     "Sector Sur"
    ],
    "capacidad_kg": 900000,
-   "temp_objetivo": null,
-   "temp_tolerancia": null,
-   "direccion": "Camino Viejo a Chapadmalal km 8"
+   "direccion": "Mar del Plata, Buenos Aires"
+  },
+  {
+   "id": "campo_trevelin",
+   "nombre": "Campo Trevelin",
+   "tipo": "campo",
+   "propia": false,
+   "chacra_id": "trevelin",
+   "alias": [
+    "trevelin"
+   ],
+   "camaras": [],
+   "capacidad_kg": null
+  },
+  {
+   "id": "pancani",
+   "nombre": "Frigorífico Pancani (Dospanca)",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "dospanca",
+    "pancani",
+    "dos panca",
+    "dj panc"
+   ],
+   "camaras": [
+    "Cámara 1",
+    "Cámara 2",
+    "Cámara 3"
+   ],
+   "capacidad_kg": null,
+   "direccion": "Dospanca — frío de terceros"
+  },
+  {
+   "id": "cecive",
+   "nombre": "Cecive",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "cecive"
+   ],
+   "camaras": [
+    "Cámara 1",
+    "Cámara 2"
+   ],
+   "capacidad_kg": null
+  },
+  {
+   "id": "sasula",
+   "nombre": "Sasula Balcarce",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "sasula",
+    "sasula balcarce"
+   ],
+   "camaras": [],
+   "capacidad_kg": null
+  },
+  {
+   "id": "belmonte",
+   "nombre": "Belmonte",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "belmonte"
+   ],
+   "camaras": [],
+   "capacidad_kg": null
+  },
+  {
+   "id": "frigopap",
+   "nombre": "Frigopap",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "frigopap"
+   ],
+   "camaras": [],
+   "capacidad_kg": null
+  },
+  {
+   "id": "teramal",
+   "nombre": "Teramal",
+   "tipo": "frio_tercero",
+   "propia": false,
+   "alias": [
+    "teramal"
+   ],
+   "camaras": [],
+   "capacidad_kg": null
+  }
+ ],
+ "chacras": [
+  {
+   "id": "santa_ana",
+   "nombre": "Chacra Santa Ana — Marisol",
+   "localidad": "General Pueyrredón",
+   "provincia": "Buenos Aires",
+   "ha": 111.1,
+   "zona": "Sudeste bonaerense"
+  },
+  {
+   "id": "trevelin",
+   "nombre": "Trevelin",
+   "localidad": "Trevelin",
+   "provincia": "Chubut",
+   "ha": null,
+   "zona": "Patagonia austral"
   }
  ],
  "variedades": [
   {
    "id": "spunta",
-   "nombre": "Spunta",
-   "destino": "consumo fresco",
-   "dormancia_dias": 78,
-   "peso_relativo": 0.29
+   "nombre": "Spunta"
   },
   {
-   "id": "innovator",
-   "nombre": "Innovator",
-   "destino": "industria (bastón)",
-   "dormancia_dias": 102,
-   "peso_relativo": 0.24
+   "id": "agata",
+   "nombre": "Ágata"
   },
   {
    "id": "atlantic",
-   "nombre": "Atlantic",
-   "destino": "industria (chip)",
-   "dormancia_dias": 94,
-   "peso_relativo": 0.18
+   "nombre": "Atlantic"
   },
   {
-   "id": "daisy",
-   "nombre": "Daisy",
-   "destino": "consumo fresco",
-   "dormancia_dias": 71,
-   "peso_relativo": 0.12
+   "id": "daifla",
+   "nombre": "Daifla"
   },
   {
    "id": "asterix",
-   "nombre": "Asterix",
-   "destino": "consumo fresco / industria",
-   "dormancia_dias": 88,
-   "peso_relativo": 0.1
+   "nombre": "Asterix"
+  },
+  {
+   "id": "sagitta",
+   "nombre": "Sagitta"
+  },
+  {
+   "id": "ludmilla",
+   "nombre": "Ludmilla"
+  },
+  {
+   "id": "sababa",
+   "nombre": "Sababa"
+  },
+  {
+   "id": "seven_four_7",
+   "nombre": "7 Four 7"
+  },
+  {
+   "id": "king_russet",
+   "nombre": "King Russet"
+  },
+  {
+   "id": "memphis",
+   "nombre": "Memphis"
+  },
+  {
+   "id": "sunred",
+   "nombre": "Sunred"
+  },
+  {
+   "id": "edison",
+   "nombre": "Edison"
+  },
+  {
+   "id": "sinatra",
+   "nombre": "Sinatra"
+  },
+  {
+   "id": "tilbury",
+   "nombre": "Tilbury"
+  },
+  {
+   "id": "quintera",
+   "nombre": "Quintera"
+  },
+  {
+   "id": "red_magic",
+   "nombre": "Red Magic"
+  },
+  {
+   "id": "orchestra",
+   "nombre": "Orchestra"
+  },
+  {
+   "id": "acoustic",
+   "nombre": "Acoustic"
+  },
+  {
+   "id": "rock",
+   "nombre": "Rock"
+  },
+  {
+   "id": "sound",
+   "nombre": "Sound"
+  },
+  {
+   "id": "yona",
+   "nombre": "Yona"
+  },
+  {
+   "id": "lady_anna",
+   "nombre": "Lady Anna"
+  },
+  {
+   "id": "lady_jane",
+   "nombre": "Lady Jane"
+  },
+  {
+   "id": "alverstone",
+   "nombre": "Alverstone"
+  },
+  {
+   "id": "markies",
+   "nombre": "Markies"
+  },
+  {
+   "id": "ikarus",
+   "nombre": "Ikarus"
+  },
+  {
+   "id": "noha",
+   "nombre": "Noha"
+  },
+  {
+   "id": "farida",
+   "nombre": "Farida"
+  },
+  {
+   "id": "beo",
+   "nombre": "Beo"
+  },
+  {
+   "id": "picus",
+   "nombre": "Picus"
+  },
+  {
+   "id": "linus",
+   "nombre": "Linus"
+  },
+  {
+   "id": "primus",
+   "nombre": "Primus"
+  },
+  {
+   "id": "lady_avlone",
+   "nombre": "Lady Avlone"
+  },
+  {
+   "id": "lady_alicia",
+   "nombre": "Lady Alicia"
+  },
+  {
+   "id": "lady_ada",
+   "nombre": "Lady Ada"
+  },
+  {
+   "id": "rivola",
+   "nombre": "Rivola"
+  },
+  {
+   "id": "taurus",
+   "nombre": "Taurus"
+  },
+  {
+   "id": "ribola",
+   "nombre": "Ribola"
   },
   {
    "id": "kennebec",
-   "nombre": "Kennebec",
-   "destino": "industria (bastón)",
-   "dormancia_dias": 84,
-   "peso_relativo": 0.07
+   "nombre": "Kennebec"
+  },
+  {
+   "id": "kelly",
+   "nombre": "Kelly"
+  },
+  {
+   "id": "pampeana",
+   "nombre": "Pampeana"
+  },
+  {
+   "id": "punchy",
+   "nombre": "Punchy"
   }
  ],
  "categorias": [
   {
-   "id": "preinicial_2",
-   "nombre": "Preinicial II",
+   "id": "preinicial_0",
+   "nombre": "Preinicial 0",
    "clase": "Básica",
-   "orden": 1,
-   "ambiente": "condiciones controladas",
-   "costo_kg": 2140.0,
-   "peso_relativo": 0.02,
+   "orden": 0,
+   "costo_kg": 2480.0,
    "virus_max_pct": 0.0
   },
   {
-   "id": "preinicial_3",
-   "nombre": "Preinicial III",
+   "id": "preinicial_1",
+   "nombre": "Preinicial I",
+   "clase": "Básica",
+   "orden": 1,
+   "costo_kg": 2140.0,
+   "virus_max_pct": 0.0
+  },
+  {
+   "id": "preinicial_2",
+   "nombre": "Preinicial II",
    "clase": "Básica",
    "orden": 2,
-   "ambiente": "condiciones controladas",
    "costo_kg": 1685.0,
-   "peso_relativo": 0.03,
    "virus_max_pct": 0.0
   },
   {
@@ -126,9 +361,7 @@
    "nombre": "Inicial I",
    "clase": "Básica",
    "orden": 3,
-   "ambiente": "campo",
    "costo_kg": 1186.0,
-   "peso_relativo": 0.08,
    "virus_max_pct": 0.2
   },
   {
@@ -136,9 +369,7 @@
    "nombre": "Inicial II",
    "clase": "Básica",
    "orden": 4,
-   "ambiente": "campo",
    "costo_kg": 894.0,
-   "peso_relativo": 0.17,
    "virus_max_pct": 0.6
   },
   {
@@ -146,49 +377,39 @@
    "nombre": "Inicial III",
    "clase": "Básica",
    "orden": 5,
-   "ambiente": "campo",
    "costo_kg": 713.0,
-   "peso_relativo": 0.21,
    "virus_max_pct": 1.0
-  },
-  {
-   "id": "prefundacion",
-   "nombre": "Prefundación",
-   "clase": "Básica",
-   "orden": 6,
-   "ambiente": "campo",
-   "costo_kg": 608.0,
-   "peso_relativo": 0.16,
-   "virus_max_pct": 1.6
   },
   {
    "id": "fundacion",
    "nombre": "Fundación",
    "clase": "Básica",
-   "orden": 7,
-   "ambiente": "campo",
+   "orden": 6,
    "costo_kg": 521.0,
-   "peso_relativo": 0.14,
    "virus_max_pct": 2.0
   },
   {
    "id": "registrada",
    "nombre": "Registrada",
    "clase": "Certificada",
-   "orden": 8,
-   "ambiente": "campo",
+   "orden": 7,
    "costo_kg": 428.0,
-   "peso_relativo": 0.13,
    "virus_max_pct": 6.0
   },
   {
-   "id": "certificada",
-   "nombre": "Certificada",
+   "id": "certificada_a",
+   "nombre": "Certificada A",
+   "clase": "Certificada",
+   "orden": 8,
+   "costo_kg": 356.0,
+   "virus_max_pct": 15.0
+  },
+  {
+   "id": "certificada_b",
+   "nombre": "Certificada B",
    "clase": "Certificada",
    "orden": 9,
-   "ambiente": "campo",
-   "costo_kg": 356.0,
-   "peso_relativo": 0.06,
+   "costo_kg": 320.0,
    "virus_max_pct": 15.0
   }
  ],
@@ -214,131 +435,244 @@
    "label": "Grado 4 (libre)"
   }
  },
+ "calibres_comerciales": [
+  {
+   "id": "recibo",
+   "nombre": "Recibo"
+  },
+  {
+   "id": "exportacion",
+   "nombre": "Exportación"
+  },
+  {
+   "id": "expo_buena",
+   "nombre": "Exportación buena"
+  },
+  {
+   "id": "desc_expo",
+   "nombre": "Descarte exportación"
+  },
+  {
+   "id": "sin_chicas",
+   "nombre": "Sin chicas"
+  },
+  {
+   "id": "granel",
+   "nombre": "Granel"
+  },
+  {
+   "id": "desc_paraguay",
+   "nombre": "Desc. Paraguay"
+  },
+  {
+   "id": "sin_tamanar",
+   "nombre": "Sin tamañar"
+  },
+  {
+   "id": "cepillada_25",
+   "nombre": "Bolsa 25 kg cepillada"
+  }
+ ],
+ "envases": [
+  {
+   "id": "bolsa",
+   "nombre": "Bolsa",
+   "kg_nominal": 50
+  },
+  {
+   "id": "bolson",
+   "nombre": "Bolsón",
+   "kg_nominal": 700
+  },
+  {
+   "id": "granel",
+   "nombre": "Granel",
+   "kg_nominal": null
+  },
+  {
+   "id": "chasis",
+   "nombre": "Granel (chasis)",
+   "kg_nominal": null
+  },
+  {
+   "id": "acopiador",
+   "nombre": "Granel (acopiador)",
+   "kg_nominal": null
+  },
+  {
+   "id": "tarima",
+   "nombre": "Tarima",
+   "kg_nominal": null
+  },
+  {
+   "id": "bolsa_25",
+   "nombre": "Bolsa 25 kg",
+   "kg_nominal": 25
+  }
+ ],
  "campos": [
   {
-   "id": "calafate",
-   "nombre": "Campo El Calafate — Santa Cruz",
-   "ha": 22.6,
-   "rinde": 26.4,
-   "zona": "Patagonia austral",
-   "categorias_altas": true
+   "id": "santa_ana",
+   "nombre": "Chacra Santa Ana — Marisol",
+   "localidad": "General Pueyrredón",
+   "provincia": "Buenos Aires",
+   "ha": 111.1,
+   "zona": "Sudeste bonaerense"
   },
   {
-   "id": "tres_arroyos",
-   "nombre": "Campo Tres Arroyos",
-   "ha": 68.4,
-   "rinde": 37.2,
-   "zona": "Sudeste bonaerense",
-   "categorias_altas": false
-  },
-  {
-   "id": "san_cayetano",
-   "nombre": "Campo San Cayetano",
-   "ha": 54.7,
-   "rinde": 36.1,
-   "zona": "Sudeste bonaerense",
-   "categorias_altas": false
-  },
-  {
-   "id": "gonzalez_chaves",
-   "nombre": "Campo González Chaves",
-   "ha": 43.9,
-   "rinde": 34.8,
-   "zona": "Sudeste bonaerense",
-   "categorias_altas": false
-  },
-  {
-   "id": "napaleofu",
-   "nombre": "Campo Napaleofú — Balcarce",
-   "ha": 24.7,
-   "rinde": 33.4,
-   "zona": "Sudeste bonaerense",
-   "categorias_altas": false
+   "id": "trevelin",
+   "nombre": "Trevelin",
+   "localidad": "Trevelin",
+   "provincia": "Chubut",
+   "ha": null,
+   "zona": "Patagonia austral"
   }
  ],
  "clientes": [
   {
-   "id": "vn_ind",
-   "nombre": "Southern Foods Vietnam Co., Ltd.",
+   "id": "wemar_mccain",
+   "nombre": "Wemar — McCain",
+   "tipo": "industria",
+   "canal": "industria"
+  },
+  {
+   "id": "lamb_weston",
+   "nombre": "Lamb Weston",
    "tipo": "exportacion",
-   "pais": "Vietnam",
-   "puerto": "Puerto de Mar del Plata",
-   "destino_puerto": "Hai Phong",
+   "canal": "industria",
+   "pais": "Países Bajos",
    "incoterm": "FOB",
    "moneda": "USD",
-   "canal": "industrial",
-   "requisitos_onpf": [
-    "Libre de Ralstonia solanacearum",
-    "Libre de Globodera spp.",
-    "Tratamiento en origen declarado",
-    "Análisis de virus PVY < 0,5%"
-   ]
+   "puerto": "Puerto de Mar del Plata",
+   "destino_puerto": "Rotterdam"
   },
   {
-   "id": "br_sul",
-   "nombre": "Batata Sul Comércio Ltda.",
-   "tipo": "exportacion",
-   "pais": "Brasil",
-   "puerto": "Paso fronterizo Uruguaiana",
-   "destino_puerto": "Curitiba",
-   "incoterm": "CIF",
-   "moneda": "USD",
-   "canal": "distribución",
-   "requisitos_onpf": [
-    "Certificado fitosanitario MERCOSUR",
-    "Libre de Synchytrium endobioticum",
-    "Declaración de origen varietal"
-   ]
+   "id": "parmentier",
+   "nombre": "Parmentier",
+   "tipo": "industria",
+   "canal": "industria"
   },
   {
-   "id": "uy_este",
-   "nombre": "Semillas del Este S.R.L.",
-   "tipo": "exportacion",
-   "pais": "Uruguay",
-   "puerto": "Paso fronterizo Fray Bentos",
-   "destino_puerto": "Montevideo",
-   "incoterm": "CIF",
-   "moneda": "USD",
-   "canal": "distribución",
-   "requisitos_onpf": [
-    "Certificado fitosanitario MERCOSUR",
-    "Análisis de virus PVY < 1%"
-   ]
-  },
-  {
-   "id": "int_tandil",
-   "nombre": "Establecimiento Los Cardales — Tandil",
-   "tipo": "interno",
-   "pais": "Argentina",
-   "canal": "productor"
-  },
-  {
-   "id": "int_balcarce",
-   "nombre": "Agrícola Balcarce S.A.",
-   "tipo": "interno",
-   "pais": "Argentina",
-   "canal": "productor"
-  },
-  {
-   "id": "int_noa",
-   "nombre": "Semillera del Norte — Tafí del Valle",
-   "tipo": "interno",
-   "pais": "Argentina",
+   "id": "hzpc",
+   "nombre": "HZPC",
+   "tipo": "obtentor",
    "canal": "semillero"
   },
   {
-   "id": "int_cordoba",
-   "nombre": "Papas Villa Dolores S.R.L.",
+   "id": "delcaso",
+   "nombre": "Delcaso",
+   "tipo": "broker",
+   "canal": "comisionista"
+  },
+  {
+   "id": "papalini",
+   "nombre": "Papalini",
+   "tipo": "broker",
+   "canal": "comisionista"
+  },
+  {
+   "id": "romero_m",
+   "nombre": "Romero M",
    "tipo": "interno",
-   "pais": "Argentina",
+   "canal": "productor",
+   "broker_id": "delcaso"
+  },
+  {
+   "id": "agro_selmi",
+   "nombre": "Agro Selmi",
+   "tipo": "interno",
    "canal": "productor"
   },
   {
-   "id": "int_otamendi",
-   "nombre": "Hnos. Etcheverry — Otamendi",
+   "id": "mazzeo_cristian",
+   "nombre": "Mazzeo Cristian",
    "tipo": "interno",
-   "pais": "Argentina",
    "canal": "productor"
+  },
+  {
+   "id": "francisco_andreu",
+   "nombre": "Francisco Andreu",
+   "tipo": "interno",
+   "canal": "productor"
+  },
+  {
+   "id": "la_union_del_sur",
+   "nombre": "La Unión del Sur",
+   "tipo": "interno",
+   "canal": "productor"
+  },
+  {
+   "id": "frigopap_cliente",
+   "nombre": "Frigopap (carga Lamb Weston)",
+   "tipo": "industria",
+   "canal": "industria"
+  }
+ ],
+ "transportes": [
+  {
+   "id": "camillo_gaston",
+   "empresa": "Camillo",
+   "chofer": "Gastón"
+  },
+  {
+   "id": "camillo_mario",
+   "empresa": "Camillo",
+   "chofer": "Mario"
+  },
+  {
+   "id": "camillo_jaimez",
+   "empresa": "Camillo",
+   "chofer": "Jaimez"
+  },
+  {
+   "id": "cerone_raphael",
+   "empresa": "Cerone",
+   "chofer": "Raphael"
+  },
+  {
+   "id": "cerone_sotelo",
+   "empresa": "Cerone",
+   "chofer": "Sotelo"
+  },
+  {
+   "id": "arenas",
+   "empresa": "Arenas",
+   "chofer": null
+  },
+  {
+   "id": "arenas_jaimez",
+   "empresa": "Arenas",
+   "chofer": "Jaimez"
+  },
+  {
+   "id": "arenas_de_grandis",
+   "empresa": "Arenas",
+   "chofer": "De Grandis"
+  },
+  {
+   "id": "serantes_vera",
+   "empresa": "Serantes-Vera",
+   "chofer": null
+  },
+  {
+   "id": "fran_cambronera",
+   "empresa": "Fran Cambronera",
+   "chofer": null
+  },
+  {
+   "id": "el_salvador",
+   "empresa": "El Salvador",
+   "chofer": null
+  },
+  {
+   "id": "delcasagro",
+   "empresa": "Delcasagro",
+   "chofer": null
+  },
+  {
+   "id": "s_garcia",
+   "empresa": "S. García",
+   "chofer": null
   }
  ],
  "docs_exportacion": [
@@ -424,10 +758,10 @@
  "meta": {
   "empresa": "Papasud S.A.",
   "hoy": "2026-08-22",
-  "hectareas": 214.3,
-  "produccion_ciclo_kg": 7468490.0,
   "campania": "2025/26",
-  "posicion_arancelaria": "0701.10.00",
-  "sintetico": true
+  "sintetico": false,
+  "fuente": "Planilla de movimientos 2026.xls · modelo de linaje",
+  "kg_por_bolsa": 50,
+  "posicion_arancelaria": "0701.10.00"
  }
 }

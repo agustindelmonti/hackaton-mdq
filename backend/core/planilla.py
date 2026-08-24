@@ -1,8 +1,8 @@
 """
-Fachada del libro real (data-planilla) sobre el store de la instancia.
+Fachada del libro oficial (remitos, claves namespaced) sobre el store.
 
-Si el data dir no tiene remitos ni claves namespaced, las funciones devuelven
-vacío o caen al inventario sintético: el demo de `data-papasud/` no se rompe.
+El seed de `data-papasud/` es este libro. Si un data dir no tiene remitos ni
+claves namespaced, las funciones devuelven vacío.
 """
 from __future__ import annotations
 

@@ -1,187 +1,315 @@
 """
-dominio.py · Las constantes del negocio de la semilla de papa.
+Catálogos oficiales de Papasud — el libro de la planilla.
 
-Todo lo de acá sale de la operación real de Papasud y de la normativa argentina
-que la rige. Vive aparte del generador porque el BACKEND también las necesita
-(categorías INASE, calibres, rangos de temperatura): son reglas del rubro, no
-datos sembrados.
-
-FUENTES (verificadas, no inventadas):
-
-  · Resolución INASE 171/2000 — categorías y subcategorías de semilla de papa,
-    calibres por grado en milímetros, tolerancias y rotulado de envases.
-      - Clase BÁSICA:      Preinicial 0 / I / II (condiciones controladas),
-                           Inicial I / II / III, Prefundación, Fundación (a campo)
-      - Clase CERTIFICADA: Registrada, Certificada
-      - Calibres (Art. 25):  grado 1 = >45 a 90 mm · grado 2 = >33 a 45 mm
-                             grado 3 = >20 a 33 mm · grado 4 = libre
-        Tolerancia: 5% en peso del grado inmediato inferior y 5% del superior.
-      - Envases (Art. 23): máximo 50 kg a campo; 20 kg para Preiniciales.
-      - Rótulo (Art. 16): clase fiscalizada, categoría y subcategoría, variedad,
-        zona de producción, año de cosecha, y N° de inscripción en el Registro
-        Nacional de Comercio y Fiscalización de Semillas.
-
-  · Conservación de semilla (bibliografía de poscosecha): almacenamiento por
-    más de tres meses a 3–5 °C. Por encima de 4 °C se rompe la dormancia y
-    arranca la brotación. La dormancia dura entre 7 y 120 días según variedad,
-    estado de cosecha y condiciones. La temperatura alta acelera el
-    envejecimiento fisiológico del tubérculo y acorta la dormancia.
-
-  · Exportación de semilla desde Argentina: certificado de exportación del
-    INASE (Res. SAGYP 715/94 para papa), Certificado Fitosanitario de
-    Exportación del SENASA (que exige copia del certificado INASE para material
-    de propagación), permiso de embarque de Aduana, y los requisitos
-    fitosanitarios que fije la ONPF del país importador.
+Fuentes: Planilla de movimientos 2026.xls (12 hojas) y la escalera INASE
+que Papasud usa en Trevelin (Inicial I / II / III). Nada de Innovator: no
+aparece en la planilla de este ciclo. Este archivo ES el dominio del seed
+oficial (`data-papasud/`).
 """
 from __future__ import annotations
 
-# --- Las cuatro ubicaciones ------------------------------------------------
-# Tres frigoríficos y un galpón, como dice el brief. El galpón NO tiene frío:
-# es acondicionamiento y armado de carga, y por eso es el que corre contra el
-# reloj — lo que entra ahí ya empezó a envejecer.
+# --- Chacras de origen -----------------------------------------------------
+# El nro de lote SOLO es único dentro de una chacra. Lote 50 en Santa Ana es
+# Spunta papa chica; lote 50 en Trevelin es Beo Inicial I.
+CHACRAS = [
+    {"id": "santa_ana", "nombre": "Chacra Santa Ana — Marisol",
+     "localidad": "General Pueyrredón", "provincia": "Buenos Aires",
+     "ha": 111.1, "zona": "Sudeste bonaerense"},
+    {"id": "trevelin", "nombre": "Trevelin",
+     "localidad": "Trevelin", "provincia": "Chubut",
+     "ha": None, "zona": "Patagonia austral"},
+]
+CHACRA_POR_ID = {c["id"]: c for c in CHACRAS}
+
+# --- Ubicaciones de custodia -----------------------------------------------
+# Propias: planta, galpón, campo. El frío que manda en la planilla es de
+# terceros (Dospanca/Pancani, Cecive, Sasula, Belmonte, Frigopap, Teramal).
 UBICACIONES = [
-    {"id": "sierra", "nombre": "Frigorífico Sierra de los Padres",
-     "tipo": "frigorifico", "camaras": ["Cámara 1", "Cámara 2", "Cámara 3", "Cámara 4"],
-     "capacidad_kg": 2_850_000, "temp_objetivo": 4.0, "temp_tolerancia": 1.0,
-     "direccion": "Ruta 226 km 14,5 — Sierra de los Padres"},
-    {"id": "ruta226", "nombre": "Frigorífico Ruta 226",
-     "tipo": "frigorifico", "camaras": ["Cámara A", "Cámara B", "Cámara C"],
-     "capacidad_kg": 2_100_000, "temp_objetivo": 4.0, "temp_tolerancia": 1.0,
-     "direccion": "Ruta 226 km 31 — Partido de General Pueyrredón"},
-    {"id": "batan", "nombre": "Frigorífico Batán",
-     "tipo": "frigorifico", "camaras": ["Cámara 1", "Cámara 2"],
-     "capacidad_kg": 1_450_000, "temp_objetivo": 3.5, "temp_tolerancia": 1.0,
-     "direccion": "Parque Industrial Batán — Mar del Plata"},
-    {"id": "chapadmalal", "nombre": "Galpón Chapadmalal",
-     "tipo": "galpon", "camaras": ["Sector Norte", "Sector Sur"],
-     "capacidad_kg": 900_000, "temp_objetivo": None, "temp_tolerancia": None,
-     "direccion": "Camino Viejo a Chapadmalal km 8"},
+    {"id": "campo_santa_ana", "nombre": "Campo Santa Ana",
+     "tipo": "campo", "propia": True, "chacra_id": "santa_ana",
+     "alias": ["santa ana", "sta ana", "marisol"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "planta_santa_ana", "nombre": "Planta Santa Ana",
+     "tipo": "planta", "propia": True, "chacra_id": "santa_ana",
+     "alias": ["planta", "en planta", "tolvas", "papasud"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "galpon_mdp", "nombre": "Galpón Mar del Plata",
+     "tipo": "galpon", "propia": True,
+     "alias": ["galpon", "galpón", "galpon-galpon", "galpon mdp",
+               "galpon mar del plata"],
+     "camaras": ["Sector Norte", "Sector Sur"], "capacidad_kg": 900_000,
+     "direccion": "Mar del Plata, Buenos Aires"},
+    {"id": "campo_trevelin", "nombre": "Campo Trevelin",
+     "tipo": "campo", "propia": False, "chacra_id": "trevelin",
+     "alias": ["trevelin"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "pancani", "nombre": "Frigorífico Pancani (Dospanca)",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["dospanca", "pancani", "dos panca", "dj panc"],
+     "camaras": ["Cámara 1", "Cámara 2", "Cámara 3"], "capacidad_kg": None,
+     "direccion": "Dospanca — frío de terceros"},
+    {"id": "cecive", "nombre": "Cecive",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["cecive"],
+     "camaras": ["Cámara 1", "Cámara 2"], "capacidad_kg": None},
+    {"id": "sasula", "nombre": "Sasula Balcarce",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["sasula", "sasula balcarce"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "belmonte", "nombre": "Belmonte",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["belmonte"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "frigopap", "nombre": "Frigopap",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["frigopap"],
+     "camaras": [], "capacidad_kg": None},
+    {"id": "teramal", "nombre": "Teramal",
+     "tipo": "frio_tercero", "propia": False,
+     "alias": ["teramal"],
+     "camaras": [], "capacidad_kg": None},
 ]
 UBIC_POR_ID = {u["id"]: u for u in UBICACIONES}
 
 
 def ubicacion_nombre(uid: str) -> str:
-    return UBIC_POR_ID[uid]["nombre"]
+    u = UBIC_POR_ID.get(uid)
+    return u["nombre"] if u else (uid or "")
 
 
-# --- Variedades ------------------------------------------------------------
-# Las que se multiplican como semilla en el sudeste bonaerense. Innovator y
-# Atlantic son las industriales (bastón y chip): son las que van al circuito de
-# PepsiCo. Spunta manda en consumo fresco.
+def ubicacion_por_alias(texto: str) -> dict | None:
+    t = (texto or "").strip().lower()
+    if not t:
+        return None
+    for u in UBICACIONES:
+        if u["id"] == t or u["nombre"].lower() == t:
+            return u
+        if t in [a.lower() for a in u.get("alias") or []]:
+            return u
+    return None
+
+
+# --- Variedades (las que la planilla mueve en 2026) ------------------------
 VARIEDADES = [
-    {"id": "spunta", "nombre": "Spunta", "destino": "consumo fresco",
-     "dormancia_dias": 78, "peso_relativo": 0.29},
-    {"id": "innovator", "nombre": "Innovator", "destino": "industria (bastón)",
-     "dormancia_dias": 102, "peso_relativo": 0.24},
-    {"id": "atlantic", "nombre": "Atlantic", "destino": "industria (chip)",
-     "dormancia_dias": 94, "peso_relativo": 0.18},
-    {"id": "daisy", "nombre": "Daisy", "destino": "consumo fresco",
-     "dormancia_dias": 71, "peso_relativo": 0.12},
-    {"id": "asterix", "nombre": "Asterix", "destino": "consumo fresco / industria",
-     "dormancia_dias": 88, "peso_relativo": 0.10},
-    {"id": "kennebec", "nombre": "Kennebec", "destino": "industria (bastón)",
-     "dormancia_dias": 84, "peso_relativo": 0.07},
+    {"id": "spunta", "nombre": "Spunta"},
+    {"id": "agata", "nombre": "Ágata"},
+    {"id": "atlantic", "nombre": "Atlantic"},
+    {"id": "daifla", "nombre": "Daifla"},
+    {"id": "asterix", "nombre": "Asterix"},
+    {"id": "sagitta", "nombre": "Sagitta"},
+    {"id": "ludmilla", "nombre": "Ludmilla"},
+    {"id": "sababa", "nombre": "Sababa"},
+    {"id": "seven_four_7", "nombre": "7 Four 7"},
+    {"id": "king_russet", "nombre": "King Russet"},
+    {"id": "memphis", "nombre": "Memphis"},
+    {"id": "sunred", "nombre": "Sunred"},
+    {"id": "edison", "nombre": "Edison"},
+    {"id": "sinatra", "nombre": "Sinatra"},
+    {"id": "tilbury", "nombre": "Tilbury"},
+    {"id": "quintera", "nombre": "Quintera"},
+    {"id": "red_magic", "nombre": "Red Magic"},
+    {"id": "orchestra", "nombre": "Orchestra"},
+    {"id": "acoustic", "nombre": "Acoustic"},
+    {"id": "rock", "nombre": "Rock"},
+    {"id": "sound", "nombre": "Sound"},
+    {"id": "yona", "nombre": "Yona"},
+    {"id": "lady_anna", "nombre": "Lady Anna"},
+    {"id": "lady_jane", "nombre": "Lady Jane"},
+    {"id": "alverstone", "nombre": "Alverstone"},
+    {"id": "markies", "nombre": "Markies"},
+    {"id": "ikarus", "nombre": "Ikarus"},
+    {"id": "noha", "nombre": "Noha"},
+    {"id": "farida", "nombre": "Farida"},
+    {"id": "beo", "nombre": "Beo"},
+    {"id": "picus", "nombre": "Picus"},
+    {"id": "linus", "nombre": "Linus"},
+    {"id": "primus", "nombre": "Primus"},
+    {"id": "lady_avlone", "nombre": "Lady Avlone"},
+    {"id": "lady_alicia", "nombre": "Lady Alicia"},
+    {"id": "lady_ada", "nombre": "Lady Ada"},
+    {"id": "rivola", "nombre": "Rivola"},
+    {"id": "taurus", "nombre": "Taurus"},
+    {"id": "ribola", "nombre": "Ribola"},
+    {"id": "kennebec", "nombre": "Kennebec"},
+    {"id": "kelly", "nombre": "Kelly"},
+    {"id": "pampeana", "nombre": "Pampeana"},
+    {"id": "punchy", "nombre": "Punchy"},
 ]
 VAR_POR_ID = {v["id"]: v for v in VARIEDADES}
 
-# --- Categorías INASE ------------------------------------------------------
-# `orden` es la posición en la escala de multiplicación: cuanto más chico, más
-# arriba en el pedigrí (y más caro el kilo). `clase` es la fiscalización.
+_VAR_ALIAS = {
+    "agatha": "agata", "ágata": "agata",
+    "ludmila": "ludmilla",
+    "7 f 7": "seven_four_7", "7f7": "seven_four_7", "7 four 7": "seven_four_7",
+    "7 four seven": "seven_four_7",
+    "king russet": "king_russet",
+    "red magic": "red_magic",
+    "lady anna": "lady_anna", "lady jane": "lady_jane",
+    "lady avlone": "lady_avlone", "lady alicia": "lady_alicia",
+    "lady ada": "lady_ada",
+    "rivola 75": "rivola",
+}
+
+
+def variedad_id(nombre: str) -> str | None:
+    t = (nombre or "").strip().lower()
+    if not t:
+        return None
+    if t in VAR_POR_ID:
+        return t
+    if t in _VAR_ALIAS:
+        return _VAR_ALIAS[t]
+    for v in VARIEDADES:
+        if v["nombre"].lower() == t:
+            return v["id"]
+    return None
+
+
+# --- Categorías INASE (ids cortos: los que usa Trevelin) -------------------
+# orden: más chico = más arriba en el pedigrí.
 CATEGORIAS = [
-    {"id": "preinicial_2", "nombre": "Preinicial II", "clase": "Básica", "orden": 1,
-     "ambiente": "condiciones controladas", "costo_kg": 2_140.0,
-     "peso_relativo": 0.02, "virus_max_pct": 0.0},
-    {"id": "preinicial_3", "nombre": "Preinicial III", "clase": "Básica", "orden": 2,
-     "ambiente": "condiciones controladas", "costo_kg": 1_685.0,
-     "peso_relativo": 0.03, "virus_max_pct": 0.0},
+    {"id": "preinicial_0", "nombre": "Preinicial 0", "clase": "Básica", "orden": 0,
+     "costo_kg": 2_480.0, "virus_max_pct": 0.0},
+    {"id": "preinicial_1", "nombre": "Preinicial I", "clase": "Básica", "orden": 1,
+     "costo_kg": 2_140.0, "virus_max_pct": 0.0},
+    {"id": "preinicial_2", "nombre": "Preinicial II", "clase": "Básica", "orden": 2,
+     "costo_kg": 1_685.0, "virus_max_pct": 0.0},
     {"id": "inicial_1", "nombre": "Inicial I", "clase": "Básica", "orden": 3,
-     "ambiente": "campo", "costo_kg": 1_186.0,
-     "peso_relativo": 0.08, "virus_max_pct": 0.2},
+     "costo_kg": 1_186.0, "virus_max_pct": 0.2},
     {"id": "inicial_2", "nombre": "Inicial II", "clase": "Básica", "orden": 4,
-     "ambiente": "campo", "costo_kg": 894.0,
-     "peso_relativo": 0.17, "virus_max_pct": 0.6},
+     "costo_kg": 894.0, "virus_max_pct": 0.6},
     {"id": "inicial_3", "nombre": "Inicial III", "clase": "Básica", "orden": 5,
-     "ambiente": "campo", "costo_kg": 713.0,
-     "peso_relativo": 0.21, "virus_max_pct": 1.0},
-    {"id": "prefundacion", "nombre": "Prefundación", "clase": "Básica", "orden": 6,
-     "ambiente": "campo", "costo_kg": 608.0,
-     "peso_relativo": 0.16, "virus_max_pct": 1.6},
-    {"id": "fundacion", "nombre": "Fundación", "clase": "Básica", "orden": 7,
-     "ambiente": "campo", "costo_kg": 521.0,
-     "peso_relativo": 0.14, "virus_max_pct": 2.0},
-    {"id": "registrada", "nombre": "Registrada", "clase": "Certificada", "orden": 8,
-     "ambiente": "campo", "costo_kg": 428.0,
-     "peso_relativo": 0.13, "virus_max_pct": 6.0},
-    {"id": "certificada", "nombre": "Certificada", "clase": "Certificada", "orden": 9,
-     "ambiente": "campo", "costo_kg": 356.0,
-     "peso_relativo": 0.06, "virus_max_pct": 15.0},
+     "costo_kg": 713.0, "virus_max_pct": 1.0},
+    {"id": "fundacion", "nombre": "Fundación", "clase": "Básica", "orden": 6,
+     "costo_kg": 521.0, "virus_max_pct": 2.0},
+    {"id": "registrada", "nombre": "Registrada", "clase": "Certificada", "orden": 7,
+     "costo_kg": 428.0, "virus_max_pct": 6.0},
+    {"id": "certificada_a", "nombre": "Certificada A", "clase": "Certificada", "orden": 8,
+     "costo_kg": 356.0, "virus_max_pct": 15.0},
+    {"id": "certificada_b", "nombre": "Certificada B", "clase": "Certificada", "orden": 9,
+     "costo_kg": 320.0, "virus_max_pct": 15.0},
 ]
-
-# Los virus que se fiscalizan y cómo se analizan. La tolerancia declarada arriba
-# es sobre PVY, que es el que manda; los otros tres se informan igual en el
-# análisis. En las categorías de laboratorio (in vitro) la tolerancia es 0%,
-# igual que la de mezcla varietal.
-VIRUS_FISCALIZADOS = ["PVY", "PVX", "PLRV", "PVS"]
-METODO_ANALISIS = "DAS-ELISA"
-LABORATORIO = "INTA Balcarce · ProPapa (habilitado por INASE)"
-
 CAT_POR_ID = {c["id"]: c for c in CATEGORIAS}
+CAT_ORDEN = [c["id"] for c in CATEGORIAS]
 
-# --- Calibres (Res. INASE 171/2000, Art. 25) -------------------------------
-# El grado se DECLARA en el rótulo y el calibre medido tiene que caer adentro.
-# Un lote cuyo calibre medido queda afuera del rango de su grado es un dato mal
-# configurado — el rótulo miente, y en exportación eso frena un embarque.
-CALIBRES = {
+
+def categoria_id(texto: str) -> str | None:
+    t = (texto or "").strip().lower().replace("  ", " ")
+    t = t.replace("inicial3", "inicial 3")
+    aliases = {
+        "inicial 1": "inicial_1", "inicial i": "inicial_1", "inicial1": "inicial_1",
+        "inicial 2": "inicial_2", "inicial ii": "inicial_2",
+        "inicial 3": "inicial_3", "inicial iii": "inicial_3",
+    }
+    return aliases.get(t) or (t if t in CAT_POR_ID else None)
+
+
+# --- Calibre COMERCIAL (no es el grado INASE en mm) ------------------------
+CALIBRES_COMERCIALES = [
+    {"id": "recibo", "nombre": "Recibo"},
+    {"id": "exportacion", "nombre": "Exportación"},
+    {"id": "expo_buena", "nombre": "Exportación buena"},
+    {"id": "desc_expo", "nombre": "Descarte exportación"},
+    {"id": "sin_chicas", "nombre": "Sin chicas"},
+    {"id": "granel", "nombre": "Granel"},
+    {"id": "desc_paraguay", "nombre": "Desc. Paraguay"},
+    {"id": "sin_tamanar", "nombre": "Sin tamañar"},
+    {"id": "cepillada_25", "nombre": "Bolsa 25 kg cepillada"},
+]
+CAL_COM_POR_ID = {c["id"]: c for c in CALIBRES_COMERCIALES}
+
+# El grado INASE en mm sigue existiendo como dato de rótulo, aparte.
+CALIBRES_INASE = {
     1: {"min_mm": 45.0, "max_mm": 90.0, "label": "Grado 1 (45–90 mm)"},
     2: {"min_mm": 33.0, "max_mm": 45.0, "label": "Grado 2 (33–45 mm)"},
     3: {"min_mm": 20.0, "max_mm": 33.0, "label": "Grado 3 (20–33 mm)"},
     4: {"min_mm": None, "max_mm": None, "label": "Grado 4 (libre)"},
 }
-CALIBRE_TOLERANCIA_PCT = 5.0   # Art. 25: 5% en peso del grado contiguo
 
-# --- Grados por PESO (Res. INASE 217/2002, art. 22) ------------------------
-# Ojo, no es lo mismo que lo de arriba: los calibres en milímetros aplican al
-# TUBÉRCULO SEMILLA producido a campo; estos grados por peso en gramos aplican
-# al MINITUBÉRculo de las categorías Preiniciales, que sale de invernáculo y se
-# cuenta por unidad, no por kilo. Confundirlos es el tipo de error que un
-# productor detecta al toque.
-GRADOS_PESO = {
-    0: {"min_g": None, "max_g": 5.0, "label": "Grado 0 (menos de 5 g)"},
-    1: {"min_g": 5.0, "max_g": 15.0, "label": "Grado 1 (5 a 15 g)"},
-    2: {"min_g": 15.0, "max_g": 25.0, "label": "Grado 2 (15 a 25 g)"},
-    3: {"min_g": 25.0, "max_g": 40.0, "label": "Grado 3 (25 a 40 g)"},
-    4: {"min_g": 40.0, "max_g": 60.0, "label": "Grado 4 (40 a 60 g)"},
-    5: {"min_g": 60.0, "max_g": None, "label": "Grado 5 (más de 60 g)"},
-}
-GRADO_PESO_TOLERANCIA_PCT = 5.0        # mismo 5% de desvío fuera de grado
-MAX_UNIDADES_POR_ENVASE = 2_000        # micro/minitubérculos por envase
-MAX_MICROPLANTAS_POR_CONJUNTO = 1_000
 
-# --- Envases y conservación ------------------------------------------------
-KG_POR_BOLSON = 1_000          # big bag: la unidad con la que se mueve la cámara
-KG_MAX_ENVASE_CAMPO = 50       # Art. 23
-KG_MAX_ENVASE_PREINICIAL = 20  # Art. 23
+# --- Envases ---------------------------------------------------------------
+# Env a Frio 2026: kg/bolsa promedio 50,67 (rango 25–53,4). El bolsón de la
+# operación es ~700 kg, no 1.000. Granel no tiene peso de envase.
+KG_POR_BOLSA = 50
+ENVASES = [
+    {"id": "bolsa", "nombre": "Bolsa", "kg_nominal": KG_POR_BOLSA},
+    {"id": "bolson", "nombre": "Bolsón", "kg_nominal": 700},
+    {"id": "granel", "nombre": "Granel", "kg_nominal": None},
+    {"id": "chasis", "nombre": "Granel (chasis)", "kg_nominal": None},
+    {"id": "acopiador", "nombre": "Granel (acopiador)", "kg_nominal": None},
+    {"id": "tarima", "nombre": "Tarima", "kg_nominal": None},
+    {"id": "bolsa_25", "nombre": "Bolsa 25 kg", "kg_nominal": 25},
+]
+ENV_POR_ID = {e["id"]: e for e in ENVASES}
 
-TEMP_MIN_CONSERVACION = 3.0    # °C — conservación por más de 3 meses (CIP/INTA)
-TEMP_MAX_CONSERVACION = 5.0
-HUMEDAD_MIN_PCT = 85           # humedad relativa: por debajo, el tubérculo se deshidrata
-HUMEDAD_MAX_PCT = 90           # por encima, condensación y pudrición
-# Oscuridad total: la luz genera solanina y verdeo. Y antes de despachar, el
-# lote vuelve a temperatura ambiente de forma CONTROLADA: si no, condensa.
-TEMP_ROMPE_DORMANCIA = 4.0     # por encima de esto arranca la brotación
 
-# El frío es lo que compra tiempo: a 3–5 °C el reloj fisiológico del tubérculo
-# corre mucho más lento y la brotación se posterga hasta que el lote sale de
-# cámara. Un lote guardado en el galpón (sin frío) corre a reloj natural — por
-# eso el galpón es tránsito y no depósito, y por eso lo que entra ahí tiene que
-# salir. Este factor es lo que separa "tengo semilla para la plantación de
-# primavera" de "se me brotó todo en agosto".
-FACTOR_FRIO = 3.2              # multiplica la dormancia en cámara refrigerada
+def envase(eid: str) -> dict:
+    return ENV_POR_ID[eid]
+
+
+# --- Transportes (empresa + chofer habitual) -------------------------------
+TRANSPORTES = [
+    {"id": "camillo_gaston", "empresa": "Camillo", "chofer": "Gastón"},
+    {"id": "camillo_mario", "empresa": "Camillo", "chofer": "Mario"},
+    {"id": "camillo_jaimez", "empresa": "Camillo", "chofer": "Jaimez"},
+    {"id": "cerone_raphael", "empresa": "Cerone", "chofer": "Raphael"},
+    {"id": "cerone_sotelo", "empresa": "Cerone", "chofer": "Sotelo"},
+    {"id": "arenas", "empresa": "Arenas", "chofer": None},
+    {"id": "arenas_jaimez", "empresa": "Arenas", "chofer": "Jaimez"},
+    {"id": "arenas_de_grandis", "empresa": "Arenas", "chofer": "De Grandis"},
+    {"id": "serantes_vera", "empresa": "Serantes-Vera", "chofer": None},
+    {"id": "fran_cambronera", "empresa": "Fran Cambronera", "chofer": None},
+    {"id": "el_salvador", "empresa": "El Salvador", "chofer": None},
+    {"id": "delcasagro", "empresa": "Delcasagro", "chofer": None},
+    {"id": "s_garcia", "empresa": "S. García", "chofer": None},
+]
+TR_POR_ID = {t["id"]: t for t in TRANSPORTES}
+
+
+# --- Clientes: broker y productor final son dos entidades ------------------
+CLIENTES = [
+    {"id": "wemar_mccain", "nombre": "Wemar — McCain", "tipo": "industria",
+     "canal": "industria"},
+    {"id": "lamb_weston", "nombre": "Lamb Weston", "tipo": "exportacion",
+     "canal": "industria", "pais": "Países Bajos", "incoterm": "FOB",
+     "moneda": "USD", "puerto": "Puerto de Mar del Plata",
+     "destino_puerto": "Rotterdam"},
+    {"id": "parmentier", "nombre": "Parmentier", "tipo": "industria",
+     "canal": "industria"},
+    {"id": "hzpc", "nombre": "HZPC", "tipo": "obtentor", "canal": "semillero"},
+    {"id": "delcaso", "nombre": "Delcaso", "tipo": "broker",
+     "canal": "comisionista"},
+    {"id": "papalini", "nombre": "Papalini", "tipo": "broker",
+     "canal": "comisionista"},
+    {"id": "romero_m", "nombre": "Romero M", "tipo": "interno",
+     "canal": "productor", "broker_id": "delcaso"},
+    {"id": "agro_selmi", "nombre": "Agro Selmi", "tipo": "interno",
+     "canal": "productor"},
+    {"id": "mazzeo_cristian", "nombre": "Mazzeo Cristian", "tipo": "interno",
+     "canal": "productor"},
+    {"id": "francisco_andreu", "nombre": "Francisco Andreu", "tipo": "interno",
+     "canal": "productor"},
+    {"id": "la_union_del_sur", "nombre": "La Unión del Sur", "tipo": "interno",
+     "canal": "productor"},
+    {"id": "frigopap_cliente", "nombre": "Frigopap (carga Lamb Weston)",
+     "tipo": "industria", "canal": "industria"},
+]
+CLI_POR_ID = {c["id"]: c for c in CLIENTES}
+
+# Alias que el generador viejo y el backend todavía leen.
+CALIBRES = CALIBRES_INASE
+KG_POR_BOLSON = 700
+
+VIRUS_FISCALIZADOS = ["PVY", "PVX", "PLRV", "PVS"]
+METODO_ANALISIS = "DAS-ELISA"
+LABORATORIO = "INTA Balcarce · ProPapa (habilitado por INASE)"
+CLASE_COMERCIAL = "Fiscalizada"
+POSICION_ARANCELARIA = "0701.10.00"
+INSCRIPCION_RNCFS = "RNCyFS N° 14.328"
+CUIT = "30-54187629-3"
+FACTOR_FRIO = 3.2
 FACTOR_SIN_FRIO = 1.0
 
-# --- Documentación de exportación (organismos reales) ----------------------
-# Cada requisito declara de dónde sale el dato: por eso el copiloto puede
-# pre-completar lo que ya sabe y pedir sólo lo que falta.
 DOCS_EXPORTACION = [
     {"id": "factura_proforma", "nombre": "Factura proforma",
      "organismo": "Papasud S.A.", "emite": "empresa",
@@ -205,19 +333,3 @@ DOCS_EXPORTACION = [
      "organismo": "Cámara de Comercio", "emite": "organismo",
      "requiere": ["factura", "pais_destino", "posicion_arancelaria"]},
 ]
-
-# Posición arancelaria de la papa para siembra (NCM/HS).
-POSICION_ARANCELARIA = "0701.10.00"
-
-# --- Lo que el semillero está obligado a tener -----------------------------
-# La comercialización de papa semilla es obligatoriamente de clase FISCALIZADA
-# (Res. SAGyP 146/89). El semillero lleva Registro de Cultivos, obtiene el
-# Documento de Autorización de Venta (DAV) o de Multiplicación (DAM), y tiene
-# un Director Técnico registrado que responde por la fiscalización.
-CLASE_COMERCIAL = "Fiscalizada"
-DOCUMENTOS_HABILITANTES = ["DAV", "DAM"]
-
-# Identidad registral de la empresa en el dataset (sintética, con el formato
-# real: es lo que va impreso en cada rótulo y en cada documento de exportación).
-INSCRIPCION_RNCFS = "RNCyFS N° 14.328"
-CUIT = "30-54187629-3"

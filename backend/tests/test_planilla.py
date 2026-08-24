@@ -1,15 +1,16 @@
 """
-El modelo que sale de la planilla real — no del seed sintético.
+El modelo que sale de la planilla real — ahora el seed oficial.
 
 Estos tests defienden las relaciones que la Planilla de movimientos 2026.xls
-tiene y que data-papasud aplana: lote namespaced, remito con líneas, DTV del
-viaje, código visual bolsa+hilo, frío de terceros, calibre comercial, envase
-de ~50 kg, reproceso/retorno, y lote_padre_id de verdad.
+tiene: lote namespaced, remito con líneas, DTV del viaje, código visual
+bolsa+hilo, frío de terceros, calibre comercial, envase de ~50 kg,
+reproceso/retorno, y lote_padre_id de verdad.
 
-No tocan data-papasud/. Leen el paquete data-planilla.
+Leen `data-papasud/` (dominio, modelo, generar). Ya no hay un subtree aparte.
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 
@@ -18,12 +19,12 @@ import pytest
 TENANT_PAPASUD = True
 
 _RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_PLANILLA = os.path.join(_RAIZ, "data-planilla")
-if _PLANILLA not in sys.path:
-    sys.path.insert(0, _PLANILLA)
+_PAPASUD = os.path.join(_RAIZ, "data-papasud")
+if _PAPASUD not in sys.path:
+    sys.path.insert(0, _PAPASUD)
 
-from data_planilla import dominio as D  # noqa: E402
-from data_planilla import modelo as M  # noqa: E402
+import dominio as D  # noqa: E402
+import modelo as M  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -266,7 +267,7 @@ class TestCodigoVisual:
 class TestDataset:
     @pytest.fixture
     def data(self):
-        from data_planilla import generar
+        import generar
         return generar.construir()
 
     def test_ningun_par_de_lotes_comparte_clave(self, data):
@@ -319,12 +320,12 @@ class TestDataset:
 
 class TestImportar:
     def test_extrae_dtv_de_la_observacion(self):
-        from data_planilla.importar import extraer_dtv
+        from importar import extraer_dtv
         assert extraer_dtv("b.blanca-dtv 13451462-0") == "13451462-0"
         assert extraer_dtv("dtv 13354667-7") == "13354667-7"
 
     def test_dospanca_resuelve_a_pancani(self):
-        from data_planilla.importar import fila_a_linea
+        from importar import fila_a_linea
         ln = fila_a_linea(
             {"Variedad": "spunta", "Lote": 301, "Kgs.": 100, "Destino": "dospanca"},
             hoja="Env a Frio",
@@ -333,7 +334,7 @@ class TestImportar:
         assert ln["lote_id"] == "santa_ana:spunta:301"
 
     def test_trevelin_usa_chacra_trevelin(self):
-        from data_planilla.importar import fila_a_linea
+        from importar import fila_a_linea
         ln = fila_a_linea(
             {"Variedad": "beo", "Lote": 50, "Kgs": 1264,
              "Color bolsa": "amarilla", "Color hilo": "naranja",
@@ -361,7 +362,84 @@ class TestBackendNoRompeElDemo:
         assert isinstance(semilla.calibres_comerciales(), list)
         assert isinstance(semilla.chacras(), list)
 
-    def test_planilla_inactiva_sobre_el_seed_sintetico(self):
+    def test_planilla_activa_sobre_el_seed_oficial(self):
         from core import planilla
-        assert planilla.activo() is False
-        assert planilla.remitos() == []
+        assert planilla.activo() is True
+        assert planilla.remitos()
+        assert planilla.remito("1009") or planilla.remito("R-2026-1009")
+
+
+class TestSeedOficial:
+    """El JSON versionado en data-papasud ES el libro real. Sin env extra."""
+
+    def _json(self, nombre):
+        with open(os.path.join(_PAPASUD, nombre), encoding="utf-8") as f:
+            return json.load(f)
+
+    def test_catalogo_tiene_sitios_reales_no_sierra(self):
+        cat = self._json("catalogos.json")
+        ids = {u["id"] for u in cat["ubicaciones"]}
+        assert "pancani" in ids
+        assert "planta_santa_ana" in ids
+        assert "galpon_mdp" in ids
+        assert "sierra" not in ids
+        assert "ruta226" not in ids
+        assert "chapadmalal" not in ids
+        assert "innovator" not in {v["id"] for v in cat["variedades"]}
+
+    def test_apartados_exponen_remitos_en_el_seed_commiteado(self):
+        ap = self._json("apartados.json")
+        assert ap["remitos"]["filas"]
+        assert any(":" in str(a.get("lote") or "")
+                   for a in self._json("inventory.json")["articulos"])
+
+    def test_meta_declara_que_no_es_sintetico(self):
+        meta = self._json("catalogos.json").get("meta") or {}
+        assert meta.get("sintetico") is False
+
+
+class TestDemoBeats:
+    """Los tres beats de la demo, remounted sobre sitios reales."""
+
+    @pytest.fixture
+    def data(self):
+        import generar
+        return generar.construir()
+
+    def test_stock_insuficiente_frena_una_orden_en_sitio_real(self, data):
+        ordenes = data["apartados"]["ordenes_carga"]["filas"]
+        frenadas = [o for o in ordenes if o.get("estado") == "pendiente"]
+        assert frenadas, "tiene que haber una orden que el core pueda frenar"
+        o = frenadas[0]
+        assert o["items"]
+        lote = o["items"][0]["lote"]
+        assert ":" in lote
+        ubi = (o.get("ubicacion_carga") or "").lower()
+        assert any(x in ubi for x in ("pancani", "galpón", "galpon", "planta", "santa ana"))
+
+    def test_linaje_invalido_esta_plantado_y_no_persistido(self, data):
+        caso = data["plantadas"]["linaje_invalido"]
+        assert caso["motivo"] == "linaje_invalido"
+        ids = {l["id"] for l in data["lotes"]}
+        assert caso["hijo_id"] not in ids
+        r = M.validar_lote(
+            {"id": caso["hijo_id"], "categoria_id": caso["hijo_categoria"],
+             "lote_padre_id": caso["padre_id"]},
+            padre={"id": caso["padre_id"], "categoria_id": caso["padre_categoria"]},
+        )
+        assert r["ok"] is False
+
+    def test_discrepancia_de_merma_en_frio_de_terceros(self, data):
+        merma = data["plantadas"]["merma_no_registrada"]
+        assert merma.get("ubicacion_id") in {u["id"] for u in D.UBICACIONES
+                                             if u["tipo"] == "frio_tercero"}
+        conteos = data["apartados"]["conteos"]["filas"]
+        hit = next(c for c in conteos if c["lote"] == merma["lote"])
+        assert hit["diferencia_kg"] < 0
+
+    def test_traslado_sin_confirmar_sale_de_un_frio_real(self, data):
+        m = data["plantadas"]["movimiento_sin_confirmar"]
+        assert m["estado"] == "en_transito"
+        assert m["confirmado_en_destino"] is False
+        origen = (m.get("origen") or "").lower()
+        assert any(x in origen for x in ("pancani", "cecive", "sasula"))

@@ -85,6 +85,8 @@ def _centro(arts: list[dict]) -> tuple[list[dict], list[dict]]:
     ubis = conciliacion.por_ubicacion()
 
     for u in ubis:
+        if not (u.get("lotes") or u.get("toneladas")):
+            continue
         lotes = [a for a in arts if a.get("ubicacion_id") == u["id"]]
         # Los lotes NO van sueltos: 147 nodos son una mancha. Se agrupan por
         # variedad dentro de cada ubicación y se expanden al tocar.

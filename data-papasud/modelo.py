@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 
-from . import dominio as D
+import dominio as D
 
 TIPOS_MOVIMIENTO = (
     "ingreso",
@@ -70,7 +70,6 @@ def validar_lote(lote: dict, padre: dict | None = None) -> dict:
         if not linaje_valido(padre.get("categoria_id"), lote.get("categoria_id") or ""):
             return {"ok": False, "motivo": "linaje_invalido"}
     elif lote.get("lote_padre_id") and padre is None:
-        # el caller pasó el id pero no el padre: no adivinamos
         pass
     if lote.get("lote_padre_id") and padre is not None:
         if not linaje_valido(padre.get("categoria_id"), lote.get("categoria_id") or ""):

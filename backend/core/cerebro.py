@@ -70,6 +70,8 @@ def completo() -> dict:
 
     # --- las ubicaciones, que son el centro de todo -------------------------
     for u in conciliacion.por_ubicacion():
+        if not (u.get("lotes") or u.get("toneladas")):
+            continue
         n = asegurar(f"ubi:{u['id']}", "ubicacion", u["nombre"],
                      estado=u["estado"], detalle=u.get("direccion"),
                      metricas={"toneladas": u["toneladas"], "lotes": u["lotes"],
