@@ -280,8 +280,11 @@ secciones. Nada de HTML. Los montos `_fmt` se copian tal cual, también adentro 
 del Markdown.
 - DESPUÉS de la respuesta, en un bloque APARTE (nunca mezclado con el texto que \
 lee el dueño), agregá exactamente 3 preguntas de seguimiento para INDAGAR MÁS A \
-FONDO — no para repetir lo ya dicho ni para confirmar un sí/no. Cortas, concretas, \
-en el mismo idioma, sin números que no vinieron de una herramienta. Formato exacto:
+FONDO. Las formás a partir del CONTEXTO de la conversación y del ÚLTIMO mensaje \
+del dueño: nombran lo que acaba de preguntar (ubicación, lote, variedad, cliente) \
+y profundizan con lo que ya se habló en el hilo. Si preguntó por Sierra, seguí \
+en Sierra — no saltes a un tema que no estuvo. Cortas, concretas, en el mismo \
+idioma, sin números que no vinieron de una herramienta. Formato exacto:
 
 :::siguientes
 pregunta 1
@@ -3192,170 +3195,10 @@ _CIERRES_SIN_SEGUIMIENTO = (
     "that question belongs to the",
 )
 
-_SUGERENCIAS_POR_TOOL = {
-    "stock_ubicaciones": {
-        "es": (
-            "¿Qué lotes de esa ubicación tienen merma fuera de curva?",
-            "¿Hay stock suficiente para el próximo despacho?",
-            "¿Cómo está el galpón de Chapadmalal contra las cámaras?",
-        ),
-        "en": (
-            "Which lots in that location are losing more weight than they should?",
-            "Is there enough stock for the next dispatch?",
-            "How does the Chapadmalal shed compare to the cold rooms?",
-        ),
-    },
-    "consultar_lote": {
-        "es": (
-            "¿De qué lote padre desciende este?",
-            "¿La categoría INASE cierra con el linaje?",
-            "¿Cuánta merma llevó este lote en cámara?",
-        ),
-        "en": (
-            "Which parent lot does this one come from?",
-            "Does the INASE category match the lineage?",
-            "How much weight has this lot lost in storage?",
-        ),
-    },
-    "verificar_disponibilidad": {
-        "es": (
-            "¿Qué movimientos componen ese saldo?",
-            "¿Hay otro lote de la misma variedad que sí alcance?",
-            "¿La merma esperada cambia el disponible?",
-        ),
-        "en": (
-            "Which movements make up that balance?",
-            "Is there another lot of the same variety that covers it?",
-            "Does expected shrinkage change what's available?",
-        ),
-    },
-    "explicar_diferencia": {
-        "es": (
-            "¿Qué movimientos pueden explicar el faltante?",
-            "¿La diferencia queda dentro de la merma esperada?",
-            "¿En qué ubicación conviene contar de nuevo?",
-        ),
-        "en": (
-            "Which movements could explain the gap?",
-            "Is the difference still inside expected shrinkage?",
-            "Which location should we recount?",
-        ),
-    },
-    "verificar_orden_carga": {
-        "es": (
-            "¿Qué lote alternativa cubre esa orden?",
-            "¿El bloqueo es de stock, de linaje o de merma?",
-            "¿Qué papeles faltan para poder despachar?",
-        ),
-        "en": (
-            "Which alternative lot would cover that order?",
-            "Is the hold about stock, lineage or shrinkage?",
-            "Which papers are still missing to dispatch?",
-        ),
-    },
-    "consultar_deposito": {
-        "es": (
-            "¿Qué vence o brota primero en esa cámara?",
-            "¿Hay discrepancias de conteo abiertas ahí?",
-            "¿Cuántos bolsones se pueden mover hoy?",
-        ),
-        "en": (
-            "What sprouts or expires first in that room?",
-            "Are there open count discrepancies there?",
-            "How many bags can we move today?",
-        ),
-    },
-    "resumen_negocio": {
-        "es": (
-            "¿Dónde está el mayor riesgo de stock hoy?",
-            "¿Qué ubicación tiene más plata parada?",
-            "¿Hay algún despacho frenado por una discrepancia?",
-        ),
-        "en": (
-            "Where is the biggest stock risk today?",
-            "Which location has the most money sitting idle?",
-            "Is any dispatch blocked by a discrepancy?",
-        ),
-    },
-    "consultar_cruces": {
-        "es": (
-            "¿Qué lote de ese cruce no cierra el linaje?",
-            "¿Hay un movimiento sin confirmar en esa cadena?",
-            "¿Eso frena algún despacho de esta semana?",
-        ),
-        "en": (
-            "Which lot in that cross-check breaks lineage?",
-            "Is there an unconfirmed movement in that chain?",
-            "Does that block a dispatch this week?",
-        ),
-    },
-}
-
-_SUGERENCIAS_POR_TEMA = (
-    (("merma", "conteo", "discrepan", "diferencia", "contado", "shrink", "count"), {
-        "es": (
-            "¿La diferencia queda dentro de la merma esperada?",
-            "¿Qué movimientos pueden explicar el faltante?",
-            "¿En qué cámara conviene volver a contar?",
-        ),
-        "en": (
-            "Is the gap still inside expected shrinkage?",
-            "Which movements could explain the missing kilos?",
-            "Which cold room should we recount?",
-        ),
-    }),
-    (("linaje", "categoría", "categoria", "inase", "padre", "generación", "generacion",
-      "lineage", "category"), {
-        "es": (
-            "¿El lote padre es de categoría igual o superior?",
-            "¿Qué generación comercial tiene este lote?",
-            "¿Eso frena un despacho o sólo hay que corregir el rótulo?",
-        ),
-        "en": (
-            "Is the parent lot the same category or higher?",
-            "What commercial generation is this lot?",
-            "Does that block a dispatch or is it just a label fix?",
-        ),
-    }),
-    (("despacho", "remito", "orden de carga", "embarque", "dtv", "dispatch",
-      "shipment"), {
-        "es": (
-            "¿Hay stock suficiente para cerrar ese remito?",
-            "¿El linaje de esos lotes cierra para exportar?",
-            "¿Qué papeles faltan en la carpeta de embarque?",
-        ),
-        "en": (
-            "Is there enough stock to close that dispatch note?",
-            "Does the lineage of those lots hold for export?",
-            "Which papers are still missing from the shipping folder?",
-        ),
-    }),
-    (("frigor", "cámara", "camara", "galpón", "galpon", "chapadmalal", "ubicación",
-      "ubicacion", "cold room", "shed"), {
-        "es": (
-            "¿Cómo se reparte el stock entre las 4 ubicaciones?",
-            "¿Qué lotes del galpón no deberían seguir ahí?",
-            "¿Hay alguna cámara con merma fuera de curva?",
-        ),
-        "en": (
-            "How is stock split across the 4 locations?",
-            "Which lots shouldn't still be in the shed?",
-            "Is any cold room losing more weight than it should?",
-        ),
-    }),
-)
-
-_SUGERENCIAS_GENERICAS = {
-    "es": (
-        "¿Me mostrás el detalle detrás de esos números?",
-        "¿Hay alguna alerta o bloqueo relacionado?",
-        "¿Qué convendría revisar ahora en el depósito?",
-    ),
-    "en": (
-        "Show me the detail behind those numbers",
-        "Is there an alert or hold related to this?",
-        "What should we check in the warehouse now?",
-    ),
+_STOP_ALIAS = {
+    "frigorifico", "galpon", "campo", "establecimiento", "camara", "sector",
+    "cold", "room", "shed", "warehouse", "the", "and", "del", "de", "los",
+    "las", "una", "uno",
 }
 
 
@@ -3406,21 +3249,256 @@ def omitir_sugerencias(texto: str) -> bool:
     return t.startswith(_CIERRES_SIN_SEGUIMIENTO)
 
 
+def _texto_turno(mensaje: str, respuesta: str = "", historial: list[dict] | None = None) -> str:
+    partes = []
+    for turn in (historial or [])[-6:]:
+        if turn.get("content"):
+            partes.append(str(turn["content"]))
+    if mensaje:
+        partes.append(mensaje)
+    if respuesta:
+        partes.append(respuesta)
+    return "\n".join(partes)
+
+
+def _nombre_corto(nombre: str) -> str:
+    n = re.sub(r"^(frigorífico|frigorifico|galpón|galpon|campo)\s+", "",
+               nombre or "", flags=re.IGNORECASE).strip()
+    n = re.split(r"\s+[—–-]\s+", n)[0].strip()
+    return n or (nombre or "").strip()
+
+
+def _aliases_de(nombre: str, uid: str = "") -> list[str]:
+    n = ds._strip(nombre or "")
+    out = []
+    for raw in (n, ds._strip(uid or ""), ds._strip(_nombre_corto(nombre))):
+        if raw and raw not in out:
+            out.append(raw)
+    corto = re.sub(r"^(frigorifico|galpon|campo)\s+", "", n).strip()
+    if corto and corto not in out:
+        out.append(corto)
+    for tok in re.split(r"[^\w]+", corto):
+        if len(tok) >= 5 and tok not in _STOP_ALIAS and tok not in out:
+            out.append(tok)
+    return out
+
+
+def _alias_en_texto(alias: str, blob: str) -> bool:
+    if not alias or not blob:
+        return False
+    if " " in alias or any(c.isdigit() for c in alias):
+        return alias in blob
+    return re.search(rf"\b{re.escape(alias)}\b", blob) is not None
+
+
+def _catalogo_sugerencias() -> dict:
+    try:
+        from core import semilla
+        return {
+            "ubicaciones": semilla.ubicaciones(),
+            "variedades": semilla.variedades(),
+            "categorias": semilla.categorias(),
+            "clientes": semilla.clientes(),
+            "campos": semilla.campos(),
+        }
+    except Exception:  # noqa: BLE001
+        return {"ubicaciones": [], "variedades": [], "categorias": [],
+                "clientes": [], "campos": []}
+
+
+def _entidades_en(texto: str) -> dict:
+    """Nombres del catálogo y lotes que aparecen en este texto."""
+    blob = ds._strip(texto or "")
+    halladas = {k: [] for k in ("ubicaciones", "variedades", "categorias",
+                                "clientes", "campos", "lotes")}
+    if not blob:
+        return halladas
+    cat = _catalogo_sugerencias()
+
+    def recoger(clave, filas, campo="nombre"):
+        ranked = []
+        for fila in filas or []:
+            nombre = fila.get(campo) or ""
+            aliases = _aliases_de(nombre, fila.get("id") or "")
+            hit = next((a for a in sorted(aliases, key=len, reverse=True)
+                        if _alias_en_texto(a, blob)), None)
+            if hit:
+                ranked.append((-len(hit), _nombre_corto(nombre) or nombre))
+        ranked.sort()
+        for _, nombre in ranked:
+            if nombre not in halladas[clave]:
+                halladas[clave].append(nombre)
+
+    recoger("ubicaciones", cat["ubicaciones"])
+    recoger("variedades", cat["variedades"])
+    recoger("categorias", cat["categorias"])
+    recoger("clientes", cat["clientes"])
+    recoger("campos", cat["campos"])
+    for m in re.finditer(r"\b(?:lote\s+)?(L\d+)\b", texto or "", flags=re.IGNORECASE):
+        lid = m.group(1).upper()
+        if lid not in halladas["lotes"]:
+            halladas["lotes"].append(lid)
+    return halladas
+
+
+def _primero(*listas) -> str:
+    for xs in listas:
+        if xs:
+            return xs[0]
+    return ""
+
+
+def _angulo(mensaje: str, tools_usadas: list[str] | None) -> str:
+    blob = ds._strip(mensaje or "")
+    tools = set(tools_usadas or [])
+    if tools & {"explicar_diferencia"} or any(
+            k in blob for k in ("merma", "conteo", "discrepan", "diferencia", "contado",
+                                "shrink", "count")):
+        return "merma"
+    if tools & {"consultar_lote"} or any(
+            k in blob for k in ("linaje", "categoria", "inase", "padre", "generacion",
+                                "lineage", "lote ")):
+        return "linaje"
+    if tools & {"verificar_orden_carga", "verificar_disponibilidad"} or any(
+            k in blob for k in ("despacho", "remito", "orden de carga", "embarque",
+                                "dtv", "dispatch", "shipment")):
+        return "despacho"
+    if tools & {"stock_ubicaciones", "consultar_deposito", "resumen_negocio"} or any(
+            k in blob for k in ("stock", "kilo", "bolson", "camara", "ubicacion",
+                                "frigor", "galpon")):
+        return "stock"
+    return "otro"
+
+
+def _preguntas_del_turno(
+    mensaje: str,
+    respuesta: str = "",
+    historial: list[dict] | None = None,
+    tools_usadas: list[str] | None = None,
+) -> list[str]:
+    """3 preguntas ancladas al último mensaje y al hilo — no a un menú genérico."""
+    lang = _idioma_sugerencias()
+    last = _entidades_en(mensaje)
+    ans = _entidades_en(respuesta)
+    ctx = _entidades_en(_texto_turno(mensaje, respuesta, historial))
+    ubi = _primero(last["ubicaciones"], ans["ubicaciones"], ctx["ubicaciones"])
+    var = _primero(last["variedades"], ans["variedades"], ctx["variedades"])
+    cat = _primero(last["categorias"], ans["categorias"], ctx["categorias"])
+    lote = _primero(last["lotes"], ans["lotes"], ctx["lotes"])
+    cli = _primero(last["clientes"], ans["clientes"], ctx["clientes"])
+    campo = _primero(last["campos"], ans["campos"], ctx["campos"])
+    otras_ubi = [x for x in ctx["ubicaciones"] if x != ubi]
+    angulo = _angulo(mensaje, tools_usadas)
+    es = lang != "en"
+    out: list[str] = []
+
+    def add(q: str | None) -> None:
+        q = (q or "").strip()
+        if not q or q in out:
+            return
+        if ds._strip(q) == ds._strip(mensaje or ""):
+            return
+        out.append(q)
+
+    if lote:
+        if es:
+            add(f"¿De qué lote padre desciende el {lote}?")
+            add(f"¿La categoría INASE del {lote} cierra con el linaje?")
+            add(f"¿Cuánta merma llevó el {lote} en cámara?")
+        else:
+            add(f"Which parent lot does {lote} come from?")
+            add(f"Does the INASE category of {lote} match its lineage?")
+            add(f"How much weight has {lote} lost in storage?")
+        if ubi:
+            add(f"¿El {lote} está en {ubi}?" if es else f"Is {lote} in {ubi}?")
+
+    if ubi and var:
+        add(f"¿Cuánto {var} hay en {ubi}?" if es else f"How much {var} is in {ubi}?")
+    if ubi and cat:
+        add(f"¿Qué lotes {cat} hay en {ubi}?" if es
+            else f"Which {cat} lots are in {ubi}?")
+    if var and not ubi:
+        add(f"¿En qué ubicación está el {var}?" if es
+            else f"Which location holds the {var}?")
+        add(f"¿Qué categoría INASE tiene el {var} que está en stock?" if es
+            else f"What INASE category is the {var} currently in stock?")
+
+    if ubi:
+        if angulo == "merma":
+            add(f"¿La diferencia en {ubi} queda dentro de la merma esperada?" if es
+                else f"Is the gap in {ubi} still inside expected shrinkage?")
+            add(f"¿Qué movimientos pueden explicar el faltante en {ubi}?" if es
+                else f"Which movements could explain the missing kilos in {ubi}?")
+            add(f"¿Conviene volver a contar en {ubi}?" if es
+                else f"Should we recount in {ubi}?")
+        elif angulo == "despacho":
+            add(f"¿Hay stock suficiente en {ubi} para cerrar ese remito?" if es
+                else f"Is there enough stock in {ubi} to close that dispatch note?")
+            add(f"¿El linaje de los lotes de {ubi} cierra para exportar?" if es
+                else f"Does the lineage of the lots in {ubi} hold for export?")
+        else:
+            add(f"¿Qué lotes de {ubi} tienen merma fuera de curva?" if es
+                else f"Which lots in {ubi} are losing more weight than they should?")
+            add(f"¿Hay stock suficiente en {ubi} para el próximo despacho?" if es
+                else f"Is there enough stock in {ubi} for the next dispatch?")
+        if otras_ubi:
+            add(f"¿Cómo está {ubi} contra {otras_ubi[0]}?" if es
+                else f"How does {ubi} compare to {otras_ubi[0]}?")
+        else:
+            add(f"¿Cómo está {ubi} contra las otras ubicaciones?" if es
+                else f"How does {ubi} compare to the other locations?")
+
+    if cat and not ubi:
+        add(f"¿El lote padre de esa {cat} es de categoría igual o superior?" if es
+            else f"Is the parent lot of that {cat} the same category or higher?")
+        add(f"¿Qué generación comercial tiene esa {cat}?" if es
+            else f"What commercial generation is that {cat}?")
+
+    if cli:
+        add(f"¿Hay stock para el pedido de {cli}?" if es
+            else f"Is there stock for the {cli} order?")
+        add(f"¿Qué papeles faltan en la carpeta de {cli}?" if es
+            else f"Which papers are still missing from the {cli} folder?")
+
+    if campo:
+        add(f"¿Qué lotes de {campo} están por despachar?" if es
+            else f"Which lots from {campo} are about to ship?")
+
+    if len(out) < 3:
+        if angulo == "merma":
+            add("¿La diferencia queda dentro de la merma esperada?" if es
+                else "Is the gap still inside expected shrinkage?")
+            add("¿Qué movimientos pueden explicar el faltante?" if es
+                else "Which movements could explain the missing kilos?")
+        elif angulo == "linaje":
+            add("¿El lote padre es de categoría igual o superior?" if es
+                else "Is the parent lot the same category or higher?")
+            add("¿Eso frena un despacho o sólo hay que corregir el rótulo?" if es
+                else "Does that block a dispatch or is it just a label fix?")
+        elif angulo == "despacho":
+            add("¿Hay stock suficiente para cerrar ese remito?" if es
+                else "Is there enough stock to close that dispatch note?")
+            add("¿Qué papeles faltan en la carpeta de embarque?" if es
+                else "Which papers are still missing from the shipping folder?")
+        else:
+            add("¿Me desglosás eso por ubicación?" if es
+                else "Can you break that down by location?")
+            add("¿Hay alguna alerta o bloqueo relacionado con esto?" if es
+                else "Is there an alert or hold related to this?")
+            add("¿Qué convendría revisar ahora a partir de lo que pregunté?" if es
+                else "What should we check next based on what I just asked?")
+    return out[:3]
+
+
 def sugerencias_heuristicas(
     mensaje: str,
     tools_usadas: list[str] | None = None,
+    respuesta: str = "",
+    historial: list[dict] | None = None,
 ) -> list[dict]:
-    """3 preguntas de seguimiento cuando no hay modelo o no vino el bloque."""
-    lang = _idioma_sugerencias()
-    for name in reversed(tools_usadas or []):
-        pack = _SUGERENCIAS_POR_TOOL.get(name)
-        if pack:
-            return _como_sugerencias(pack.get(lang) or pack["es"])
-    blob = ds._strip(mensaje or "")
-    for keys, pack in _SUGERENCIAS_POR_TEMA:
-        if any(k in blob for k in keys):
-            return _como_sugerencias(pack.get(lang) or pack["es"])
-    return _como_sugerencias(_SUGERENCIAS_GENERICAS[lang])
+    """3 preguntas de seguimiento armadas con el hilo y el último mensaje."""
+    return _como_sugerencias(
+        _preguntas_del_turno(mensaje, respuesta, historial, tools_usadas))
 
 
 def _sugerencias_desde_llm(
@@ -3430,30 +3508,38 @@ def _sugerencias_desde_llm(
     respuesta: str,
     historial: list[dict] | None,
 ) -> list[dict]:
-    """Una pasada corta, sin tools: 3 preguntas para ir más a fondo."""
+    """Una pasada corta, sin tools: 3 preguntas del hilo + último mensaje."""
     if client is None or omitir_sugerencias(respuesta):
         return []
     lang = _idioma_sugerencias()
     if lang == "en":
         consigna = (
-            "Propose exactly 3 follow-up questions that go DEEPER into this turn "
-            "(not repeats, not yes/no confirmations). Short, concrete, same language "
-            "as the answer. Do not invent numbers. Reply with JSON only: "
+            "Propose exactly 3 follow-up questions formed ONLY from the conversation "
+            "context and the user's LAST message. Name the concrete things just discussed "
+            "(location, lot, variety, customer) and go DEEPER into that last message — "
+            "do not jump to a topic that was not in this thread. Not repeats, not yes/no "
+            "confirmations. Short, same language as the answer. Do not invent numbers. "
+            "Reply with JSON only: "
             '{"sugerencias":["q1","q2","q3"]}'
         )
     else:
         consigna = (
-            "Proponé exactamente 3 preguntas de seguimiento para INDAGAR MÁS A FONDO "
-            "este turno (no repitas, no confirmes un sí/no). Cortas, concretas, en el "
-            "mismo idioma que la respuesta. No inventes números. Respondé sólo JSON: "
+            "Proponé exactamente 3 preguntas de seguimiento formadas SOLO a partir del "
+            "contexto de la conversación y del ÚLTIMO mensaje del usuario. Nombrá las "
+            "cosas concretas que se acaban de hablar (ubicación, lote, variedad, cliente) "
+            "y profundizá ESE último mensaje — no saltes a un tema que no estuvo en este "
+            "hilo. No repitas, no confirmes un sí/no. Cortas, mismo idioma que la "
+            "respuesta. No inventes números. Respondé sólo JSON: "
             '{"sugerencias":["p1","p2","p3"]}'
         )
-    recorte = []
-    for turn in (historial or [])[-4:]:
+    recorte = ["HISTORIAL:"]
+    for turn in (historial or [])[-6:]:
         if turn.get("role") in ("user", "assistant") and turn.get("content"):
             recorte.append(f"{turn['role']}: {str(turn['content'])[:400]}")
-    recorte.append(f"user: {mensaje}")
-    recorte.append(f"assistant: {respuesta[:800]}")
+    if len(recorte) == 1:
+        recorte.append("(sin turnos previos)")
+    recorte.append(f"ÚLTIMO MENSAJE DEL USUARIO:\n{mensaje}")
+    recorte.append(f"ÚLTIMA RESPUESTA:\n{(respuesta or '')[:800]}")
     try:
         resp = client.messages.create(
             model=modelo,
@@ -3490,7 +3576,8 @@ def resolver_sugerencias(
         sugerencias = _sugerencias_desde_llm(
             client, modelo, mensaje, limpio, historial)
     if not sugerencias:
-        sugerencias = sugerencias_heuristicas(mensaje, tools_usadas)
+        sugerencias = sugerencias_heuristicas(
+            mensaje, tools_usadas, respuesta=limpio, historial=historial)
     return limpio, sugerencias
 
 
